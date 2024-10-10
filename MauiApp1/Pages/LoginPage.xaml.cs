@@ -9,18 +9,20 @@ public partial class LoginPage : ContentPage
 		InitializeComponent();
 	}
 
-	private void OnLoginButtonClicked(object sender, EventArgs e)
+	private async void OnLoginButtonClicked(object sender, EventArgs e)
 	{
 		string netid = NetIDEntry.Text;
         string password = PasswordEntry.Text;
         if (netid == "abc12345" && password == "password")
-            {
-                DisplayAlert("Login", "Login Successful!", "OK");
-            }
-            else
-            {
-                DisplayAlert("Login", "Invalid username or password", "OK");
-            }
+        {
+            await Navigation.PushAsync(new HomePage());
+
+            //DisplayAlert("Login", "Login Successful!", "OK");
+        }
+        else
+        {
+            await DisplayAlert("Login", "Invalid username or password", "OK");
+        }
 
 	}
 }

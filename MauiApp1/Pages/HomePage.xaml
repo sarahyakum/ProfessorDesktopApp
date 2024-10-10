@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Pages.HomePage"
+             Title="Home Page">
+    <ScrollView>
+    <VerticalStackLayout 
+        Padding="30" 
+        Spacing="10">
+
+        <Label 
+            Text="Welcome to the Home Page!"
+            SemanticProperties.HeadingLevel="Level1" 
+            HorizontalOptions="Center" />
+
+        <Label 
+            Text="Professor choose one of the following apps."
+            SemanticProperties.HeadingLevel="Level2" 
+            HorizontalOptions="Center" />
+        <HorizontalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+        
+            <Button
+                x:Name="TimeSheetsButton"
+                Text="Student Timesheets" 
+                Clicked="OnTimesheetsButtonClicked"
+            />
+
+            <Button
+                x:Name="PeerReviewButton"
+                Text="Student Peer Reviews" 
+                Clicked="OnPeerReviewButtonClicked"
+            />
+
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+    </ScrollView>
+     
+</ContentPage>
