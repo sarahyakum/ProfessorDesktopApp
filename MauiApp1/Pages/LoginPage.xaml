@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Pages.LoginPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            
+            <Label
+                Text="Login"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+            <Entry 
+                x:Name="NetIDEntry"
+                Placeholder="NetID"
+                HorizontalOptions="FillAndExpand"/>
+
+            <Entry 
+                x:Name="PasswordEntry"
+                Placeholder="Password"
+                HorizontalOptions="FillAndExpand"/>
+
+            <Button
+                x:Name="LoginButton"
+                Text="Log In" 
+                Clicked="OnLoginButtonClicked"
+                HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
