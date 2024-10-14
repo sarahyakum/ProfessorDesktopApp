@@ -12,9 +12,12 @@
             Text="Time Track View"
             SemanticProperties.HeadingLevel="Level1" 
             HorizontalOptions="Center" />
+        
+        
 
         
     </VerticalStackLayout>
+    
     </ScrollView>
      
 </ContentPage>
