@@ -16,12 +16,17 @@
                 x:Name="NetIDEntry"
                 Placeholder="NetID"
                 HorizontalOptions="FillAndExpand"/>
+            
+            <Entry
+            IsPassword="True"   
+            x:Name="PasswordEntry"
+            Placeholder="Password"
+            HorizontalOptions="FillAndExpand"/>
 
-            <Entry 
-                x:Name="PasswordEntry"
-                Placeholder="Password"
-                HorizontalOptions="FillAndExpand"/>
-
+            
+            
+            
+ 
             <Button
                 x:Name="LoginButton"
                 Text="Log In" 
