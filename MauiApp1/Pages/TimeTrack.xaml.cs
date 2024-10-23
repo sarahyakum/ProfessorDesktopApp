@@ -1,37 +1,36 @@
-
+using MauiApp1.Models;
 
 namespace MauiApp1.Pages;
 
 public partial class TimeTrack : ContentPage
 {
-	 
-
-	public TimeTrack()
-	{
+	
+	public TimeTrack(){
 		InitializeComponent();
 
-		List<string> classes = new List<string>(){
-			"CS4485", "CS4365", "CS4352"
-
+		var classes = new List<Class>{
+			new Class{Name = "CS 4485"},
+			new Class{Name = "CS 1234"},
+			new Class{Name = "CS 2424"},
+			new Class{Name = "CS 5678"},
+			new Class{Name = "CS 1212"},
+			new Class{Name = "CS 9876"}
 		};
-		listClasses.ItemsSource = classes;
+
+		classList.ItemsSource = classes;
 		
+		
+
+
+
 	}
 
-	private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e){
-		String className = (string)e.SelectedItem;
+	private async void OnClassSelected(object sender, SelectedItemChangedEventArgs e){
+		var classPick = e.SelectedItem as Class;
 		
-		if (className=="CS4485"){ 
-			await Navigation.PushAsync(new Timesheets());
-		}
-		//return className;
-	}
-	
+		await Navigation.PushAsync(new Timesheets(classPick.Name));
 
-	
-	
-	
-	
+	}
 	
 }
 

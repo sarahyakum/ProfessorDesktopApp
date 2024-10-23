@@ -13,7 +13,7 @@ public partial class LoginPage : ContentPage
 	{
 		string netid = NetIDEntry.Text;
         string password = PasswordEntry.Text;
-        if (netid == "abc12345" && password == "password")
+        if (netid == "1" && password == "1")
         {
             await Navigation.PushAsync(new HomePage());
 

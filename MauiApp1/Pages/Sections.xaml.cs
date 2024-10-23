@@ -1,10 +1,10 @@
 namespace MauiApp1.Pages;
 
-public partial class PeerReview : TabbedPage
+public partial class Sections : ContentPage
 {
 	
 
-	public PeerReview()
+	public Sections()
 	{
 		InitializeComponent();
 	}

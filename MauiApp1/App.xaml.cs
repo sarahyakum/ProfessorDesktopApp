@@ -8,7 +8,9 @@ public partial class App : Application
 	{
 		InitializeComponent();
 
+		//MainPage = new NavigationPage(new Pages.Timesheets());
 		MainPage = new NavigationPage(new Pages.LoginPage());
+		//MainPage = new NavigationPage(new Pages.TabsPage());
 		//MainPage = new AppShell();
 	}
 }

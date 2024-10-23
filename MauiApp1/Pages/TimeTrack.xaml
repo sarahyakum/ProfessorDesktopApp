@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+
              x:Class="MauiApp1.Pages.TimeTrack"
              Title="Time Track">
-    <ScrollView>
-    <VerticalStackLayout 
-        Padding="30" 
-        Spacing="10">
 
-        <Label 
-            Text="Time Track View"
-            SemanticProperties.HeadingLevel="Level1" 
-            HorizontalOptions="Center" />
-        <ListView x:Name="listClasses" ItemSelected="OnItemSelected">
-
-        </ListView>
-        
-        
-
-        
-    </VerticalStackLayout>
     
+    <ScrollView>
+        <StackLayout Padding="20">
+            <Label Text="Time Tracking" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
+            <ListView x:Name="classList" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
+            
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+        </StackLayout>
+        
     </ScrollView>
-     
+      
 </ContentPage>
