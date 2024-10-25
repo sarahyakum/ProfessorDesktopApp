@@ -25,13 +25,13 @@
 
             
             
-            
- 
+    
             <Button
                 x:Name="LoginButton"
                 Text="Log In" 
                 Clicked="OnLoginButtonClicked"
                 HorizontalOptions="Center" />
+            
         </VerticalStackLayout>
     </ScrollView>
 

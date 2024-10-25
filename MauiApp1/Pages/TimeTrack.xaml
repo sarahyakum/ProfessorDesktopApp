@@ -10,13 +10,13 @@
         <StackLayout Padding="20">
             <Label Text="Time Tracking" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
-            <ListView x:Name="classList" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
+            <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
             
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Padding="10">
-                                <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+                                <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

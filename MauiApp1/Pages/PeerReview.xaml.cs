@@ -4,7 +4,7 @@ public partial class PeerReview : TabbedPage
 {
 	
 
-	public PeerReview()
+	public PeerReview(string netid)
 	{
 		InitializeComponent();
 	}
