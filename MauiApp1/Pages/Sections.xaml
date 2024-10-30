@@ -13,9 +13,26 @@
             SemanticProperties.HeadingLevel="Level1" 
             HorizontalOptions="Center" />
 
-            <CollectionView  ItemsLayout="VerticalGrid, 3">
+             
+        <StackLayout Padding="20">
+            <Label Text="Peer Reviews" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
+            <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
+            
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-            </CollectionView>
+            </ListView>
+        </StackLayout>
+        
+    
 
     </VerticalStackLayout>
     </ScrollView>

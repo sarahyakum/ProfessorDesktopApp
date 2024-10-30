@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Pages.PeerReview"
-             xmlns:local="clr-namespace:MauiApp1.Pages"
-             Title="Peer Review"
-             BackgroundColor="GhostWhite" SelectedTabColor="#FF110101" UnselectedTabColor="Gray">
+            Title="Peer Review">
     
-    <local:Sections />
-    <local:Settings />
+    <ScrollView>
+         <HorizontalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+        
+            <Button
+                x:Name="TimeSheetsButton"
+                Text="View Peer Reviews" 
+                Clicked="OnViewButtonClicked"
+            />
+
+            <Button
+                x:Name="PeerReviewButton"
+                Text="Set Up Peer Reviews" 
+                Clicked="OnSetUpButtonClicked"
+            />
+
+        </HorizontalStackLayout>
+    </ScrollView>
      
-</TabbedPage>
+</ContentPage>

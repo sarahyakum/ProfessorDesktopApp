@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using MySqlConnector;
 
 namespace MauiApp1.Models;
@@ -66,15 +67,51 @@ class DatabaseService{
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-                
-
+            
             }
             return sections;
 
 
+        }
+    }
+    public async Task<string> changePassword(string netid, string oldPassword, string newPassword){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(var cmd = new MySqlCommand("change_professor_password", conn)){
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    
+                    cmd.Parameters.AddWithValue("@prof_username", netid);
+                    cmd.Parameters.AddWithValue("@old_professor_password", oldPassword);
+                    cmd.Parameters.AddWithValue("@new_professor_password", newPassword);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+                
+
+                }
+                return error_message;
+                
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+
     }
 
+    /*public async Task<List<string>> getStudentsNetID(string classCode){
+
+    }*/
 
 
-}
 }

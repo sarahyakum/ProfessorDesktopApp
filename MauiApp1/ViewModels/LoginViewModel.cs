@@ -19,4 +19,12 @@ public class LoginViewModel
 
         return loginResultMessage;
     }
+
+    public async Task<string> ChangePasswordAsync(string netid, string oldPassword, string newPassword){
+        string changeResultMessage = await databaseService.changePassword(netid, oldPassword, newPassword);
+        Console.WriteLine(changeResultMessage);
+
+        return changeResultMessage;
+        
+    }
 }

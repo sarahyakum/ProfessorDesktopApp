@@ -9,9 +9,70 @@
         Spacing="10">
 
         <Label 
-            Text="Set up criteria"
-            SemanticProperties.HeadingLevel="Level1" 
+            Text="Set up criteria and Peer Review"
+            FontSize="Large"
             HorizontalOptions="Center" />
+         <Label 
+            Text="Enter Criteria Category"
+            FontSize="Body"
+            HorizontalOptions="Center" />
+        <Label 
+            Text="Separate category with a , and space like below"
+            FontSize="Small"
+            HorizontalOptions="Center" />
+        <Entry
+            x:Name="CriteriaEntry"
+            Placeholder="Teamwork, Contribution..."
+            HorizontalOptions="FillAndExpand"
+        />
+        <Label 
+            Text="Course Section (ex: 81000)"
+            FontSize="Body"
+            HorizontalOptions="Center" />
+        <Entry 
+            x:Name="SectionCodeEntry"
+            Placeholder="Code"
+            HorizontalOptions="FillAndExpand"/>
+        <Label 
+            Text="Review type (ex: Midterm or Final)"
+            FontSize="Body"
+            HorizontalOptions="Center" />
+        <Entry 
+            x:Name="ReviewTypeEntry"
+            Placeholder="Type"
+            HorizontalOptions="FillAndExpand"/>
+        <Label 
+            Text="Enter availability dates for students:"
+            FontSize="Body"
+            HorizontalOptions="Center" />
+        <Label 
+            Text="Midterms"
+            FontSize="Small"
+            HorizontalOptions="Center" />
+        <Entry 
+            x:Name="TimePeriodEntry1"
+            Placeholder="10/01/2024-10/08/2024"
+            HorizontalOptions="FillAndExpand"
+
+        />
+        <Label 
+            Text="Finals"
+            FontSize="Small"
+            HorizontalOptions="Center" />
+        <Entry 
+            x:Name="TimePeriodEntry2"
+            Placeholder="12/01/2024-12/08/2024"
+            HorizontalOptions="FillAndExpand"
+
+        />
+        <Button
+            x:Name="PeerReviewButton"
+            Text="Submit Peer Review"
+            Clicked="OnCreatePeerReviewClicked"
+            HorizontalOptions="Center"
+        />
+
+        
 
         <Label 
             Text="Set up date ranged."

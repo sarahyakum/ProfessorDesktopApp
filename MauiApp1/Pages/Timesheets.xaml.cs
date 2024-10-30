@@ -12,12 +12,12 @@ public partial class Timesheets : ContentPage
 		InitializeComponent();
 
 		DisplayTime();
-
-		BindingContext = new StudentHoursViewModel();
+		SectionName.Text = className;
 
 	}
 
 	private void DisplayTime(){
+		
 		Time.Text = DateTime.Now.ToString("G");
 	}
 }

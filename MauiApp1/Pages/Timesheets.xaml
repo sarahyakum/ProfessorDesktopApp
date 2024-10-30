@@ -5,9 +5,7 @@
              x:Class="MauiApp1.Pages.Timesheets"
              Title="Timesheets">
 
-    <ContentPage.BindingContext>
-        <local:StudentHoursViewModel/>
-    </ContentPage.BindingContext>
+   
 
     <ScrollView Orientation="Both">
 
@@ -15,7 +13,7 @@
             <Label 
                 Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
-            <Label x:Name="ClassName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
+            <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
 
 
        

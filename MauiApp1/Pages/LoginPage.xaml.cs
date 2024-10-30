@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using MauiApp1.ViewModels;
 
 namespace MauiApp1.Pages;
@@ -31,6 +32,9 @@ public partial class LoginPage : ContentPage
             professor.password = password;
 
             //DisplayAlert("Login", "Login Successful!", "OK");
+        }
+        else if(loginValidation == "Change password"){
+            await Navigation.PushAsync(new ChangePassword(netid, password));
         }
         else
         {
