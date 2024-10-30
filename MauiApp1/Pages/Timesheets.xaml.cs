@@ -1,18 +1,23 @@
 
-
-namespace MauiApp1.Pages;
 using MauiApp1.ViewModels;
+using MauiApp1.Models;
+namespace MauiApp1.Pages;
+
 
 public partial class Timesheets : ContentPage
 {
 	public DateTime Timestamp { get; set; }
 
-	public Timesheets(string className)
-	{
-		InitializeComponent();
+	private StudentSheetsViewModel viewModel;
 
+	public Timesheets(string className, string code)
+	{
+		viewModel = new StudentSheetsViewModel(code);
+		BindingContext = viewModel;
+		InitializeComponent();
 		DisplayTime();
 		SectionName.Text = className;
+		
 
 	}
 

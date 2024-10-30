@@ -18,8 +18,9 @@ public partial class TimeTrack : ContentPage
 
 	private async void OnClassSelected(object sender, SelectedItemChangedEventArgs e){
 		var classPick = e.SelectedItem as Section;
+		string secCode = classPick.code;
 		
-		await Navigation.PushAsync(new Timesheets(classPick.name));
+		await Navigation.PushAsync(new Timesheets(classPick.name, secCode));
 
 	}
 	

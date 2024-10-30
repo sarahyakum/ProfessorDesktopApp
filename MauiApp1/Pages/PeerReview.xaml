@@ -11,13 +11,13 @@
             HorizontalOptions="Center">
         
             <Button
-                x:Name="TimeSheetsButton"
+                x:Name="ViewPeerReviews"
                 Text="View Peer Reviews" 
                 Clicked="OnViewButtonClicked"
             />
 
             <Button
-                x:Name="PeerReviewButton"
+                x:Name="PeerReviewSettings"
                 Text="Set Up Peer Reviews" 
                 Clicked="OnSetUpButtonClicked"
             />

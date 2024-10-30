@@ -14,6 +14,6 @@ public partial class Settings : ContentPage
 	private async void OnCreatePeerReviewClicked(object sender, EventArgs e){
 		string secCode = SectionCodeEntry.Text;
 		string type = ReviewTypeEntry.Text;
-		await DisplayAlert("Peer review by" + professorID + " for " + secCode, type, "OK");
+		await DisplayAlert("Peer review by " + professorID + " for " + secCode, type, "OK");
 	}
 }

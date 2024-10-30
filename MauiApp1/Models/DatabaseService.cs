@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using MySqlConnector;
 
 namespace MauiApp1.Models;
@@ -109,9 +108,81 @@ class DatabaseService{
 
     }
 
-    /*public async Task<List<string>> getStudentsNetID(string classCode){
 
-    }*/
+    public async Task<List<Student>> getStudents(string code){
+
+        List<Student> students= new List<Student>();
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("get_section_students", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Connection = conn;
+
+                    cmd.Parameters.AddWithValue("@section_code", code);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                            {
+                                students.Add(new Student
+                                {
+                                    netid=reader.GetString("StuNetID")
+                                });
+                            }
+
+                        }
+
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+            return students;
+
+
+        }
+    }
+
+    public async Task<Student> getStudentsInfo(string netid){
+
+        Student student = new Student();
+        string studentNetid = netid;
+        string studentName = "";
+        string studentUtdId = "";
+        using (var conn = new MySqlConnection(connectionString)){
+            string query = "SELECT StuName, StuUTDID FROM Student WHERE StuNetID = @StuNetID";
+            
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    
+
+                    cmd.Parameters.AddWithValue("@StuNetID", studentNetid);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        if (await reader.ReadAsync()){
+                            studentName = reader["StuName"].ToString();
+                            studentUtdId = reader["StuUTDID"].ToString();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+            
+        }
+        student.name = studentName;
+        student.netid = studentNetid;
+        student.utdid = studentUtdId;
+
+        return student;
+
+    }
 
 
 }

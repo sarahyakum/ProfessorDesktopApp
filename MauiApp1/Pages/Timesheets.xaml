@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MauiApp1.ViewModels"
+             
              x:Class="MauiApp1.Pages.Timesheets"
              Title="Timesheets">
 
@@ -9,75 +9,33 @@
 
     <ScrollView Orientation="Both">
 
-       <VerticalStackLayout>
+       <StackLayout>
             <Label 
                 Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
             <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
-
-
-       
             
-        
-            <Grid Padding="10">
-                <!-- Define columns for dates + cumulative -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <!-- Add more columns as needed for each date -->
-                </Grid.ColumnDefinitions>
+            <ListView ItemsSource="{Binding Students}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10"  >
+                
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <ViewCell>
+                                <StackLayout Padding="30">
+                                    <Label Text="{Binding name}"  FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" />
+                                    <Label Text="{Binding netid}" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding utdid}" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" />
 
-                <!-- Define rows for students -->
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <!-- Add a RowDefinition for each student -->
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                                </StackLayout>
+                            
+                        </ViewCell>
+                        
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-                <!-- Header Row for Dates -->
-                <Label Text="Student" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"/>
-                <Label Text="19 Oct" Grid.Row="0" Grid.Column="1" FontAttributes="Bold"/>
-                <Label Text="20 Oct" Grid.Row="0" Grid.Column="2" FontAttributes="Bold"/>
-                <Label Text="21 Oct" Grid.Row="0" Grid.Column="3" FontAttributes="Bold"/>
-                <Label Text="22 Oct" Grid.Row="0" Grid.Column="4" FontAttributes="Bold"/>
-                <Label Text="23 Oct" Grid.Row="0" Grid.Column="5" FontAttributes="Bold"/>
-                <Label Text="Cumulative Hours" Grid.Row="0" Grid.Column="6" FontAttributes="Bold"/>
+            </ListView>
 
-                <!-- Data Rows -->
-                <CollectionView Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Students}" BackgroundColor="LightGray">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                                <!-- Student Name --> 
-                                <Label Text="{Binding StudentName}" Grid.Row="{Binding StudentName}" Grid.Column="0" Padding="5" Margin="10" />
-                                <!-- Hours on 20 Oct -->
-                                <Label Text="{Binding HoursByDate[19-Oct-2024]}" Grid.Row="{Binding StudentName}" Grid.Column="1"  Padding="5" Margin="10"/>
-                                
 
-                                <!-- Hours on 20 Oct -->
-                                <Label Text="{Binding HoursByDate[20-Oct-2024]}" Grid.Row="{Binding StudentName}" Grid.Column="2"  Padding="5" Margin="10"/>
-                                
-                                <!-- Hours on 21 Oct -->
-                                <Label Text="{Binding HoursByDate[21-Oct-2024]}" Grid.Row="{Binding StudentName}" Grid.Column="3"  Padding="5" Margin="10"/>
-                                <!-- Hours on 20 Oct -->
-                                <Label Text="{Binding HoursByDate[22-Oct-2024]}" Grid.Row="{Binding StudentName}" Grid.Column="4"  Padding="5" Margin="10"/>
-                                <!-- Hours on 20 Oct -->
-                                <Label Text="{Binding HoursByDate[23-Oct-2024]}" Grid.Row="{Binding StudentName}" Grid.Column="5"  Padding="5" Margin="10"/>
-                                
-                                <!-- Cumulative Hours -->
-                                <Label Text="{Binding CumulativeHours}" Grid.Row="{Binding StudentName}" Grid.Column="6"  Padding="6" Margin="10"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
-
-        </VerticalStackLayout>
+        </StackLayout>
     </ScrollView>
      
 </ContentPage>
