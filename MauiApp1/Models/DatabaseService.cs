@@ -127,7 +127,8 @@ class DatabaseService{
                             {
                                 students.Add(new Student
                                 {
-                                    netid=reader.GetString("StuNetID")
+                                    netid=reader.GetString("StuNetID"),
+                                    section = code
                                 });
                             }
 
@@ -182,6 +183,47 @@ class DatabaseService{
 
         return student;
 
+    }
+
+    public async Task<List<Team>> getTeams(string code){
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            List<Team> teams = new List<Team>();
+            
+            
+            
+            string query = "SELECT TeamNum from Team where SecCode=@SecCode";
+            
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    
+
+                    cmd.Parameters.AddWithValue("@SecCode", code);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync()){
+                            teams.Add(new Team{
+                                number=Convert.ToInt32(reader["TeamNum"]),
+                                section = code
+
+                            });
+                            
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+
+            return teams;
+            
+            
+        }
+        
     }
 
 

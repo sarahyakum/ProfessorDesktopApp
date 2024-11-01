@@ -1,5 +1,6 @@
 namespace MauiApp1.Pages;
 using MauiApp1.ViewModels;
+using MauiApp1.Models;
 
 public partial class Sections : ContentPage
 {
@@ -12,8 +13,11 @@ public partial class Sections : ContentPage
 		BindingContext = viewModel;
 	}
 
-	private async void OnClassSelected(object sender, EventArgs e){
-		await DisplayAlert("section", "you chose section", "ok");
+	private async void OnClassSelected(object sender, SelectedItemChangedEventArgs e){
+		var classPick = e.SelectedItem as Section;
+		string secCode = classPick.code;
+		
+		await Navigation.PushAsync(new TeamReviews(classPick.name, secCode));
 	}
 
 	

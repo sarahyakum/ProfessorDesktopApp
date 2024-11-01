@@ -14,7 +14,7 @@
             
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
+                        <ViewCell> 
                             <StackLayout Padding="10">
                                 <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
                             </StackLayout>
@@ -23,6 +23,15 @@
                 </ListView.ItemTemplate>
 
             </ListView>
+            <StackLayout>
+                <Label Text="File Upload Example" FontSize="Medium" HorizontalOptions="Center" />
+                <Button Text="Upload File" Command="{Binding PickAndDisplayFileCommand}" />
+                <Label Text="Selected File:" FontSize="Small" Margin="0,20,0,0" />
+                <Label Text="{Binding FileName}" FontSize="Small" />
+                <Label Text="File Content:" FontSize="Small" Margin="0,20,0,0" />
+                <Label Text="{Binding FileContent}" FontSize="Small" LineBreakMode="WordWrap" />
+            </StackLayout>
+            
         </StackLayout>
         
     </ScrollView>

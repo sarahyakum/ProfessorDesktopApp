@@ -5,24 +5,31 @@
             Title="Peer Review">
     
     <ScrollView>
-         <HorizontalStackLayout
+         <VerticalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+
+            <Label Text="Peer Review Page" FontSize="Title" HorizontalOptions="Center"/>
+
+            <HorizontalStackLayout
             Padding="30" 
             Spacing="10"
             HorizontalOptions="Center">
         
-            <Button
-                x:Name="ViewPeerReviews"
-                Text="View Peer Reviews" 
-                Clicked="OnViewButtonClicked"
-            />
+                <Button
+                    x:Name="ViewPeerReviews"
+                    Text="View Peer Reviews" 
+                    Clicked="OnViewButtonClicked"
+                />
 
-            <Button
-                x:Name="PeerReviewSettings"
-                Text="Set Up Peer Reviews" 
-                Clicked="OnSetUpButtonClicked"
-            />
-
-        </HorizontalStackLayout>
+                <Button
+                    x:Name="PeerReviewSettings"
+                    Text="Set Up Peer Reviews" 
+                    Clicked="OnSetUpButtonClicked"
+                />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
     </ScrollView>
      
 </ContentPage>

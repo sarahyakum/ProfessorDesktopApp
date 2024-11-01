@@ -4,37 +4,37 @@
              x:Class="MauiApp1.Pages.Sections"
              Title="Sections">
     <ScrollView>
-    <VerticalStackLayout 
-        Padding="30" 
-        Spacing="10">
+        <StackLayout 
+            Padding="20" >
 
-        <Label 
-            Text="Buttons for classes -> button for teams -> students"
-            SemanticProperties.HeadingLevel="Level1" 
-            HorizontalOptions="Center" />
-
-             
-        <StackLayout Padding="20">
+            <Label 
+                Text="Choose section for Peer Review:"
+                SemanticProperties.HeadingLevel="Level1" 
+                HorizontalOptions="Center" />
             <Label Text="Peer Reviews" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
-            <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
+                
+
+                
             
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10">
-                                <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
+                
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="10">
+                                    <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
-            </ListView>
-        </StackLayout>
+                </ListView>
+            
+            
         
-    
 
-    </VerticalStackLayout>
+        </StackLayout>
     </ScrollView>
      
 </ContentPage>

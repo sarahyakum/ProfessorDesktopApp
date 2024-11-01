@@ -17,8 +17,6 @@ public partial class PeerReview : ContentPage
 	private async void OnSetUpButtonClicked(object sender, EventArgs e){
 		await Navigation.PushAsync(new Settings(professorID));
 		
-		
-
 	}
 
 }
