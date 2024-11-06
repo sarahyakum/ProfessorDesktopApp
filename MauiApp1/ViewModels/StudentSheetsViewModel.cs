@@ -1,3 +1,13 @@
+/*
+    StudentSheetViewModel Class
+        NOT SURE WHAT TO ADD HERE 
+
+
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+        NETID:
+*/
+
+
 namespace MauiApp1.ViewModels;
 
 using System.ComponentModel;
