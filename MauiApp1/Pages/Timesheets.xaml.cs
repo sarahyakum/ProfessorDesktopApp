@@ -1,3 +1,11 @@
+/*
+	Timesheets Page:
+		Displays the Time sheets FOR A SPECIFIC SECTION?
+
+
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ... ADD THIS 
+        NetID: ... ADD THIS 
+*/
 
 using MauiApp1.ViewModels;
 using MauiApp1.Models;

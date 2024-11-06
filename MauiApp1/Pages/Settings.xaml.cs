@@ -1,3 +1,14 @@
+/*
+	Setting Page: MAYBE WE NEED TO CHANGE THIS NAME?
+		NOT SURE WHAT THIS ONE DOES YET
+
+
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+        NetID: ...
+
+
+*/
+
 namespace MauiApp1.Pages;
 
 public partial class Settings : ContentPage

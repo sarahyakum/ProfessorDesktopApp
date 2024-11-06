@@ -1,3 +1,14 @@
+/*
+	Sections Page:
+		Prompts the professor which section he would like to view the information for.
+
+		IS THIS FOR THE PEER REVIEWS OR THE TIME TRACKING OR BOTH?
+
+
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+        NetID: ...
+*/
+
 namespace MauiApp1.Pages;
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
