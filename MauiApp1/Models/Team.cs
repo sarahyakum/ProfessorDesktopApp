@@ -1,3 +1,12 @@
+/*
+    Initializing the Team Class:
+        Teams are dependent on the section. They should be used to separate the students to make peer reviews easier.
+
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+        NetID: ...
+
+*/
+
 namespace MauiApp1.Models;
 
 public class Team(){

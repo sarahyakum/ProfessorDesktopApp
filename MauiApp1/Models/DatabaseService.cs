@@ -1,10 +1,30 @@
+/*
+    Connects the professor's front end with the database. Instantiates the connection with the connection string. 
+    Connects the various procedures from the database to the front end system.
+    The procedures include:
+        Time Tracking: Editing timeslot, getting student emails
+        General: Professor login, change password, insert the number of teams, deleting a team, changing student's teams, getting sections,
+            adding students to teams, adding section
+        Peer Review: Getting section criteria, creating criteria, editing criteria, deleting criteria, creating peer reviews, viewing average scores, 
+            viewing individual scores, editing scores, reusing previous criteria, getting incomplete reviews, getting student emails
+
+    The procedures handle most of the validation for the database and return a string of the status of the procedure. 
+
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+        NETID:
+*/
+
 using MySqlConnector;
 
 namespace MauiApp1.Models;
 
 class DatabaseService{
+    // Connection String to the databse, must change to reflect how the database is used on your device and your password.
     string connectionString = "Server=localhost;Database=seniordesignproject;User=root;Password=sarahyakum;";
 
+
+    // Professor Login connection to check the inputted values against the database
+    // Also returns whether the professor needs to change their password because it is a first time login
     public async Task<string> Login(string username, string password){
 
         string error_message = string.Empty;
@@ -26,7 +46,7 @@ class DatabaseService{
 
                 error_message = result.Value.ToString();
 
-                
+
 
             }
             return error_message;
@@ -38,6 +58,7 @@ class DatabaseService{
 
     }
     
+    // Gets the sections that a professor teaches 
     public async Task<List<Section>> getSections(string netId){
 
         List<Section> sections= new List<Section>();
@@ -73,6 +94,10 @@ class DatabaseService{
 
         }
     }
+
+
+    // Checks whether the inputted username, old password, and new password are within the constraints:
+        // Username and old password must match, new password cannot be the same as the old or the UTDID
     public async Task<string> changePassword(string netid, string oldPassword, string newPassword){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -108,7 +133,7 @@ class DatabaseService{
 
     }
 
-
+    // Gets the NetIDs of all of the students in the section that the professor teaches
     public async Task<List<Student>> getStudents(string code){
 
         List<Student> students= new List<Student>();
@@ -146,6 +171,8 @@ class DatabaseService{
         }
     }
 
+
+    // Based on the student's NetID, returns their Name and UTDID
     public async Task<Student> getStudentsInfo(string netid){
 
         Student student = new Student();
@@ -185,6 +212,7 @@ class DatabaseService{
 
     }
 
+    // Gets the teams for the section that the professor teaches
     public async Task<List<Team>> getTeams(string code){
         
         using (var conn = new MySqlConnection(connectionString)){
