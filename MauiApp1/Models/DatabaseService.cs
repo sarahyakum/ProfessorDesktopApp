@@ -58,8 +58,10 @@ class DatabaseService{
 
     }
     
+
     // Gets the sections that a professor teaches 
     public async Task<List<Section>> getSections(string netId){
+
 
         List<Section> sections= new List<Section>();
         
@@ -95,10 +97,10 @@ class DatabaseService{
         }
     }
 
-
     // Checks whether the inputted username, old password, and new password are within the constraints:
         // Username and old password must match, new password cannot be the same as the old or the UTDID
     public async Task<string> changePassword(string netid, string oldPassword, string newPassword){
+
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -133,8 +135,10 @@ class DatabaseService{
 
     }
 
+
     // Gets the NetIDs of all of the students in the section that the professor teaches
     public async Task<List<Student>> getStudents(string code){
+
 
         List<Student> students= new List<Student>();
         
@@ -171,9 +175,9 @@ class DatabaseService{
         }
     }
 
-
     // Based on the student's NetID, returns their Name and UTDID
     public async Task<Student> getStudentsInfo(string netid){
+
 
         Student student = new Student();
         string studentNetid = netid;
@@ -212,8 +216,46 @@ class DatabaseService{
 
     }
 
+    //get timeslot for student by date
+    public async Task<List<Timeslot>> GetTimeslots(DateTime date, string netId){
+        List<Timeslot> timeslots = new List<Timeslot>();
+        using(var conn = new MySqlConnection(connectionString)){
+           
+            try{
+                using (MySqlCommand cmd = new MySqlCommand("student_timeslot_by_date", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@stu_netID", netId);
+                    cmd.Parameters.AddWithValue("@input_date", date);
+                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            timeslots.Add(new Timeslot
+                            {
+                                
+                                desciption = reader.GetString("TSDate"),
+                                duration = reader.GetString("TSDuration")
+                                
+                            });
+                        }
+
+                    }
+                }
+              
+            }
+            catch (Exception ex){
+                    Console.Write(ex.Message);
+
+            }
+
+
+        }
+        return timeslots;
+    }
+
+
     // Gets the teams for the section that the professor teaches
     public async Task<List<Team>> getTeams(string code){
+
         
         using (var conn = new MySqlConnection(connectionString)){
             List<Team> teams = new List<Team>();

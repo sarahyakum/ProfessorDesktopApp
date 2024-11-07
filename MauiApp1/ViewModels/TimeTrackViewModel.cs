@@ -71,7 +71,7 @@ public class TimeTrackViewModel : INotifyPropertyChanged
 
     private async Task LoadSectionsAsync(string netid)
     {
-        Sections = await databaseService.getSections(netid);
+        Sections = await databaseService.GetSections(netid);
         
     }
 

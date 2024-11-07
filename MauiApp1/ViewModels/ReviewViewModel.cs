@@ -30,7 +30,7 @@ public class ReviewViewModel : INotifyPropertyChanged
         LoadTeamsAsync(code);
     }
     private async void LoadTeamsAsync(string code){
-        Teams = await databaseService.getTeams(code);
+        Teams = await databaseService.GetTeams(code);
         List<Team> new_teams = new List<Team>();
 
         foreach (Team team in teams){

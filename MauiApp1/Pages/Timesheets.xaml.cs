@@ -8,7 +8,9 @@
 */
 
 using MauiApp1.ViewModels;
+using CommunityToolkit.Maui.Views;
 using MauiApp1.Models;
+
 namespace MauiApp1.Pages;
 
 
@@ -25,6 +27,7 @@ public partial class Timesheets : ContentPage
 		InitializeComponent();
 		DisplayTime();
 		SectionName.Text = className;
+
 		
 
 	}
@@ -32,5 +35,15 @@ public partial class Timesheets : ContentPage
 	private void DisplayTime(){
 		
 		Time.Text = DateTime.Now.ToString("G");
+	}
+
+	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
+				// Inside any page
+		var student = e.SelectedItem as Student;
+		string netid = student.netid;
+
+
+		var popup = new PopupPage(netid);
+		this.ShowPopup(popup);
 	}
 }

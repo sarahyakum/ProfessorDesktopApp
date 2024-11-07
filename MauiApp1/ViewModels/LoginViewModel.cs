@@ -34,7 +34,7 @@ public class LoginViewModel
 
     // Calls the method to change the password for the professor given they need to
     public async Task<string> ChangePasswordAsync(string netid, string oldPassword, string newPassword){
-        string changeResultMessage = await databaseService.changePassword(netid, oldPassword, newPassword);
+        string changeResultMessage = await databaseService.ChangePassword(netid, oldPassword, newPassword);
         Console.WriteLine(changeResultMessage);
 
         return changeResultMessage;

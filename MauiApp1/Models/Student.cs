@@ -21,4 +21,6 @@ public class Student(){
     public string utdid {get;set;}
     public string section{get;set;}
 
+    public List<Timeslot> timeslots{get;set;}
+
 }
