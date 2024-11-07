@@ -21,7 +21,7 @@ public class LoginViewModel
     }
 
     public async Task<string> ChangePasswordAsync(string netid, string oldPassword, string newPassword){
-        string changeResultMessage = await databaseService.changePassword(netid, oldPassword, newPassword);
+        string changeResultMessage = await databaseService.ChangePassword(netid, oldPassword, newPassword);
         Console.WriteLine(changeResultMessage);
 
         return changeResultMessage;

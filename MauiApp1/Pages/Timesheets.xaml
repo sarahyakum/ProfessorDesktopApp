@@ -15,7 +15,7 @@
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
             <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
             
-            <ListView ItemsSource="{Binding Students}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10"  >
+            <ListView ItemsSource="{Binding Students}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnStudentSelected" >
                 
                 <ListView.ItemTemplate>
                     <DataTemplate >
