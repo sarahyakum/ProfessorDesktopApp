@@ -296,6 +296,7 @@ class DatabaseService{
         
     }
 
+    //Creates criteria for a review type in a specific section
     public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -329,6 +330,379 @@ class DatabaseService{
             }
         }
     }
+
+     //Creates a peer review for a specific section with availability dates
+     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<Date> dates){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_create_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code", criteriaSetup[0]);
+                    cmd.Parameters.AddWithValue("@review_type", criteriaSetup[1]);
+                    cmd.Parameters.AddWithValue("@start_date", date[0]);
+                    cmd.Parameters.AddWithValue("@end_date", date[1]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+   //Allows for professor to modify individual scores for a student if needed
+    public async Task<string> EditScores(string netid, List<string> reviewInfo, int newScore){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("edit_scores_given", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",reviewInfo[0]);
+                    cmd.Parameters.AddWithValue("@reviewer_netID", reviewInfo[1]);
+                    cmd.Parameters.AddWithValue("@reviewee_netID", reviewInfo[2]);
+                    cmd.Parameters.AddWithValue("@criteria_name", reviewInfo[3]);
+                    cmd.Parameters.AddWithValue("@new_score", newScore);
+                    cmd.Parameters.AddWithValue("@review_type", reviewInfor[4]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+
+    //Inserts the amount of teams a professor will have for a section
+    public async Task<string> InsertTeamNums(string netid, string section, int numTeams){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_insert_num_teams", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@num_teams", numTeams);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+
+    //Deletes a team for a section based on given team number
+    public async Task<string> DeleteTeam(string netid, string section, int teamNum){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_delete_team", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNum);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+
+    //Retrieves criteria ID for a section in order to edit it
+     public async Task<string> GetCriteriaID(string netid, string section, string reviewType){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("get_section_criteriaid", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@review_type", teamNum);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+
+    //Edits a specific criteria created
+    public async Task<string> EditCriteria(string netid, string section, int criteriaID, List<string> criteriaInfo){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_edit_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@criteria_id", criteriaID);
+                    cmd.Parameters.AddWithValue("@criteria_name", criteriaInfo[0]);
+                    cmd.Parameters.AddWithValue("@criteria_description", criteriaInfo[1]);
+                    cmd.Parameters.AddWithValue("@review_type", criteriaInfo[2]);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+   
+    //Deletes a specific criteria
+    public async Task<string> DeleteCriteria(string netid, string section, string criteriaName, string reviewType){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_delete_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@criteria_name", criteriaName);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
+3
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+    
+    //Changes a students assigned team
+    public async Task<string> ChangeStuTeam(string profNetid, string section, string stuNetid, int newTeam){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_change_student_team", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", profNetid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@student_netID", stuNetid);
+                    cmd.Parameters.AddWithValue("@new_team", newTeam);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+    
+    //Allows professor to reuse criteria for different types of reviews
+    public async Task<string> ReuseCriteria(string netid, string section, string oldType, string newType){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("reuse_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", profNetid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@old_criteria_type", oldType);
+                    cmd.Parameters.AddWithValue("@new_criteria_type", newType);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+    
+    //Adds students to a professors class
+    public async Task<string> AddStudents(string netid, string utdid, string name, string section){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_add_students", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@student_netID",netid);
+                    cmd.Parameters.AddWithValue("@student_UTDID",utdid);
+                    cmd.Parameters.AddWithValue("@student_name", name);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+    
+    //Adds a student to a team
+     public async Task<string> AddNewTeamMember(int teamNum, string netid, string section){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("add_student_to_team", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@team_num",teamNum;
+                    cmd.Parameters.AddWithValue("@student_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " ex.Message;
+            }
+        }
+    }
+    
+    //Add a new section for a professor
+
+    //Retrieves sections start and end date
+
+    //Retrieves the students with unfinished reviews
+
+    //Edits the timeslot of a student
+
+    //Retrieves email addresses for students who have not logged any hours
+
+    //Retrieves email addresses for student who have not submitted their peer reviews
+
 
 
 }
