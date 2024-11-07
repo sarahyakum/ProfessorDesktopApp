@@ -296,5 +296,39 @@ class DatabaseService{
         
     }
 
+    public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_create_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code", criteriaSetup[0]);
+                    cmd.Parameters.AddWithValue("@criteria_name", criteriaSetup[1]);
+                    cmd.Parameters.AddWithValue("@criteria_description", criteriaSetup[2]);
+                    cmd.Parameters.AddWithValue("@review_type", criteriaSetup[3]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
 
 }

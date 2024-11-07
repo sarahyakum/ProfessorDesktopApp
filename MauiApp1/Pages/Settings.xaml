@@ -4,82 +4,107 @@
              x:Class="MauiApp1.Pages.Settings"
              Title="Settings">
     <ScrollView>
-    <VerticalStackLayout 
-        Padding="30" 
-        Spacing="10">
+        <VerticalStackLayout 
+            Padding="30" 
+            Spacing="10">
 
-        <Label 
-            Text="Set up criteria and Peer Review"
-            FontSize="Large"
-            HorizontalOptions="Center" />
-         <Label 
-            Text="Enter Criteria Category"
-            FontSize="Body"
-            HorizontalOptions="Center" />
-        <Label 
-            Text="Separate category with a , and space like below"
-            FontSize="Small"
-            HorizontalOptions="Center" />
-        <Entry
-            x:Name="CriteriaEntry"
-            Placeholder="Teamwork, Contribution..."
-            HorizontalOptions="FillAndExpand"
-        />
-        <Label 
-            Text="Course Section (ex: 81000)"
-            FontSize="Body"
-            HorizontalOptions="Center" />
-        <Entry 
-            x:Name="SectionCodeEntry"
-            Placeholder="Code"
-            HorizontalOptions="FillAndExpand"/>
-        <Label 
-            Text="Review type (ex: Midterm or Final)"
-            FontSize="Body"
-            HorizontalOptions="Center" />
-        <Entry 
-            x:Name="ReviewTypeEntry"
-            Placeholder="Type"
-            HorizontalOptions="FillAndExpand"/>
-        <Label 
-            Text="Enter availability dates for students:"
-            FontSize="Body"
-            HorizontalOptions="Center" />
-        <Label 
-            Text="Midterms"
-            FontSize="Small"
-            HorizontalOptions="Center" />
-        <Entry 
-            x:Name="TimePeriodEntry1"
-            Placeholder="10/01/2024-10/08/2024"
-            HorizontalOptions="FillAndExpand"
+            <Label 
+                Text="Set up criteria and Peer Review"
+                FontSize="Large"
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Enter Criteria and Description"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            
+            <Entry
+                x:Name="CriteriaEntry"
+                Placeholder="Teamwork"
+                HorizontalOptions="FillAndExpand"
+            />
+            <Border Stroke="Black" StrokeThickness="1">
+                <Editor x:Name="DescriptionEntry"
+                    Placeholder="How the person contributes to team..."
+                    HorizontalOptions="FillAndExpand"
+                    HeightRequest="75" 
+                
+                />
+                </Border>
+                
+            <Label  
+                Text="Course Section (ex: 81000)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="CodeEntry"
+                Placeholder="Code"
+                HorizontalOptions="FillAndExpand"/>
+            <Label 
+                Text="Review type (ex: Midterm or Final)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TypeEntry"
+                Placeholder="Type"
+                HorizontalOptions="FillAndExpand"/>
 
-        />
-        <Label 
-            Text="Finals"
-            FontSize="Small"
-            HorizontalOptions="Center" />
-        <Entry 
-            x:Name="TimePeriodEntry2"
-            Placeholder="12/01/2024-12/08/2024"
-            HorizontalOptions="FillAndExpand"
 
-        />
-        <Button
-            x:Name="PeerReviewButton"
-            Text="Submit Peer Review"
-            Clicked="OnCreatePeerReviewClicked"
-            HorizontalOptions="Center"
-        />
+             <Button
+                x:Name="CriteriaButton"
+                Text="Submit Criteria"
+                Clicked="OnCriteriaClicked"
+                HorizontalOptions="Center"
+            />
+            <Label  
+                Text="Course Section (ex: 81000)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="SectionCodeEntry"
+                Placeholder="Code"
+                HorizontalOptions="FillAndExpand"/>
+            <Label 
+                Text="Review type (ex: Midterm or Final)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="ReviewTypeEntry"
+                Placeholder="Type"
+                HorizontalOptions="FillAndExpand"/>
+            
+            <Label 
+                Text="Enter availability dates for students:"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Start"
+                FontSize="Small"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TimePeriodEntry1"
+                Placeholder="10/01/2024"
+                HorizontalOptions="FillAndExpand"
 
-        
+            />
+            <Label 
+                Text="End"
+                FontSize="Small"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TimePeriodEntry2"
+                Placeholder="10/08/2024"
+                HorizontalOptions="FillAndExpand"
 
-        <Label 
-            Text="Set up date ranged."
-            SemanticProperties.HeadingLevel="Level1" 
-            HorizontalOptions="Center" />
-        
-    </VerticalStackLayout>
+            />
+            <Button
+                x:Name="PeerReviewButton"
+                Text="Submit Peer Review"
+                Clicked="OnCreatePeerReviewClicked"
+                HorizontalOptions="Center"
+            />
+
+            
+        </VerticalStackLayout>
     </ScrollView>
      
 </ContentPage>
