@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+Page layout for the professor to choose a section
+**NEEDS TO BE UPDATED
+Written by Sarah Yakum sny200000
+-->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+
              x:Class="MauiApp1.Pages.Sections"
              Title="Sections">
+
+    
     <ScrollView>
-        <StackLayout 
-            Padding="20" >
-
-            <Label 
-                Text="Choose section for Peer Review:"
-                SemanticProperties.HeadingLevel="Level1" 
-                HorizontalOptions="Center" />
-            <Label Text="Peer Reviews" FontSize="Large" HorizontalOptions="Center" />
+        <StackLayout Padding="20">
+            <Label Text="Time Tracking" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
-                
-
-                
+            <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
             
-                <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
-                
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <StackLayout Padding="10">
-                                    <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
-                                </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell> 
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding name}" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-                </ListView>
+            </ListView>
             
             
-        
-
         </StackLayout>
+        
     </ScrollView>
-     
+      
 </ContentPage>

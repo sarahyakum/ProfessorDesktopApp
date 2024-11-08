@@ -5,8 +5,10 @@
 
         This page should be the landing page after the professor has logged in.
 
+
+
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
-        NetID: ...
+        NetID: sny200000
 
 */
 
@@ -16,6 +18,7 @@ public partial class HomePage : ContentPage
 
 {
     private string id;
+    private string flag;
     public HomePage(string netid)
     {
         InitializeComponent();
@@ -25,15 +28,24 @@ public partial class HomePage : ContentPage
     // If the professor chooses to visit the Time Tracking 
     private async void OnTimesheetsButtonClicked(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new TimeTrack(id));
+		flag="TIME";
+        await Navigation.PushAsync(new Sections(id, flag));
         
 
 	}
 
     // If the professor chooses to visit the Peer Review
     private async void OnPeerReviewButtonClicked(object sender, EventArgs e)
+
     {
-        await Navigation.PushAsync(new PeerReview(id));
+        flag="PR";
+        await Navigation.PushAsync(new Sections(id, flag));
+
+    }
+
+    private async void OnSettingsButtonClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new Settings(id));
 
     }
 }

@@ -1,9 +1,9 @@
 /*
     ReviewModel Class
-        NOT SURE WHAT TO ADD HERE 
+        Handles accessing all the teams their information for the peer reviews
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
-        NETID:
+        NETID: sny200000
 */
 
 namespace MauiApp1.ViewModels;
@@ -29,6 +29,7 @@ public class ReviewViewModel : INotifyPropertyChanged
         databaseService = new DatabaseService();
         LoadTeamsAsync(code);
     }
+    //calls database service that retrieves teams based on a section and adds to team class for the professor
     private async void LoadTeamsAsync(string code){
         Teams = await databaseService.GetTeams(code);
         List<Team> new_teams = new List<Team>();

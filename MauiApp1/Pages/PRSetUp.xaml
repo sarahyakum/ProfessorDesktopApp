@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+Page layout for the professor to set up peer reviews and create criteria
+Written by Sarah Yakum sny200000
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Pages.PRSetUp"
+             Title="Create Peer Review">
+    <ScrollView>
+        <VerticalStackLayout 
+            Padding="30" 
+            Spacing="10">
+
+            <Label 
+                Text="Set up criteria and Peer Review"
+                FontSize="Large"
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Enter Criteria and Description"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            
+            <Entry
+                x:Name="CriteriaEntry"
+                Placeholder="Teamwork"
+                HorizontalOptions="FillAndExpand"
+            />
+            <Border Stroke="Black" StrokeThickness="1">
+                <Editor x:Name="DescriptionEntry"
+                    Placeholder="How the person contributes to team..."
+                    HorizontalOptions="FillAndExpand"
+                    HeightRequest="75" 
+                
+                />
+                </Border>
+                
+            <Label  
+                Text="Course Section (ex: 81000)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="CodeEntry"
+                Placeholder="Code"
+                HorizontalOptions="FillAndExpand"/>
+            <Label 
+                Text="Review type (ex: Midterm or Final)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TypeEntry"
+                Placeholder="Type"
+                HorizontalOptions="FillAndExpand"/>
+
+
+             <Button
+                x:Name="CriteriaButton"
+                Text="Submit Criteria"
+                Clicked="OnCriteriaClicked"
+                HorizontalOptions="Center"
+            />
+            <Label  
+                Text="Course Section (ex: 81000)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="SectionCodeEntry"
+                Placeholder="Code"
+                HorizontalOptions="FillAndExpand"/>
+            <Label 
+                Text="Review type (ex: Midterm or Final)"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="ReviewTypeEntry"
+                Placeholder="Type"
+                HorizontalOptions="FillAndExpand"/>
+            
+            <Label 
+                Text="Enter availability dates for students:"
+                FontSize="Body"
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Start"
+                FontSize="Small"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TimePeriodEntry1"
+                Placeholder="10/01/2024"
+                HorizontalOptions="FillAndExpand"
+
+            />
+            <Label 
+                Text="End"
+                FontSize="Small"
+                HorizontalOptions="Center" />
+            <Entry 
+                x:Name="TimePeriodEntry2"
+                Placeholder="10/08/2024"
+                HorizontalOptions="FillAndExpand"
+
+            />
+            <Button
+                x:Name="PeerReviewButton"
+                Text="Submit Peer Review"
+                Clicked="OnCreatePeerReviewClicked"
+                HorizontalOptions="Center"
+            />
+
+            
+        </VerticalStackLayout>
+    </ScrollView>
+     
+</ContentPage>

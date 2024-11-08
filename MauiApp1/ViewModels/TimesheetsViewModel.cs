@@ -1,10 +1,17 @@
+/*
+    TimesheetsViewModel Class
+        View model for getting each students current recorded time sheet
+
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+        NETID:sny200000
+*/
 namespace MauiApp1.ViewModels;
 
 using System.ComponentModel;
 using MauiApp1.Models;
 using MauiApp1.Pages;
 
-public class TimeslotViewModel : INotifyPropertyChanged
+public class TimesheetsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private List<Timeslot> timeslots = new List<Timeslot>();
@@ -19,7 +26,7 @@ public class TimeslotViewModel : INotifyPropertyChanged
         
         }
 
-    public TimeslotViewModel(string netid)
+    public TimesheetsViewModel(string netid)
     {
         DateTime date = new DateTime(2024, 10, 8);;
         databaseService = new DatabaseService();

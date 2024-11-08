@@ -1,10 +1,10 @@
 /*
 	Timesheets Page:
-		Displays the Time sheets FOR A SPECIFIC SECTION?
+		Displays the Time sheets FOR A SPECIFIC SECTION
 
 
 	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ... ADD THIS 
-        NetID: ... ADD THIS 
+        NetID: sny200000 
 */
 
 using MauiApp1.ViewModels;
@@ -38,12 +38,10 @@ public partial class Timesheets : ContentPage
 	}
 
 	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
-				// Inside any page
+		// Inside any page
 		var student = e.SelectedItem as Student;
 		string netid = student.netid;
 
 
-		var popup = new PopupPage(netid);
-		this.ShowPopup(popup);
 	}
 }

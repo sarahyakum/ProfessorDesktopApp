@@ -6,7 +6,7 @@
         New professsor will have to be added to the system manually in SQL.
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
-        NetID: ...
+        NetID: sny200000
 
 */
 

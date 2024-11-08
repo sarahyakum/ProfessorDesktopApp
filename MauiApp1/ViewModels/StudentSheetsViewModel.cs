@@ -1,10 +1,9 @@
 /*
     StudentSheetViewModel Class
-        NOT SURE WHAT TO ADD HERE 
-
+        View model for getting all students a professor has and which section they correspond to
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
-        NETID:
+        NETID:sny200000
 */
 
 

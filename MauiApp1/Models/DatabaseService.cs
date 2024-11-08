@@ -11,7 +11,7 @@
     The procedures handle most of the validation for the database and return a string of the status of the procedure. 
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
-        NETID:
+        NETID: sny200000
 */
 
 using MySqlConnector;
@@ -332,7 +332,7 @@ class DatabaseService{
     }
 
      //Creates a peer review for a specific section with availability dates
-     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<Date> dates){
+     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<DateTime> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -340,10 +340,10 @@ class DatabaseService{
                 using (MySqlCommand cmd = new MySqlCommand("professor_create_criteria", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@professor_netID", netid);
-                    cmd.Parameters.AddWithValue("@section_code", criteriaSetup[0]);
-                    cmd.Parameters.AddWithValue("@review_type", criteriaSetup[1]);
-                    cmd.Parameters.AddWithValue("@start_date", date[0]);
-                    cmd.Parameters.AddWithValue("@end_date", date[1]);
+                    cmd.Parameters.AddWithValue("@section_code", prDetails[0]);
+                    cmd.Parameters.AddWithValue("@review_type", prDetails[1]);
+                    cmd.Parameters.AddWithValue("@start_date", dates[0]);
+                    cmd.Parameters.AddWithValue("@end_date", dates[1]);
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;
@@ -380,7 +380,7 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@reviewee_netID", reviewInfo[2]);
                     cmd.Parameters.AddWithValue("@criteria_name", reviewInfo[3]);
                     cmd.Parameters.AddWithValue("@new_score", newScore);
-                    cmd.Parameters.AddWithValue("@review_type", reviewInfor[4]);
+                    cmd.Parameters.AddWithValue("@review_type", reviewInfo[4]);
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;
@@ -396,7 +396,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -428,7 +428,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -460,7 +460,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -475,7 +475,7 @@ class DatabaseService{
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@professor_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code",section);
-                    cmd.Parameters.AddWithValue("@review_type", teamNum);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
 
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
@@ -492,7 +492,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -527,7 +527,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -544,7 +544,6 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@criteria_name", criteriaName);
                     cmd.Parameters.AddWithValue("@review_type", reviewType);
-3
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;
                     result.Size = 255;
@@ -559,7 +558,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -591,7 +590,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -604,7 +603,7 @@ class DatabaseService{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("reuse_criteria", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", profNetid);
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@old_criteria_type", oldType);
                     cmd.Parameters.AddWithValue("@new_criteria_type", newType);
@@ -623,7 +622,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -655,7 +654,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }
@@ -668,7 +667,7 @@ class DatabaseService{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("add_student_to_team", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@team_num",teamNum;
+                    cmd.Parameters.AddWithValue("@team_num",teamNum);
                     cmd.Parameters.AddWithValue("@student_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code", section);
 
@@ -686,7 +685,7 @@ class DatabaseService{
                 return error_message;
             }
             catch(Exception ex){
-                return "Error: " ex.Message;
+                return "Error: " + ex.Message;
             }
         }
     }

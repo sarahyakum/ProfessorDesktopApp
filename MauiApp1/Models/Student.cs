@@ -9,7 +9,7 @@
                 - Professors should be able to see the scores for the peer reviews, both given and written by the students in their section
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
-        NetID: ...
+        NetID: sny200000
 
 */
 

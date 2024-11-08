@@ -5,7 +5,7 @@
         Then upon creation of the peer reviews, the students will receive the criteria to rate their team members on.
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
-        NetID: ...
+        NetID: sny200000
 */
 
 namespace MauiApp1.Models;

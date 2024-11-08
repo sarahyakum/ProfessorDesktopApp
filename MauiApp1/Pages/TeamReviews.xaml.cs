@@ -1,9 +1,9 @@
 /*
 	Team Reviews Page:
-		NOT SURE WHAT THIS ONE DOES EITHER 
+		List of Teams per section and all the students and peer reviews within the team
 
 	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
-        NetID: ...
+        NetID: sny200000
 
 */
 
@@ -17,12 +17,12 @@ public partial class TeamReviews : ContentPage
 
 	private ReviewViewModel viewModel;
 
-	public TeamReviews(string className, string code)
+	public TeamReviews(string netid, string code)
 	{
 		InitializeComponent();
         viewModel = new ReviewViewModel(code);
 		BindingContext = viewModel;
-		SectionName.Text = className;
+		//SectionName.Text = className;
 		
 
 	}

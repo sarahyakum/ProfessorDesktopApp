@@ -1,11 +1,10 @@
 /*
-    LoginViewModel Class
-        Handles the authentication between the user interface and the database for the professor login
-
-        NOT SURE WHAT TO ADD HERE 
+    PRSetUpViewModel:
+        Handles creating the peer reviews and the criteria to then be populated in the database
+        based on section given
     
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
-        NETID:
+        NETID: sny200000
 
 */
 
@@ -20,7 +19,7 @@ public class PRSetUpViewModel
         databaseService = new DatabaseService();
     }
 
-    // Calls the method in the Database.cs model to check whether the given information is a correct login
+    // Calls the method in the Database.cs model to create a new criteria for a peer review
     public async Task<string> CriteriaAsync(string netid, List<string> setupInfo)
     {
         // Get the message from the stored procedure (success or error message)
@@ -30,6 +29,17 @@ public class PRSetUpViewModel
         Console.WriteLine(criteriaResultMessage);
 
         return criteriaResultMessage;
+    }
+    // Calls the method in the Database.cs model to create a new peer review for a section
+    public async Task<string> PRAsync(string netid, List<string> PRDetails, List<DateTime> dates)
+    {
+        // Get the message from the stored procedure (success or error message)
+        string prResultMessage = await databaseService.CreatePeerReview(netid, PRDetails, dates);
+
+        // Log the result (or use it in the UI)
+        Console.WriteLine(prResultMessage);
+
+        return prResultMessage;
     }
 
     
