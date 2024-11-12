@@ -10,9 +10,9 @@
 
 namespace MauiApp1.Models;
 
-public class Criteria{
+public class PeerReview{
     public string section{ get; set; }
-    public string name{ get; set; }
-    public string description{ get; set; }
-    public string reviewType{ get; set; }
+    public string type{ get; set; }
+    public DateTime startDate{ get; set; }
+    public DateTime endDate{ get; set; }
 }

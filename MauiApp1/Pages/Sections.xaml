@@ -13,7 +13,7 @@ Written by Sarah Yakum sny200000
     
     <ScrollView>
         <StackLayout Padding="20">
-            <Label Text="Time Tracking" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="Sections" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="Select a class:" FontSize="Medium" HorizontalOptions="Center" />
             <ListView ItemsSource="{Binding Sections}" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnClassSelected">
             

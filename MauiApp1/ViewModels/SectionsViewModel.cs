@@ -9,7 +9,6 @@ namespace MauiApp1.ViewModels;
 
 using System.ComponentModel;
 using MauiApp1.Models;
-using System.Windows.Input;
 
 
 

@@ -337,7 +337,7 @@ class DatabaseService{
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
-                using (MySqlCommand cmd = new MySqlCommand("professor_create_criteria", conn)){
+                using (MySqlCommand cmd = new MySqlCommand("create_peer_reviews", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@professor_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code", prDetails[0]);
@@ -465,6 +465,69 @@ class DatabaseService{
         }
     }
 
+    //Gets criteria based
+    public async Task<List<Criteria>> GetSectionsCriteria(string secCode){
+        List<Criteria> criterias = new List<Criteria>();
+
+        string query = "SELECT CriteriaName, CriteriaDescription, ReviewType FROM Criteria WHERE SecCode=@SecCode";
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    cmd.Parameters.AddWithValue("@SecCode", secCode);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while(await reader.ReadAsync()){
+                            criterias.Add(new Criteria{
+                                section = secCode,
+                                name = reader.GetString("CriteriaName"),
+                                description = reader.GetString("CriteriaDescription"),
+                                reviewType = reader.GetString("ReviewType")
+                               
+
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
+        return criterias;
+    }
+   
+    //Gets the peer reviews for a section
+    public async Task<List<PeerReview>> GetPeerReviews(string secCode) {
+        List<PeerReview> peerReviews = new List<PeerReview>();
+        string query = " SELECT DISTINCT ReviewType, StartDate, EndDate FROM PeerReview WHERE SecCode=@SecCode";
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    cmd.Parameters.AddWithValue("@SecCode", secCode);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while(await reader.ReadAsync()){
+                            peerReviews.Add(new PeerReview{
+                                section = secCode,
+                                type = reader.GetString("ReviewType"),
+                                startDate = reader.GetDateTime("StartDate"),
+                                endDate = reader.GetDateTime("EndDate")
+
+                               
+
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
+        return peerReviews;
+    }
     //Retrieves criteria ID for a section in order to edit it
      public async Task<string> GetCriteriaID(string netid, string section, string reviewType){
         string error_message = string.Empty;
@@ -689,6 +752,7 @@ class DatabaseService{
             }
         }
     }
+    
     
     //Add a new section for a professor
 
