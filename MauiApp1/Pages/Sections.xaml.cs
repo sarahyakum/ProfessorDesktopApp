@@ -27,12 +27,22 @@ public partial class Sections : ContentPage
 		this.flag = flag;
 		professorID = netid;
 		
+	}
 
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		await viewModel.InitializeASync(professorID);
 	}
 
 	// Takes the professor to the corresponding section's timesheets or peer reviews
 	private async void OnClassSelected(object sender, SelectedItemChangedEventArgs e){
 		var classPick = e.SelectedItem as Section;
+
+		if(classPick == null)
+		{
+			return;
+		}
 		string secCode = classPick.code;
 		
 		if (flag == "TIME"){

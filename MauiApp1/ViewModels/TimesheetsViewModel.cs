@@ -15,7 +15,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private List<Timeslot> timeslots = new List<Timeslot>();
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     
     public List<Timeslot> Timeslots{
         get => timeslots;

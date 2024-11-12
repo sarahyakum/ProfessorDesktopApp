@@ -17,7 +17,7 @@ public class StudentSheetsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private List<Student> students = new List<Student>();
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     
     public List<Student> Students{
         get => students;

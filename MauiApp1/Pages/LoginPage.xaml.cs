@@ -30,6 +30,7 @@ public partial class LoginPage : ContentPage
 	{
 		InitializeComponent();
         viewModel = new LoginViewModel();
+        professor = new Professor();
         
 	}
 

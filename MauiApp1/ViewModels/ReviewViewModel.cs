@@ -17,7 +17,7 @@ public class ReviewViewModel : INotifyPropertyChanged
     private List<Team> teams = new List<Team>();
     private List<Student> members = new List<Student>();
     private List<Score> scores = new List<Score>();
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public List<Team> Teams{
         get => teams;

@@ -45,7 +45,7 @@ class DatabaseService{
 
                 await cmd.ExecuteNonQueryAsync();
 
-                error_message = result.Value.ToString();
+                error_message = result.Value?.ToString() ?? string.Empty;
 
 
 
@@ -120,8 +120,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
-
+                    error_message = result.Value?.ToString() ?? string.Empty;
                 
 
                 }
@@ -196,8 +195,8 @@ class DatabaseService{
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         if (await reader.ReadAsync()){
-                            studentName = reader["StuName"].ToString();
-                            studentUtdId = reader["StuUTDID"].ToString();
+                            studentName = reader["StuName"] != DBNull.Value ? reader["StuName"].ToString() ?? string.Empty : string.Empty;
+                            studentName = reader["StuName"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
                         }
 
                     }
@@ -238,17 +237,13 @@ class DatabaseService{
                                 
                             });
                         }
-
                     }
                 }
-              
             }
             catch (Exception ex){
                     Console.Write(ex.Message);
 
             }
-
-
         }
         return timeslots;
     }
@@ -278,10 +273,8 @@ class DatabaseService{
                                 number=Convert.ToInt32(reader["TeamNum"]),
                                 section = code
 
-                            });
-                            
+                            }); 
                         }
-
                     }
                 }
             }
@@ -291,7 +284,6 @@ class DatabaseService{
             }
 
             return teams;
-            
             
         }
         
@@ -323,9 +315,7 @@ class DatabaseService{
 
                             });
                             
-                            
                         }
-
                     }
                 }
             }
@@ -336,9 +326,7 @@ class DatabaseService{
 
             return students;
             
-            
         }
-
     }
     //Creates criteria for a review type in a specific section
     public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
@@ -361,7 +349,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
 
@@ -396,7 +384,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
 
@@ -433,7 +421,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -465,7 +453,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -497,7 +485,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -592,7 +580,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -627,7 +615,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -658,7 +646,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -690,7 +678,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -722,8 +710,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
-
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
                 }
                 return error_message;
@@ -755,7 +742,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -786,7 +773,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }
@@ -831,9 +818,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
-
-
+                    error_message = result.Value?.ToString() ?? string.Empty;
                 }
                 Console.Write(error_message);
             }

@@ -16,12 +16,12 @@ public class SectionsViewModel : INotifyPropertyChanged
 {
 
     private DatabaseService databaseService;
-    private List<Section> sections;
-    public event PropertyChangedEventHandler PropertyChanged;
+    private List<Section>? sections;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
 
     public List<Section> Sections{
-        get => sections;
+        get => sections ?? new List<Section>();
         set{
             sections=value;
             OnPropertyChanged(nameof(Sections));
@@ -29,15 +29,14 @@ public class SectionsViewModel : INotifyPropertyChanged
         
     }
 
-
-
     public SectionsViewModel(string netid)
     {
-    
         databaseService = new DatabaseService();
-        LoadSectionsAsync(netid);
-        
+    }
 
+    public async Task InitializeASync(string netid)
+    {
+        await LoadSectionsAsync(netid);
     }
 
     //Uses database service to get all the sections a professor teaches
