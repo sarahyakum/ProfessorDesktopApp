@@ -23,13 +23,25 @@ Written by Sarah Yakum sny200000
             <ListView ItemsSource="{Binding Teams}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10"  >
                 
                 <ListView.ItemTemplate>
-                    <DataTemplate >
+                    <DataTemplate>
                         <ViewCell>
-                                <StackLayout Padding="30">
-                                    <Label Text="{Binding number}"  FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" />
-                                    <Label Text="{Binding section}" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center"/>
-                                    
-                                </StackLayout>
+                            <Frame BorderColor="Gray"
+                           CornerRadius="5"
+                           Margin="5"
+                           Padding="10">
+                        <VerticalStackLayout>
+                            <!-- Header Row -->
+                            <Label Text="{Binding number, StringFormat='Team Number: {0}'}  "
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Start" />
+                            <!-- Row 1 -->
+                            <HorizontalStackLayout>
+
+                                <Label Text="{Binding members.netid}" />
+                            </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            </Frame>
                             
                         </ViewCell>
                         

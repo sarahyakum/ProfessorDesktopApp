@@ -31,11 +31,13 @@ public partial class Timesheets : ContentPage
 		
 
 	}
-
+	//displays time can use datetime to keep up with current date
 	private void DisplayTime(){
 		
 		Time.Text = DateTime.Now.ToString("G");
 	}
+
+	//Allows for us to view the students and their timesheets in the section
 
 	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
 		// Inside any page

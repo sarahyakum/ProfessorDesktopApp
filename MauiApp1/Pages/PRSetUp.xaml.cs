@@ -29,7 +29,7 @@ public partial class PRSetUp : ContentPage
 		SectionName.Text = section;
 	}
 
-
+	//Creates a new criteria category based on the input given
 	private async void OnCriteriaClicked(object sender, EventArgs e){
 		List<string> criteriaInfo = new List<string> { section, CriteriaEntry.Text, DescriptionEntry.Text, TypeEntry.Text };
 
@@ -43,6 +43,8 @@ public partial class PRSetUp : ContentPage
 		}
 	
 	}
+
+	//creates a new peer review for a section when the button is clicked
 	private async void OnCreatePeerReviewClicked(object sender, EventArgs e){
 
 		List<string> peerReviewInfo = new List<string>{ section, ReviewTypeEntry.Text} ;

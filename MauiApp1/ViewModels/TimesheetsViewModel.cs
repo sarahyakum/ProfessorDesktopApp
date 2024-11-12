@@ -33,7 +33,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         GetTimeslotsAsync(date, netid);
 
     }
-
+    //Retrieves each students current recorded timesheets
     private async void GetTimeslotsAsync(DateTime date, string netid)
     {
         Timeslots = await databaseService.GetTimeslots(date,netid);

@@ -3,7 +3,7 @@
         Getting the data of each section for the professor
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
-        NETID:
+        NETID:sny200000
 */
 namespace MauiApp1.ViewModels;
 
@@ -40,6 +40,7 @@ public class SectionsViewModel : INotifyPropertyChanged
 
     }
 
+    //Uses database service to get all the sections a professor teaches
     private async Task LoadSectionsAsync(string netid)
     {
         Sections = await databaseService.GetSections(netid);

@@ -14,6 +14,7 @@
         NETID: sny200000
 */
 
+using System.Data;
 using MySqlConnector;
 
 namespace MauiApp1.Models;
@@ -296,6 +297,49 @@ class DatabaseService{
         
     }
 
+    //Get Team members for each team
+    public async Task<List<Student>> GetTeamMembers(string section, int team_num){
+        int number = team_num;
+
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            List<Student> students = new List<Student>();
+            
+            
+            
+            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum";
+            
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    
+
+                    cmd.Parameters.AddWithValue("@TeamNum", team_num);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync()){
+                            students.Add(new Student{
+                                netid= reader.GetString("StuNetID")
+
+                            });
+                            
+                            
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+
+            return students;
+            
+            
+        }
+
+    }
     //Creates criteria for a review type in a specific section
     public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
         string error_message = string.Empty;
@@ -704,6 +748,7 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@section_code", section);
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    
                     result.Direction= System.Data.ParameterDirection.Output;
                     result.Size = 255;
                     cmd.Parameters.Add(result);
@@ -753,6 +798,51 @@ class DatabaseService{
         }
     }
     
+    //Creates view for each teams peer review scores
+    public async Task<List<Score>> GetReviews(string profID, string section, string stuID, string reviewType){
+        string error_message = string.Empty;
+        List<Score> scores= new List<Score>();
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_view_individual_scores", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID",profID);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@student_netID", stuID);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
+                    
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync()){
+                            scores.Add(new Score{
+                                reviewer = reader.GetString("ReviewerName"),
+                                score = reader.GetInt32("Score"),
+                                criteria = reader.GetString("CriteriaName")
+
+                            });
+                            
+                        }}
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                Console.Write(error_message);
+            }
+            catch(Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
+        return scores;
+    }
     
     //Add a new section for a professor
 

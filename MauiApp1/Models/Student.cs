@@ -23,4 +23,6 @@ public class Student(){
 
     public List<Timeslot> timeslots{get;set;}
 
+    public List<Score> scores{get;set;}
+
 }

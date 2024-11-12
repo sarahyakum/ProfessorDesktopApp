@@ -1,7 +1,7 @@
 /*
 Timeslot class
 
-Individual dailt timeslot associated with a student to create their timesheet
+    Individual daily timeslot associated with a student to create their timesheet
 
 Written by Sarah Yakum
 sny200000

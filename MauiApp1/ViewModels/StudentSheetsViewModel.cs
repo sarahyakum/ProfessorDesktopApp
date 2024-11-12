@@ -35,6 +35,7 @@ public class StudentSheetsViewModel : INotifyPropertyChanged
 
     }
 
+    //Add students based on their section for their timesheets
     private async void LoadStudentsAsync(string code)
     {
         Students = await databaseService.GetStudents(code);

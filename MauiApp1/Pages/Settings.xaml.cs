@@ -22,16 +22,22 @@ public partial class Settings : ContentPage
         id = netid;
     }
 
+    //creating new sections under the professor
     private async void OnAddSectionsButtonClicked(object sender, EventArgs e){
         await DisplayAlert("hellloo", "hi", "OK");
     }
 
+    //adds students to a section
     private async void OnAddStudentsButtonClicked(object sender, EventArgs e){
         await DisplayAlert("hellloo", "hi", "OK");
     }
+
+    //adds students to a team
     private async void OnTeamMembersButtonClicked(object sender, EventArgs e){
         await DisplayAlert("hellloo", "hi", "OK");
     }
+
+    //allows for professor to change password any time
     private async void OnChangePasswordButtonClicked(object sender, EventArgs e){
         await DisplayAlert("hellloo", "hi", "OK");
     }
