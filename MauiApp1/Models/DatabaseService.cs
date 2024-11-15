@@ -14,6 +14,7 @@
         NETID: sny200000
 */
 
+using System.Collections.ObjectModel;
 using System.Data;
 using MySqlConnector;
 
@@ -217,8 +218,10 @@ class DatabaseService{
     }
 
     //get timeslot for student by date
-    public async Task<List<Timeslot>> GetTimeslots(DateTime date, string netId){
-        List<Timeslot> timeslots = new List<Timeslot>();
+    public async Task<ObservableCollection<Timeslot>> GetTimeslots(DateTime date, string netId){
+        ObservableCollection<Timeslot> timeslot = new ObservableCollection<Timeslot>();
+        Dictionary<DateTime, string> hours = new Dictionary<DateTime, string>();
+        Dictionary<DateTime, string> description = new Dictionary<DateTime, string>();
         using(var conn = new MySqlConnection(connectionString)){
            
             try{
@@ -229,11 +232,13 @@ class DatabaseService{
                      using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync())
                         {
-                            timeslots.Add(new Timeslot
+                            hours[date] = reader.GetString("TSDuration");
+                            description[date] = reader.GetString("TSDescription");
+                            timeslot.Add(new Timeslot
                             {
+                                HoursByDate = hours,
+                                DescByDate = description
                                 
-                                desciption = reader.GetString("TSDate"),
-                                duration = reader.GetString("TSDuration")
                                 
                             });
                         }
@@ -245,7 +250,7 @@ class DatabaseService{
 
             }
         }
-        return timeslots;
+        return timeslot;
     }
 
 

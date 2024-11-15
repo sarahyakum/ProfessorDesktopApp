@@ -19,77 +19,89 @@ public partial class Timesheets : ContentPage
 {
 	public DateTime Timestamp { get; set; }
 
-	private StudentSheetsViewModel viewModel;
-	public ObservableCollection<WorkHoursEntry> WorkHours { get; set; }
+	public TimesheetsViewModel viewModel;
+	public ObservableCollection<Timeslot> WorkHours { get; set; }
 
 	public Timesheets(string className, string code)
 	{
-		viewModel = new StudentSheetsViewModel(code);
+		viewModel = new TimesheetsViewModel(code);
+        
 		BindingContext = viewModel;
 		InitializeComponent();
 		DisplayTime();
 		SectionName.Text = className;
-		// Sample data
-       WorkHours = new ObservableCollection<WorkHoursEntry>
+        
+		// Static Data
+       WorkHours = new ObservableCollection<Timeslot>
         {
-            new WorkHoursEntry { StudentName = "Alice", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Bob", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Charlie", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Diana", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Evan", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Fiona", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "George", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Holly", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Ian", HoursByDate = GenerateSampleHours() },
-            new WorkHoursEntry { StudentName = "Jane", HoursByDate = GenerateSampleHours() }
+            new Timeslot { studentName = "Alice", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Bob", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Charlie", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Diana", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Evan", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Fiona", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "George", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Holly", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Ian", HoursByDate = GenerateSampleHours() },
+            new Timeslot { studentName = "Jane", HoursByDate = GenerateSampleHours() }
         };
 	
 		PopulateGrid();
 		
 
 	}
-	private Dictionary<string, string> GenerateSampleHours()
+
+    //Static
+	private Dictionary<DateTime, string> GenerateSampleHours()
     {
-        var hoursByDate = new Dictionary<string, string>();
+        var hoursByDate = new Dictionary<DateTime, string>();
         for (int day = 1; day <= 14; day++) // Adding 14 dates to ensure horizontal scrolling
         {
-            string date = $"2024-11-{day:00}";
+            DateTime date = DateTime.Parse($"2024-11-{day:00}");
             hoursByDate[date] = new Random().Next(0, 8).ToString(); // Random hours between 0 and 8
         }
         return hoursByDate;
     }
 	private void PopulateGrid()
     {
-        // Extract all unique dates across all students for column headers
+        var students = viewModel.Students;
+        var timeslots = viewModel.Timeslots;
+        var window = viewModel.Window;
+
+
+        
+
+        
+        //Get Dates
         var allDates = WorkHours
             .SelectMany(student => student.HoursByDate.Keys)
             .Distinct()
             .OrderBy(date => date)
             .ToList();
 
-        // Add dates as column headers in the first row
+        // Create column headers
         for (int columnIndex = 1; columnIndex <= allDates.Count; columnIndex++)
         {
             WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             var dateLabel = new Label
             {
-                Text = allDates[columnIndex - 1],
+                Text = allDates[columnIndex - 1].Date.ToString(),
                 FontAttributes = FontAttributes.Bold,
                 HorizontalOptions = LayoutOptions.Center
             };
             WorkHoursGrid.Add(dateLabel, columnIndex, 0); // Row 0, dynamic column
         }
 
-        // Add students and their hours worked as rows
+        // Create students and add rows
         for (int rowIndex = 1; rowIndex <= WorkHours.Count; rowIndex++)
         {
             var student = WorkHours[rowIndex - 1];
 
-            // Add student name as row header
+            // 
             WorkHoursGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             var nameLabel = new Label
             {
-                Text = student.StudentName,
+                Text = student.studentName,
                 FontAttributes = FontAttributes.Bold,
                 VerticalOptions = LayoutOptions.Center
             };
@@ -112,7 +124,7 @@ public partial class Timesheets : ContentPage
                 // Button click event to open an edit prompt
                 button.Clicked += async (sender, e) =>
                 {
-                    string result = await DisplayPromptAsync("Edit Hours", $"Enter hours for {student.StudentName} on {date}", 
+                    string result = await DisplayPromptAsync("Edit Hours", $"Enter hours for {student.studentName} on {date}", 
                                                               initialValue: button.Text, 
                                                               maxLength: 3, 
                                                               keyboard: Keyboard.Numeric);
@@ -140,7 +152,7 @@ public partial class Timesheets : ContentPage
                 WorkHoursGrid.Add(borderedCell, columnIndex, rowIndex); // Dynamic column, dynamic row
             }
         }
-    }
+    } 
 
 	
 	//displays time can use datetime to keep up with current date
