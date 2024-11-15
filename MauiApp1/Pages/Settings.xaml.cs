@@ -39,7 +39,7 @@ public partial class Settings : ContentPage
 
     //allows for professor to change password any time
     private async void OnChangePasswordButtonClicked(object sender, EventArgs e){
-        await DisplayAlert("hellloo", "hi", "OK");
+        await Navigation.PushAsync(new ChangePassword(id));
     }
 
     

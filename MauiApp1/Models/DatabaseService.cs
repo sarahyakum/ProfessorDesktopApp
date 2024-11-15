@@ -891,7 +891,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }

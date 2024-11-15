@@ -53,7 +53,7 @@ public partial class LoginPage : ContentPage
             //DisplayAlert("Login", "Login Successful!", "OK");
         }
         else if(loginValidation == "Change password"){
-            await Navigation.PushAsync(new ChangePassword(netid, password));
+            await Navigation.PushAsync(new ChangePassword(netid));
         }
         else
         {
