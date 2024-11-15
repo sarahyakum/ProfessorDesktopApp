@@ -15,7 +15,9 @@ public class TimesheetsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private List<Timeslot> timeslots = new List<Timeslot>();
-    public event PropertyChangedEventHandler? PropertyChanged;
+    private List<DateTime> window = new List<DateTime>();
+    //public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
     
     public List<Timeslot> Timeslots{
         get => timeslots;
@@ -25,27 +27,43 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         }
         
         }
+    public List<DateTime> Window{
+        get => window;
+        set{
+            window=value;
+            OnPropertyChanged(nameof(Window));
+        }
+    }
 
     public TimesheetsViewModel(string netid)
     {
-        DateTime date = new DateTime(2024, 10, 8);;
+        DateTime startDate = Window[0];
+         DateTime endDate = Window[1];
         databaseService = new DatabaseService();
-        GetTimeslotsAsync(date, netid);
+        GetTimeslotsAsync(netid, startDate, endDate);
 
     }
     //Retrieves each students current recorded timesheets
-    private async void GetTimeslotsAsync(DateTime date, string netid)
+    private async void GetTimeslotsAsync(string netid, DateTime startDate, DateTime endDate)
     {
-        Timeslots = await databaseService.GetTimeslots(date,netid);
-        Student curr_student =  new Student();
-        curr_student.netid = netid;
-        foreach(Timeslot slot in Timeslots){
-            curr_student.timeslots.Add(slot);
-        }
+        DateTime currDate = startDate;
+        for(DateTime i = startDate; i <= endDate; i.AddDays(1)){
+            Timeslots = await databaseService.GetTimeslots(i,netid);
+            Student curr_student =  new Student();
+            curr_student.netid = netid;
+            foreach(Timeslot slot in Timeslots){
+                curr_student.timeslots.Add(slot);
+            }
 
-        Timeslots = curr_student.timeslots;
+            Timeslots = curr_student.timeslots;
+
+        }
+        
+        
         
     }
+    //Retrieves courses time frame
+    //private async void GetTimeFrameAsync()
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

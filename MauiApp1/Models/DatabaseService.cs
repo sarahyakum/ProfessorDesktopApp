@@ -832,6 +832,48 @@ class DatabaseService{
     //Add a new section for a professor
 
     //Retrieves sections start and end date
+    public async Task<List<DateTime>> GetCourseTimeFrame(string section){
+
+        string error_message = string.Empty;
+        List<DateTime> window = new List<DateTime>();
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("get_section_timeframe", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    
+                    
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync()){
+                            
+                            window.Add(reader.GetDateTime("StartDate"));
+                            window.Add(reader.GetDateTime("EndDate"));
+                            
+                        }}
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value.ToString();
+
+
+                }
+                Console.Write(error_message);
+            }
+            catch(Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
+        return window;
+
+    }
 
     //Retrieves the students with unfinished reviews
 

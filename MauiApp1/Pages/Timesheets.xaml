@@ -13,35 +13,22 @@ Written by Sarah Yakum sny200000
 
    
 
-    <ScrollView Orientation="Both">
+    
 
        <StackLayout>
             <Label 
                 Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
             <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
-            
-            <ListView ItemsSource="{Binding Students}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10" ItemSelected="OnStudentSelected" >
-                
-                <ListView.ItemTemplate>
-                    <DataTemplate >
-                        <ViewCell>
-                                <StackLayout Padding="30">
-                                    <Label Text="{Binding name}"  FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" />
-                                    <Label Text="{Binding netid}" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding utdid}" FontAttributes="Bold" FontSize="Small" HorizontalOptions="Center" />
-
-                                </StackLayout>
-                            
-                        </ViewCell>
-                        
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-
-            </ListView>
-
-
+            <ScrollView Orientation="Both">
+                <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="2" ColumnSpacing="2">
+                    <!-- The grid will be populated dynamically in the code-behind -->
+                </Grid>
+            </ScrollView>
         </StackLayout>
-    </ScrollView>
+
+
+        
      
 </ContentPage>
+ 

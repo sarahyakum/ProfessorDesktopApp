@@ -31,14 +31,14 @@ Written by Sarah Yakum sny200000
                            Padding="10">
                         <VerticalStackLayout>
                             <!-- Header Row -->
-                            <Label Text="{Binding number, StringFormat='Team Number: {0}'}  "
+                            <Label Text="{Binding members.n}"
                                    FontSize="Medium"
                                    FontAttributes="Bold"
                                    HorizontalOptions="Start" />
                             <!-- Row 1 -->
                             <HorizontalStackLayout>
 
-                                <Label Text="{Binding members.netid}" />
+                                <Label Text="{Binding number, StringFormat='Team Number: {0}'}" />
                             </HorizontalStackLayout>
                             </VerticalStackLayout>
                             </Frame>

@@ -20,7 +20,7 @@ public class ReviewViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public List<Team> Teams{
-        get => teams;
+        get => teams; 
         set{
             teams = value;
             OnPropertyChanged(nameof(Teams));
