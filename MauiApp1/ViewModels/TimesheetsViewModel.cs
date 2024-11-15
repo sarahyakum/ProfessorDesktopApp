@@ -7,6 +7,7 @@
 */
 namespace MauiApp1.ViewModels;
 
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MauiApp1.Models;
 using MauiApp1.Pages;
@@ -14,12 +15,19 @@ using MauiApp1.Pages;
 public class TimesheetsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
-    private List<Timeslot> timeslots = new List<Timeslot>();
+    private ObservableCollection<Timeslot> timeslots = new ObservableCollection<Timeslot>();
     private List<DateTime> window = new List<DateTime>();
-    //public event PropertyChangedEventHandler PropertyChanged;
+    private List<Student> students = new List<Student>();
     public event PropertyChangedEventHandler PropertyChanged;
-    
-    public List<Timeslot> Timeslots{
+    public List<Student> Students{
+        get => students;
+        set{
+            students=value;
+            OnPropertyChanged(nameof(Students));
+        }
+        
+        }
+    public ObservableCollection<Timeslot> Timeslots{
         get => timeslots;
         set{
             timeslots=value;
@@ -34,23 +42,50 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Window));
         }
     }
+    
 
-    public TimesheetsViewModel(string netid)
+    public TimesheetsViewModel(string section)
     {
-        DateTime startDate = Window[0];
-         DateTime endDate = Window[1];
         databaseService = new DatabaseService();
-        GetTimeslotsAsync(netid, startDate, endDate);
+        LoadStudentsAsync(section);
+        GetTimeFrameAsync(section);
+        //DateTime startDate = Window[0];
+        //DateTime endDate = Window[1];
+        
+        //GetTimeslotsAsync(netid, startDate, endDate);
+        
 
     }
+     //Add students based on their section for their timesheets
+    private async void LoadStudentsAsync(string code)
+    {
+        Students = await databaseService.GetStudents(code);
+        List<Student> new_students=new List<Student>();
+        foreach (Student student in Students){
+            string netid = student.netid;
+            
+            Student stu = await databaseService.GetStudentsInfo(netid);
+            new_students.Add(stu);
+            string name = stu.name;
+            GetTimeslotsAsync(netid, name, Window[0], Window[1]);
+
+        }
+        Students = new_students;
+        
+        
+    }
+
     //Retrieves each students current recorded timesheets
-    private async void GetTimeslotsAsync(string netid, DateTime startDate, DateTime endDate)
+    private async void GetTimeslotsAsync(string netid, string name, DateTime startDate, DateTime endDate)
     {
         DateTime currDate = startDate;
         for(DateTime i = startDate; i <= endDate; i.AddDays(1)){
             Timeslots = await databaseService.GetTimeslots(i,netid);
+            //var student = students.FirstOrDefault(s => s.netid == netid);
+            //Timeslot timeslot = new Timeslot();
             Student curr_student =  new Student();
             curr_student.netid = netid;
+            curr_student.name = name;
             foreach(Timeslot slot in Timeslots){
                 curr_student.timeslots.Add(slot);
             }
@@ -62,8 +97,12 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         
         
     }
+
     //Retrieves courses time frame
-    //private async void GetTimeFrameAsync()
+    private async void GetTimeFrameAsync(string section){
+        List<DateTime> curr_window = await databaseService.GetCourseTimeFrame(section);
+        Window = curr_window;
+    }
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

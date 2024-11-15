@@ -21,7 +21,7 @@ Written by Sarah Yakum sny200000
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
             <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
             <ScrollView Orientation="Both">
-                <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="2" ColumnSpacing="2">
+                <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="5" ColumnSpacing="5">
                     <!-- The grid will be populated dynamically in the code-behind -->
                 </Grid>
             </ScrollView>

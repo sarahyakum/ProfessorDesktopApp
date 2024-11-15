@@ -8,12 +8,10 @@ sny200000
 
 
 */
-
-
-namespace MauiApp1.Models;
 public class Timeslot{
-    public DateTime date{get;set;}
-    public string duration {get;set;}
+    public string studentName { get; set; }
+    public string netId{ get; set; }
+    public Dictionary<DateTime, string> HoursByDate { get; set; }
+    public Dictionary<DateTime, string> DescByDate { get; set; }
 
-    public string desciption {get;set;}
 }
