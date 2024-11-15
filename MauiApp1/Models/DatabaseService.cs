@@ -21,7 +21,7 @@ namespace MauiApp1.Models;
 
 class DatabaseService{
     // Connection String to the databse, must change to reflect how the database is used on your device and your password.
-    string connectionString = "Server=localhost;Database=seniordesignproject;User=root;Password=sarahyakum;";
+    string connectionString = "Server=localhost;Database=seniordesignproject;User=root;Password=seniordesignproject;";
 
 
     // Professor Login connection to check the inputted values against the database
@@ -830,6 +830,36 @@ class DatabaseService{
     }
     
     //Add a new section for a professor
+    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateTime> dates){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_add_section", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code", sectionInfo[1]);
+                    cmd.Parameters.AddWithValue("@section_name", sectionInfo[0]);
+                    cmd.Parameters.AddWithValue("@start_date", dates[0]);
+                    cmd.Parameters.AddWithValue("@end_date", dates[1]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
 
     //Retrieves sections start and end date
     public async Task<List<DateTime>> GetCourseTimeFrame(string section){

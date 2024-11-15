@@ -24,7 +24,7 @@ public partial class Settings : ContentPage
 
     //creating new sections under the professor
     private async void OnAddSectionsButtonClicked(object sender, EventArgs e){
-        await DisplayAlert("hellloo", "hi", "OK");
+        await Navigation.PushAsync(new AddSections(id));
     }
 
     //adds students to a section
