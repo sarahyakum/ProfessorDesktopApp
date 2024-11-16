@@ -1,0 +1,102 @@
+<!-- Add Students Page XAML File -->
+<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
+
+<?xaml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="MauiApp1.Pages.AddStudents"
+                Title="Add Students">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+                <Label 
+                    Text="Upload Students" FontSize ="Large" HorizontalOptions="Center"/>
+
+                <!-- Uploading a CSV File Functionality -->
+                <Label
+                    Text="To upload students select a CSV file with the following columns: Last Name, First Name, NetID, UTDID" FontSize="Body" HorizontalOptions="Center"/>
+                <Label
+                    Text="The line of the CSV file should be the column titles." FontSize="Body" HorizontalOptions="Center"/>
+
+                <Button 
+                    x:Name="UploadStudentsButton"
+                    Text="Upload CSV File"
+                    Clicked ="OnUploadCsvClicked"
+                    HorizontalOptions="Center"
+                />
+                
+                <BoxView HeightRequest="50" Color="Transparent"/>
+                
+                <!-- Adding individual Student Functionality -->
+                <Label
+                    Text="Add Student"
+                    FontSize="Large"
+                    HorizontalOptions="Center" />
+
+                
+                <Label 
+                    Text="Student Name" FontSize="Medium" HorizontalOptions="Center"/>
+                <Entry  
+                    x:Name="NameEntry"
+                    Placeholder="Alison Swift"
+                    HorizontalOptions="FillAndExpand"
+                />
+            
+                <Label 
+                        Text="Student NetID" FontSize="Medium" HorizontalOptions="Center" />
+                <Entry  
+                    x:Name="NetIDEntry"
+                    Placeholder="abc123456"
+                    HorizontalOptions="FillAndExpand"
+                />
+
+                <Label
+                    Text="Student UTDID" FontSize="Medium" HorizontalOptions="Center" />
+                <Entry  
+                    x:Name="UTDIDEntry"
+                    Placeholder="0123456789"
+                    HorizontalOptions="FillAndExpand"
+                />
+
+                <Button
+                    x:Name="AddStudentButton"
+                    Text="Submit Student"
+                    Clicked="OnAddStudentClicked"
+                    HorizontalOptions="Center"
+                />
+
+                <BoxView HeightRequest="50" Color="Transparent"/>
+
+                <!-- Displaying the current students -->
+                <Label 
+                        Text="Current Students"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                />
+                
+                <ListView ItemsSource="{Binding Students}" SelectionMode="Single" Margin="5">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding name}" FontSize="Medium" FontAttributes="Bold"/>
+                                    <Label Grid.Column="1" Text="NetID: " FontSize="Small" TextColor="Gray"/>
+                                    <Label Grid.Column="2" Text="{Binding netid}" FontSize="Small"/>
+                                    <Label Grid.Column="3" Text="UTDID: " FontSize="Small" TextColor="Gray"/>
+                                    <Label Grid.Column="4" Text="{Binding utdid}" FontSize="Small"/>
+                                </Grid>
+                            </ViewCell>  
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

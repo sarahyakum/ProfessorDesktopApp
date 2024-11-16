@@ -14,7 +14,7 @@
 */
 
 namespace MauiApp1.Models;
-public class Student(){
+public class Student{
     public string name{get;set;}
     public string netid{get;set;}
 

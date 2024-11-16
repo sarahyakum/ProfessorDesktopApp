@@ -196,7 +196,7 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         if (await reader.ReadAsync()){
                             studentName = reader["StuName"] != DBNull.Value ? reader["StuName"].ToString() ?? string.Empty : string.Empty;
-                            studentName = reader["StuName"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
+                            studentUtdId = reader["StuUTDID"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
                         }
 
                     }

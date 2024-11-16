@@ -46,15 +46,17 @@ public partial class Sections : ContentPage
 		string secCode = classPick.code;
 		
 		if (flag == "TIME"){
-
 			await Navigation.PushAsync(new Timesheets(classPick.name, secCode));
-
 		}
 
 		if(flag == "PR"){
 			await Navigation.PushAsync(new PeerReview(professorID, secCode));
 		}
 		
+		if(flag == "ADDSTU")
+		{
+			await Navigation.PushAsync(new AddStudents(secCode));
+		}
 
 	}
 

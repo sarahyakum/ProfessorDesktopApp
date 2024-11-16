@@ -16,6 +16,7 @@ public partial class Settings : ContentPage
 
 {
     private string id;
+    private string flag;
     public Settings(string netid)
     {
         InitializeComponent();
@@ -29,7 +30,8 @@ public partial class Settings : ContentPage
 
     //adds students to a section
     private async void OnAddStudentsButtonClicked(object sender, EventArgs e){
-        await DisplayAlert("hellloo", "hi", "OK");
+        flag="ADDSTU";
+        await Navigation.PushAsync(new Sections(id, flag));
     }
 
     //adds students to a team
