@@ -6,7 +6,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 x:Class="MauiApp1.Pages.AddStudents"
-                Title="Add Students">
+                Title="Manage Students">
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
                 <Label 
@@ -25,6 +25,27 @@
                     HorizontalOptions="Center"
                 />
                 
+                <BoxView HeightRequest="30" Color="Transparent"/>
+
+                <Label 
+                    Text="Upload Students and Teams" FontSize ="Large" HorizontalOptions="Center"/>
+
+                <!-- Uploading a CSV File Functionality -->
+                <Label
+                    Text="To upload students and assign them to a team select a CSV file with the following columns: Last Name, First Name, NetID, UTDID, Team Number" FontSize="Body" HorizontalOptions="Center"/>
+                <Label
+                    Text="The first line of the CSV file should be the column titles." FontSize="Body" HorizontalOptions="Center"/>
+
+                <Label
+                    Text="To manage teams go to Setting -> Manage Teams." FontSize="Body" HorizontalOptions="Center"/>
+
+                <Button 
+                    x:Name="UploadStudentsandTeamsButton"
+                    Text="Upload CSV File"
+                    Clicked ="OnUploadStudentAndTeamClicked"
+                    HorizontalOptions="Center"
+                />
+
                 <BoxView HeightRequest="50" Color="Transparent"/>
                 
                 <!-- Adding individual Student Functionality -->
@@ -35,7 +56,7 @@
 
                 
                 <Label 
-                    Text="Student Name" FontSize="Medium" HorizontalOptions="Center"/>
+                    Text="Student Name" FontSize="Medium" />
                 <Entry  
                     x:Name="NameEntry"
                     Placeholder="Alison Swift"
@@ -43,7 +64,7 @@
                 />
             
                 <Label 
-                        Text="Student NetID" FontSize="Medium" HorizontalOptions="Center" />
+                        Text="Student NetID" FontSize="Medium"  />
                 <Entry  
                     x:Name="NetIDEntry"
                     Placeholder="abc123456"
@@ -51,10 +72,18 @@
                 />
 
                 <Label
-                    Text="Student UTDID" FontSize="Medium" HorizontalOptions="Center" />
+                    Text="Student UTDID" FontSize="Medium" />
                 <Entry  
                     x:Name="UTDIDEntry"
                     Placeholder="0123456789"
+                    HorizontalOptions="FillAndExpand"
+                />
+
+                <Label
+                    Text="Optional: Team" FontSize="Medium" />
+                <Entry  
+                    x:Name="TeamEntry"
+                    Placeholder="75"
                     HorizontalOptions="FillAndExpand"
                 />
 

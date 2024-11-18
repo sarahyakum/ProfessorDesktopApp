@@ -60,6 +60,30 @@ public class AddStudentsViewModel : INotifyPropertyChanged
         return studentResultMessage;
     }
 
+    // Checking if the team number already exists for this section
+    public async Task<string> CheckTeamExistsAsync(string section, string teamNum)
+    {
+        int teamNumber = int.Parse(teamNum);
+        string teamResultMessage = await databaseService.CheckTeamExists(section, teamNumber);
+        return teamResultMessage;
+    }
+
+    // Adding the team number to the database if it needs to be added
+    public async Task<string> CreateTeamAsync(string section, string teamNum)
+    {
+        int teamNumber = int.Parse(teamNum);
+        string teamResultMessage = await databaseService.InsertTeamNum(section, teamNumber);
+        return teamResultMessage;
+    }
+
+    // Assigning the students to a team with the database service file 
+    public async Task<string> AssignTeamAsync(string section, List<string> teamInfo)
+    {
+        int teamNumber = int.Parse(teamInfo[1]);
+        string teamResultMessage = await databaseService.AddNewTeamMember(teamNumber, teamInfo[0],section);
+        return teamResultMessage;
+    }
+
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -36,7 +36,7 @@ public class AssignTeamsViewModel : INotifyPropertyChanged
     }
 
     
-    // Getting the students that are in a section 
+    // Getting the students on the various teams in the section 
     public async void LoadTeamsAsync(string section)
     {
         var allteams = await databaseService.GetTeams(section);
@@ -78,7 +78,7 @@ public class AssignTeamsViewModel : INotifyPropertyChanged
     public async Task<string> AssignTeamAsync(string section, List<string> teamInfo)
     {
         int teamNumber = int.Parse(teamInfo[1]);
-        string teamResultMessage = await databaseService.AddNewTeamMember(teamNumber, teamInfo[0],section);
+        string teamResultMessage = await databaseService.AddNewTeamMember(teamNumber, teamInfo[0], section);
         return teamResultMessage;
     }
 

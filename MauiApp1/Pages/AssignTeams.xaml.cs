@@ -32,7 +32,7 @@ public partial class AssignTeams : ContentPage
         BindingContext = viewModel;
     }
 
-    // When the professor tries to add a singular student through the input boxes
+    // When the professor assigns a singular student through the input fields 
     private async void OnAssignStudentClicked(object sender, EventArgs e)
     {
         netid = NetIDEntry.Text;
@@ -99,6 +99,7 @@ public partial class AssignTeams : ContentPage
                         
                         List<string> teamInfo = new List<string> {netid, team};
 
+                        // Checking whether the team exists yet and if not adding it
                         string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamInfo[1]);
                         if(teamValidation == "Team doesn't exist")
                         {
