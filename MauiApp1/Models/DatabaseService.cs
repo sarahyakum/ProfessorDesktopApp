@@ -256,8 +256,6 @@ class DatabaseService{
         using (var conn = new MySqlConnection(connectionString)){
             List<Team> teams = new List<Team>();
             
-            
-            
             string query = "SELECT TeamNum from Team where SecCode=@SecCode";
             
             try{
@@ -299,7 +297,7 @@ class DatabaseService{
             
             
             
-            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum";
+            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
             
             try{
                 await conn.OpenAsync();
@@ -307,6 +305,7 @@ class DatabaseService{
                     
 
                     cmd.Parameters.AddWithValue("@TeamNum", team_num);
+                    cmd.Parameters.AddWithValue("@section_code", section);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
@@ -433,17 +432,16 @@ class DatabaseService{
         }
     }
 
-    //Inserts the amount of teams a professor will have for a section
-    public async Task<string> InsertTeamNums(string netid, string section, int numTeams){
+    //Inserts a team number into for the section
+    public async Task<string> InsertTeamNum(string section, int teamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand("professor_insert_num_teams", conn)){
+                using(MySqlCommand cmd = new MySqlCommand("professor_insert_team_num", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
-                    cmd.Parameters.AddWithValue("@section_code",section);
-                    cmd.Parameters.AddWithValue("@num_teams", numTeams);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNum);
 
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
@@ -765,6 +763,36 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@team_num",teamNum);
                     cmd.Parameters.AddWithValue("@student_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code", section);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+    // Checks whether a team number already exists for a section
+     public async Task<string> CheckTeamExists(string section, int teamNumber){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("check_if_team_exists", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNumber);
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;

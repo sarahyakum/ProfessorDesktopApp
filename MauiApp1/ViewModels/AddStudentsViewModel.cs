@@ -11,7 +11,7 @@
 namespace MauiApp1.ViewModels;
 using System.ComponentModel;
 using MauiApp1.Models;
-using Windows.Networking.Vpn;
+
 
 public class AddStudentsViewModel : INotifyPropertyChanged
 {
@@ -56,9 +56,7 @@ public class AddStudentsViewModel : INotifyPropertyChanged
     // Adding the students to the databse using the database service file 
     public async Task<string> AddStudentAsync(string section, List<string> studentInfo)
     {
-        Console.WriteLine($"Trying to add student: {studentInfo[0]}");
         string studentResultMessage = await databaseService.AddStudents(studentInfo[1], studentInfo[2], studentInfo[0], section);
-        Console.WriteLine(studentResultMessage);
         return studentResultMessage;
     }
 

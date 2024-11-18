@@ -45,23 +45,26 @@ public partial class Sections : ContentPage
 		}
 		string secCode = classPick.code;
 		
+		// Navigating to the Timesheets Pages
 		if (flag == "TIME"){
 			await Navigation.PushAsync(new Timesheets(classPick.name, secCode));
 		}
 
+		// Navigating the the Peer Review Pages 
 		if(flag == "PR"){
 			await Navigation.PushAsync(new PeerReview(professorID, secCode));
 		}
 		
+		// Navigating to the Add students Pages 
 		if(flag == "ADDSTU")
 		{
 			await Navigation.PushAsync(new AddStudents(secCode));
 		}
 
+		if(flag == "TEAM")
+		{
+			await Navigation.PushAsync(new AssignTeams(secCode));
+		}
 	}
-
-	
-	
-	
 }
 

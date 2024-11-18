@@ -36,7 +36,8 @@ public partial class Settings : ContentPage
 
     //adds students to a team
     private async void OnTeamMembersButtonClicked(object sender, EventArgs e){
-        await DisplayAlert("hellloo", "hi", "OK");
+        flag="TEAM";
+        await Navigation.PushAsync(new Sections(id, flag));
     }
 
     //allows for professor to change password any time

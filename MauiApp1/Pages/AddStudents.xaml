@@ -16,7 +16,7 @@
                 <Label
                     Text="To upload students select a CSV file with the following columns: Last Name, First Name, NetID, UTDID" FontSize="Body" HorizontalOptions="Center"/>
                 <Label
-                    Text="The line of the CSV file should be the column titles." FontSize="Body" HorizontalOptions="Center"/>
+                    Text="The first line of the CSV file should be the column titles." FontSize="Body" HorizontalOptions="Center"/>
 
                 <Button 
                     x:Name="UploadStudentsButton"
