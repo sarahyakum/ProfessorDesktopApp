@@ -20,19 +20,19 @@ Written by Sarah Yakum sny200000
 
         <Button
             x:Name="AddSectionsButton"
-            Text="Add New Section" 
-            Clicked="OnAddSectionsButtonClicked"
+            Text="Manage Sections" 
+            Clicked="OnManageSectionsButtonClicked"
         />
 
         <Button
             x:Name="AddStudentsButton"
-            Text="Add New Student" 
-            Clicked="OnAddStudentsButtonClicked"
+            Text="Manage Students" 
+            Clicked="OnManageStudentsButtonClicked"
         />
         <Button
             x:Name="AddTeamMembersButton"
-            Text="Add New Team Member" 
-            Clicked="OnTeamMembersButtonClicked"
+            Text="Manage Teams" 
+            Clicked="OnManageTeamsButtonClicked"
         />
         <Button
             x:Name="ChangePasswordButton"

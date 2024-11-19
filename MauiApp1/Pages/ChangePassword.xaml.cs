@@ -21,14 +21,12 @@ public partial class ChangePassword : ContentPage{
     private string newPassword;
     LoginViewModel viewModel;
 
-    public ChangePassword(string netid, string password){
+    public ChangePassword(string netid){
 
         
         InitializeComponent();
         viewModel = new LoginViewModel();
         id = netid;
-        oldPassword = password;
-        
     }
 
 

@@ -16,4 +16,7 @@ public class Section{
     public string name { get; set; }
 
     public Team number{ get; set; }
+    public DateTime startDate { get; set; }
+
+    public DateTime endDate { get; set; }
 }

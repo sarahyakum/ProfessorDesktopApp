@@ -22,7 +22,7 @@ namespace MauiApp1.Models;
 
 class DatabaseService{
     // Connection String to the databse, must change to reflect how the database is used on your device and your password.
-    string connectionString = "Server=localhost;Database=seniordesignproject;User=root;Password=sarahyakum;";
+    string connectionString = "Server=localhost;Database=seniordesignproject;User=root;Password=seniordesignproject;";
 
 
     // Professor Login connection to check the inputted values against the database
@@ -197,7 +197,7 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         if (await reader.ReadAsync()){
                             studentName = reader["StuName"] != DBNull.Value ? reader["StuName"].ToString() ?? string.Empty : string.Empty;
-                            studentName = reader["StuName"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
+                            studentUtdId = reader["StuUTDID"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
                         }
 
                     }
@@ -261,8 +261,6 @@ class DatabaseService{
         using (var conn = new MySqlConnection(connectionString)){
             List<Team> teams = new List<Team>();
             
-            
-            
             string query = "SELECT TeamNum from Team where SecCode=@SecCode";
             
             try{
@@ -304,7 +302,7 @@ class DatabaseService{
             
             
             
-            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum";
+            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
             
             try{
                 await conn.OpenAsync();
@@ -312,6 +310,7 @@ class DatabaseService{
                     
 
                     cmd.Parameters.AddWithValue("@TeamNum", team_num);
+                    cmd.Parameters.AddWithValue("@section_code", section);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
@@ -438,17 +437,16 @@ class DatabaseService{
         }
     }
 
-    //Inserts the amount of teams a professor will have for a section
-    public async Task<string> InsertTeamNums(string netid, string section, int numTeams){
+    //Inserts a team number into for the section
+    public async Task<string> InsertTeamNum(string section, int teamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand("professor_insert_num_teams", conn)){
+                using(MySqlCommand cmd = new MySqlCommand("professor_insert_team_num", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
-                    cmd.Parameters.AddWithValue("@section_code",section);
-                    cmd.Parameters.AddWithValue("@num_teams", numTeams);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNum);
 
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
@@ -789,6 +787,36 @@ class DatabaseService{
             }
         }
     }
+
+    // Checks whether a team number already exists for a section
+     public async Task<string> CheckTeamExists(string section, int teamNumber){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("check_if_team_exists", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNumber);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
     
     //Creates view for each teams peer review scores
     public async Task<List<Score>> GetReviews(string profID, string section, string stuID, string reviewType){
@@ -835,6 +863,36 @@ class DatabaseService{
     }
     
     //Add a new section for a professor
+    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateTime> dates){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_add_section", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code", sectionInfo[1]);
+                    cmd.Parameters.AddWithValue("@section_name", sectionInfo[0]);
+                    cmd.Parameters.AddWithValue("@start_date", dates[0]);
+                    cmd.Parameters.AddWithValue("@end_date", dates[1]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
 
     //Retrieves sections start and end date
     public async Task<List<DateTime>> GetCourseTimeFrame(string section){
@@ -866,7 +924,7 @@ class DatabaseService{
 
                     await cmd.ExecuteNonQueryAsync();
 
-                    error_message = result.Value.ToString();
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
 
                 }

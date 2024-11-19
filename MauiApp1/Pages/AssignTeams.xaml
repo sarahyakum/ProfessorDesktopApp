@@ -1,0 +1,106 @@
+<!-- Add Students to Teams Page XAML File -->
+<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
+
+<?xaml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="MauiApp1.Pages.AssignTeams"
+                Title="Manage Teams">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+                <Label 
+                    Text="Upload Team Assignments" FontSize ="Large" HorizontalOptions="Center"/>
+
+                <!-- Uploading a CSV File Functionality -->
+                <Label
+                    Text="To assign students to a team select a CSV file with the following columns: NetID, Team Number" FontSize="Body" HorizontalOptions="Center"/>
+                <Label
+                    Text="The first line of the CSV file should be the column titles." FontSize="Body" HorizontalOptions="Center"/>
+
+                <Button 
+                    x:Name="UploadTeamAssignmentsButton"
+                    Text="Upload CSV File"
+                    Clicked ="OnUploadCSVTeamsClicked"
+                    HorizontalOptions="Center"
+                />
+                
+                <BoxView HeightRequest="70" Color="Transparent"/>
+                
+                <!-- Adding individual Student Functionality -->
+                <Label
+                    Text="Assign Student To Team"
+                    FontSize="Large"
+                    HorizontalOptions="Center" />
+
+                
+                <Label 
+                    Text="Student NetID" FontSize="Medium" />
+                <Entry  
+                    x:Name="NetIDEntry"
+                    Placeholder="abc123456"
+                    HorizontalOptions="FillAndExpand"
+                />
+            
+                <Label 
+                        Text="Team Number" FontSize="Medium"  />
+                <Entry  
+                    x:Name="TeamNumEntry"
+                    Placeholder="1"
+                    HorizontalOptions="FillAndExpand"
+                />
+
+                <Button
+                    x:Name="AssignTeamButton"
+                    Text="Submit Team Assignment"
+                    Clicked="OnAssignStudentClicked"
+                    HorizontalOptions="Center"
+                />
+
+                <BoxView HeightRequest="70" Color="Transparent"/>
+
+                <!-- Displaying the current teams -->
+                <Label 
+                        Text="Current Teams"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                />
+
+                <BoxView HeightRequest="30" Color="Transparent"/>
+                
+                <ListView ItemsSource="{Binding Teams}" SelectionMode="None" HorizontalOptions="Center">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Vertical">
+                                    <Label FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Team " />
+                                                <Span Text="{Binding number}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <ListView ItemsSource="{Binding members}" SelectionMode="None" HorizontalOptions="Center">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                                        <Label Text="{Binding name}" FontSize="Body"/>
+                                                        <Label Text=" (" TextColor="Gray"/>
+                                                        <Label Text="{Binding netid}" TextColor="Gray"/>
+                                                        <Label Text=")" TextColor="Gray"/>
+                                                    </StackLayout>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <BoxView HeightRequest="50" Color="Transparent"/>
+                                </StackLayout>
+                            </ViewCell>  
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
