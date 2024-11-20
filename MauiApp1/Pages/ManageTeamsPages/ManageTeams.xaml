@@ -73,7 +73,8 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Vertical">
-                                    <Label FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center">
+                                    <Grid ColumnDefinitions="2*, Auto, Auto" RowSpacing="5">
+                                    <Label FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Team " />
@@ -81,6 +82,13 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+
+                                    <!-- Edit and Delete Team Buttons -->
+                                    <Button x:Name="EditTeam" Text="Edit" Clicked="OnEditTeamClicked" CommandParameter="{Binding .}" Grid.Column="1" Margin="5,0,5,0"/>
+                                    <Button x:Name="DeleteTeam" Text="Delete" Clicked="OnDeleteTeamClicked" CommandParameter="{Binding .}" Grid.Column="2" Margin="5,0,5,0"/>
+                                    </Grid>
+
+                                    <!-- Displaying the members of the teams -->
                                     <ListView ItemsSource="{Binding members}" SelectionMode="None" HorizontalOptions="Center">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>

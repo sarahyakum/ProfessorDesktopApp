@@ -25,8 +25,7 @@ public class StudentSheetsViewModel : INotifyPropertyChanged
             students=value;
             OnPropertyChanged(nameof(Students));
         }
-        
-        }
+    }
 
     public StudentSheetsViewModel(string sectionCode)
     {

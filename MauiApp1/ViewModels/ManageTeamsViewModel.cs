@@ -120,6 +120,32 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         return removeResultMessage;
     }
 
+    
+    // Checking whether a peer review already exists with for this team number 
+    public async Task<string> CheckPeerReviewStatusAsync(int teamNum, string section)
+    {
+        string prResultMessage = await databaseService.CheckPeerReviewStatus(teamNum, section);
+        return prResultMessage;
+    }
+
+    // Allows the professor to edit the team number  
+    public async Task<string> EditTeamNumberAsync(string section, int teamNum, int updatedTeamNum)
+    {
+        string editResultMessage = await databaseService.EditTeamNumber(section, teamNum, updatedTeamNum);
+        LoadTeamsAsync(section);
+        return editResultMessage;
+    }
+
+    // Allows the professor to delete a team 
+    public async Task<string> DeleteTeamAsync(string section, int teamNum)
+    {
+        string deleteResultMessage = await databaseService.DeleteTeam(section, teamNum);
+        LoadTeamsAsync(section);
+        return deleteResultMessage;
+    }
+
+
+
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

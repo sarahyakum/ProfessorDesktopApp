@@ -146,6 +146,15 @@ public partial class ManageTeams : ContentPage
     {
         string netid = (string)((Button)sender).CommandParameter;
         int teamNum = await viewModel.GetTeamNumberAsync(netid);
+
+        string checkPR = await viewModel.CheckPeerReviewStatusAsync(teamNum, section);
+
+        if(checkPR == "Peer Reviews have already been created")
+        {
+            await DisplayAlert("Cannot Move Team", "A peer review has already been created for this team, so the members cannot be changed.", "OK");
+            return;
+        }
+
         var popup = new MoveTeamPopup(netid, teamNum);
 
         var result = (List<string>)await this.ShowPopupAsync(popup);
@@ -166,6 +175,17 @@ public partial class ManageTeams : ContentPage
     private async void OnRemoveFromTeamClicked(object sender, EventArgs e)
     {
         string netid = (string)((Button)sender).CommandParameter;
+        int teamNum = await viewModel.GetTeamNumberAsync(netid);
+
+        // Checks whether a peer review has already been created, if so the students cannot be removed from the team
+        string checkPR = await viewModel.CheckPeerReviewStatusAsync(teamNum, section);
+
+        if(checkPR == "Peer Reviews have already been created")
+        {
+            await DisplayAlert("Cannot Move Team", "A peer review has already been created for this team, so the members cannot be changed.", "OK");
+            return;
+        }
+
         bool isConfirmed = await DisplayAlert("Remove Student From Team", $"Are you sure you want to remove {netid}? If a Peer Review has already been created they cannot be removed.", "OK", "Cancel");
 
         if(isConfirmed)
@@ -180,5 +200,62 @@ public partial class ManageTeams : ContentPage
                 await DisplayAlert("Student Not Removed", deleteValidation, "OK");
             }
         }
+    }
+
+    private async void OnEditTeamClicked(object sender, EventArgs e)
+    {
+        var team = (Team)((Button)sender).CommandParameter;
+        int teamNumber = team.number;
+
+        var popup = new EditTeamPopup(team);
+        var result = await this.ShowPopupAsync(popup) as Team;
+
+        // If no changed were made 
+        if(result.number == team.number)
+        {
+            return;
+        }
+
+        string editValidation = await viewModel.EditTeamNumberAsync(section, team.number, result.number);
+
+        
+        if(editValidation == "Success")
+        {
+            await DisplayAlert("Team Edited", "Team edited successfully", "OK");
+        }
+        else{
+            await DisplayAlert("Team Not Altered", editValidation, "OK");
+        }
+
+    }
+
+    private async void OnDeleteTeamClicked(object sender, EventArgs e)
+    {
+        var team = (Team)((Button)sender).CommandParameter;
+
+        // Checks whether the team has been used in a peer review already, if so it cannot be deleted
+        string checkPR = await viewModel.CheckPeerReviewStatusAsync(team.number, section);
+        if(checkPR == "Peer Reviews have already been created")
+        {
+            await DisplayAlert("Cannot Delete Team", "A peer review has already been created for this team, so it cannot be deleted.", "OK");
+            return;
+        }
+
+        bool isConfirmed = await DisplayAlert("Delete Team", $"Are you sure you want to delete team {team.number}? All members of the team will be removed.", "OK", "Cancel");
+
+        if(isConfirmed)
+        {
+            string deleteValidation = await viewModel.DeleteTeamAsync(section, team.number);
+
+            if(deleteValidation == "Success")
+            {
+                await DisplayAlert("Team Deleted", $"Team {team.number} was deleted", "OK");
+            }
+            else{
+                await DisplayAlert("Team Not Deleted", $"Team {team.number} was not deleted", "OK");
+            }
+        }
+
+
     }
 }

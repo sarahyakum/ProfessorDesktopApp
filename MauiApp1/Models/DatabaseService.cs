@@ -542,15 +542,46 @@ class DatabaseService{
         }
     }
 
+    // Allows the professot to edit a team number 
+    public async Task<string> EditTeamNumber(string section, int teamNum, int updatedTeamNum){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_edit_team_num", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@team_num", teamNum);
+                    cmd.Parameters.AddWithValue("@new_team_num", updatedTeamNum);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
     //Deletes a team for a section based on given team number
-    public async Task<string> DeleteTeam(string netid, string section, int teamNum){
+    public async Task<string> DeleteTeam(string section, int teamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("professor_delete_team", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@team_num", teamNum);
 
@@ -766,7 +797,39 @@ class DatabaseService{
         }
     }
 
-    //Changes a students from their team
+    
+    //Allows professor to reuse criteria for different types of reviews
+    public async Task<string> ReuseCriteria(string netid, string section, string oldType, string newType){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("reuse_criteria", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@old_criteria_type", oldType);
+                    cmd.Parameters.AddWithValue("@new_criteria_type", newType);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+       //Changes a students from their team
     public async Task<string> RemoveFromTeam(string stuNetid){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -795,18 +858,18 @@ class DatabaseService{
         }
     }
     
-    //Allows professor to reuse criteria for different types of reviews
-    public async Task<string> ReuseCriteria(string netid, string section, string oldType, string newType){
+    // Written by Emma Hockett (ech210001), Started on November 20, 2024
+    //Allows professor to check whether a peer review already exists 
+    // (Helps in determing whether a team/ members can be edited or not)
+    public async Task<string> CheckPeerReviewStatus(int teamNum, string section){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand("reuse_criteria", conn)){
+                using(MySqlCommand cmd = new MySqlCommand("check_peer_review_status", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.Parameters.AddWithValue("@team_num", teamNum);
                     cmd.Parameters.AddWithValue("@section_code",section);
-                    cmd.Parameters.AddWithValue("@old_criteria_type", oldType);
-                    cmd.Parameters.AddWithValue("@new_criteria_type", newType);
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;
