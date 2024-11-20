@@ -14,6 +14,7 @@
         NETID: sny200000
 */
 
+using System.Collections.ObjectModel;
 using System.Data;
 using MySqlConnector;
 
@@ -181,6 +182,45 @@ class DatabaseService{
         }
     }
 
+    // Get all of the students and their info in this section 
+    public async Task<List<Student>> GetStudentAndInfo(string code){
+
+
+        var students = new List<Student>();
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            string query = "SELECT StuName, StuUTDID, StuNetID FROM Student WHERE StuNetID IN (SELECT StuNetID FROM Attends WHERE SecCode = @section_code)";
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    cmd.Connection = conn;
+
+                    cmd.Parameters.AddWithValue("@section_code", code);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                            {
+                                students.Add(new Student
+                                {
+                                    netid=reader.GetString("StuNetID"),
+                                    name = reader.GetString("StuName"),
+                                    utdid = reader.GetString("StuUTDID"),
+                                });
+                            }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+            return students;
+
+
+        }
+    }
+
+    // Written by Emma Hockett (ech210001) Started on November 19, 2024
     // Based on the student's NetID, returns their Name and UTDID
     public async Task<Student> GetStudentsInfo(string netid){
 
@@ -757,6 +797,67 @@ class DatabaseService{
             }
         }
     }
+
+       //Allows the professor to edit a student
+    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+    public async Task<string> EditStudent(string netid, List<string> studentInfo){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_edit_student", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@original_student_netid", netid);
+                    cmd.Parameters.AddWithValue("@updated_netid", studentInfo[0]);
+                    cmd.Parameters.AddWithValue("@updated_name", studentInfo[1]);
+                    cmd.Parameters.AddWithValue("@updated_utdid", studentInfo[2]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+    //Allows the professor to delete a student
+    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+    public async Task<string> DeleteStudent(string netid){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_delete_student", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@student_netid", netid);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
     
     //Adds a student to a team
      public async Task<string> AddNewTeamMember(int teamNum, string netid, string section){
@@ -790,6 +891,7 @@ class DatabaseService{
     }
 
     // Checks whether a team number already exists for a section
+    // Written by Emma Hockett (ech210001), Started November 16, 2024
      public async Task<string> CheckTeamExists(string section, int teamNumber){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){

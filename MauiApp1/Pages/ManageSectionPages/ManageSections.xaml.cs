@@ -66,9 +66,13 @@ public partial class ManageSections : ContentPage
         string editValidation = await viewModel.EditSectionAsync(sectionCode, updatedInfo, updatedDates);
         
 
-        if(result != null)
+        if(editValidation == "Success")
         {
-            Console.WriteLine("Success");
+            
+            await DisplayAlert("Section Edited", "Section edited successfully", "OK");
+        }
+        else{
+            await DisplayAlert("Section Not Altered", editValidation, "OK");
         }
     }
 
@@ -89,7 +93,7 @@ public partial class ManageSections : ContentPage
                 await DisplayAlert("Section Deleted", "Section deleted successfully", "OK");
             }
             else{
-                await DisplayAlert("Section Not Deleted", deleteValidation, "OK");
+                await DisplayAlert("Section Not Deleted", "Section not deleted", "OK");
             }
         }
         else{

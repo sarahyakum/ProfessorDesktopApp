@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-namespace MauiApp1.Pages;
+using CommunityToolkit.Maui.Views;
+using MauiApp1.Pages.ManageStudents;
+namespace MauiApp1.Pages.ManageStudentPages;
 
 public partial class ManageStudents : ContentPage
 {
@@ -245,7 +247,7 @@ public partial class ManageStudents : ContentPage
                     await DisplayAlert("Students Not Added to Team", errorMessage, "OK");
                 }
                 else{
-                    await DisplayAlert("All students added", "All students were added!", "OK");
+                    await DisplayAlert("Teams Assigned", "All students were added to a team!", "OK");
                 }
             }
             else
@@ -259,4 +261,46 @@ public partial class ManageStudents : ContentPage
         }
     }
 
+    // Professor editing a student 
+    private async void OnEditStudentClicked(object sender, EventArgs e)
+    {
+        var student = (Student)((Button)sender).CommandParameter;
+        string studentID = student.netid;
+        var popup = new EditStudentPopup(student);
+        var result = await this.ShowPopupAsync(popup) as Student;
+
+        List<string> updatedInfo = new List<string> {result.netid, result.name, result.utdid};
+
+        string editValidation = await viewModel.EditStudentAsync(studentID, updatedInfo);
+
+        if(editValidation == "Success")
+        {
+            await DisplayAlert("Student Edited", "Student edited successfully", "OK");
+        }
+        else{
+            await DisplayAlert("Student Not Altered", editValidation, "OK");
+        }
+    }
+
+    // Professor deleting a student from the section 
+    private async void OnDeleteStudentClicked(object sender, EventArgs e)
+    {
+        var student = (Student)((Button)sender).CommandParameter;
+        string studentnetid = student.netid;
+
+        bool isConfirmed = await DisplayAlert("Delete Student", $"Are you sure you want to delete student {studentnetid}? They will be removed from the team and all of their timeslotes and Peer Reviews will be deleted.", "OK", "Cancel");
+    
+        if(isConfirmed)
+        {
+            string deleteValidation = await viewModel.DeleteStudentAsync(studentnetid);
+
+            if(deleteValidation == "Success")
+            {
+                await DisplayAlert("Student Deleted", "Sudent deleted successfully", "OK");
+            }
+            else{
+                await DisplayAlert("Student Not Deleted", "Student was unsuccessfully deleted", "OK");
+            }
+        }
+    }
 }

@@ -11,6 +11,7 @@
 
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
+using MauiApp1.Pages.ManageStudentPages;
 
 namespace MauiApp1.Pages;
 
@@ -58,7 +59,7 @@ public partial class Sections : ContentPage
 		// Navigating to the Add students Pages 
 		if(flag == "ADDSTU")
 		{
-			await Navigation.PushAsync(new ManageStudents(secCode));
+			await Navigation.PushAsync(new ManageStudentPages.ManageStudents(secCode));
 		}
 
 		if(flag == "TEAM")
