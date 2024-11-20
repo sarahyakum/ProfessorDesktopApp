@@ -12,6 +12,9 @@
 
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
         NETID: sny200000
+
+    Worked on by Emma Hockett for CS 4485.0W1, Senior Design Project, Started on November 12, 2024
+        NETID: ech210001
 */
 
 using System.Collections.ObjectModel;
@@ -48,8 +51,6 @@ class DatabaseService{
 
                 error_message = result.Value?.ToString() ?? string.Empty;
 
-
-
             }
             return error_message;
         }
@@ -76,7 +77,7 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@prof_netID", netId);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
-                                            while (await reader.ReadAsync())
+                    while (await reader.ReadAsync())
                     {
                         DateTime startDate = reader.GetDateTime("StartDate");
                         DateTime endDate = reader.GetDateTime("EndDate");
@@ -139,7 +140,6 @@ class DatabaseService{
                 return "Error: " + ex.Message;
             }
         }
-
     }
 
 
@@ -215,7 +215,6 @@ class DatabaseService{
             
             }
             return students;
-
 
         }
     }
@@ -669,7 +668,7 @@ class DatabaseService{
         return peerReviews;
     }
     //Retrieves criteria ID for a section in order to edit it
-     public async Task<string> GetCriteriaID(string netid, string section, string reviewType){
+     public async Task<string> GetAllCriteriaID(string netid, string section, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -700,20 +699,81 @@ class DatabaseService{
         }
     }
 
+    // Written by Emma Hockett (ec210001), Started on November 20, 2024
+    //Retrieves criteria ID for a section in order to edit it
+     public async Task<int> GetCriteriaID(string section, string name, string description, string reviewType){
+
+        string query = "SELECT CriteriaID FROM Criteria WHERE SecCode=@SecCode AND CriteriaName=@criteria_name AND CriteriaDescription=@criteria_description AND ReviewType=@review_type";
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    cmd.Parameters.AddWithValue("@SecCode", section);
+                    cmd.Parameters.AddWithValue("criteria_name", name);
+                    cmd.Parameters.AddWithValue("@criteria_description", description);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        if(await reader.ReadAsync())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
+        return -1;
+    }
+
+    // Written by Emma Hockett (ec210001), Started on November 20, 2024
+    //Retrieves criteria ID for a section in order to edit it
+    public async Task<string> CheckCriteriaInPR(string section, string reviewType)
+    {
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("check_type_in_pr", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;;
+                    cmd.Parameters.AddWithValue("@section_code",section);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
     //Edits a specific criteria created
-    public async Task<string> EditCriteria(string netid, string section, int criteriaID, List<string> criteriaInfo){
+    public async Task<string> EditCriteria(string section, int criteriaID, string name, string description, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("professor_edit_criteria", conn)){
-                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;;
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@criteria_id", criteriaID);
-                    cmd.Parameters.AddWithValue("@criteria_name", criteriaInfo[0]);
-                    cmd.Parameters.AddWithValue("@criteria_description", criteriaInfo[1]);
-                    cmd.Parameters.AddWithValue("@review_type", criteriaInfo[2]);
+                    cmd.Parameters.AddWithValue("@criteria_name", name);
+                    cmd.Parameters.AddWithValue("@criteria_description", description);
+                    cmd.Parameters.AddWithValue("@review_type", reviewType);
 
 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
@@ -736,14 +796,13 @@ class DatabaseService{
     }
    
     //Deletes a specific criteria
-    public async Task<string> DeleteCriteria(string netid, string section, string criteriaName, string reviewType){
+    public async Task<string> DeleteCriteria(string section, string criteriaName, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("professor_delete_criteria", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", netid);
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@criteria_name", criteriaName);
                     cmd.Parameters.AddWithValue("@review_type", reviewType);
@@ -755,7 +814,6 @@ class DatabaseService{
                     await cmd.ExecuteNonQueryAsync();
 
                     error_message = result.Value?.ToString() ?? string.Empty;
-
 
                 }
                 return error_message;

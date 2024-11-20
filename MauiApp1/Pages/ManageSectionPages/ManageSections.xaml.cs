@@ -63,8 +63,14 @@ public partial class ManageSections : ContentPage
         List<string> updatedInfo = new List<string>{result.name, result.code};
         List<DateOnly> updatedDates = new List<DateOnly>{result.startDate, result.endDate};
 
+        // If no changes were made or they chose to cancel
+        if(section.name == result.name && section.code == result.code && section.startDate == result.startDate && section.endDate == result.endDate)
+        {
+            return;
+        }
+
         string editValidation = await viewModel.EditSectionAsync(sectionCode, updatedInfo, updatedDates);
-        
+
 
         if(editValidation == "Success")
         {

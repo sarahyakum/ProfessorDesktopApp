@@ -5,7 +5,7 @@ Written by Sarah Yakum sny200000
 -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MauiApp1.Pages.PRSetUp"
+             x:Class="MauiApp1.Pages.PRSetUpPages.PRSetUp"
              Title="Create Peer Review">
     <ScrollView>
         <StackLayout 
@@ -16,13 +16,12 @@ Written by Sarah Yakum sny200000
                 FontSize="Title"
                 HorizontalOptions="Center" />
                 
-                <Label x:Name="SectionName" FontSize="Subtitle"  HorizontalOptions="Center"/>
-                    <Label
-                Text="Current Criterias"
+            <Label
+                Text="Current Criteria"
                 FontSize="Large"
                 HorizontalOptions="Center" />
+
             <CollectionView ItemsSource="{Binding Criterias}" SelectionMode="Single" Margin="5" >
-            
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                          <Frame BorderColor="Black"
@@ -33,43 +32,44 @@ Written by Sarah Yakum sny200000
                                 <Label Text="{Binding name}" FontSize="Body" FontAttributes="Bold" Margin="5"/>
                                 <Label Text="{Binding description, StringFormat='Description: {0}'}"  Margin="5"/>
                                 <Label Text="{Binding reviewType, StringFormat='Review Type: {0}'}"  Margin="5"/>
+
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                                    <Button x:Name="EditCriteria" Text="Edit" Clicked="OnEditCriteriaClicked" CommandParameter="{Binding .}" />
+                                    <Button x:Name="DeleteCriteria" Text="Delete" Clicked="OnDeleteCriteriaClicked" CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
                             </VerticalStackLayout>
-                        
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-
             </CollectionView>
             
-            
-            
-            
+            <BoxView HeightRequest="50" Color="Transparent"/>
+
+
                 <Label 
-                    Text="Create a new Criteria category"
+                    Text="Create New Criteria"
                     FontSize="Medium"
                     HorizontalOptions="Center" />
                 
+                <Label Text="Name:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
                 <Entry
                     x:Name="CriteriaEntry"
                     Placeholder="Teamwork"
                     HorizontalOptions="FillAndExpand"
                 />
-                <Frame BorderColor="LightGray"
-                           >
+      
+                <Label Text="Description:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
                 <Editor x:Name="DescriptionEntry"
                     Placeholder="How the person contributes to team..."
                     HorizontalOptions="FillAndExpand"
                     HeightRequest="20" 
                 
-                /></Frame>
+                />
                 
-            <Label 
-                Text="Review type (ex: Midterm or Final)"
-                
-                HorizontalOptions="Center" />
+            <Label Text="Review Type:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" /> 
             <Entry 
                 x:Name="TypeEntry"
-                Placeholder="Type"
+                Placeholder="Midterm"
                 HorizontalOptions="FillAndExpand"/>
 
 
@@ -79,6 +79,9 @@ Written by Sarah Yakum sny200000
                 Clicked="OnCriteriaClicked"
                 HorizontalOptions="Center"
             />
+
+
+            <BoxView HeightRequest="70" Color="Transparent"/>
 
             <Label
                 Text="Current Peer Reviews"
@@ -106,39 +109,27 @@ Written by Sarah Yakum sny200000
 
             </CollectionView>
             
+            <BoxView HeightRequest="50" Color="Transparent"/>
              
             <Label 
-                    Text="Add a Peer Review for the Section"
+                    Text="Create Peer Review"
                     FontSize="Medium"
                     HorizontalOptions="Center" />
            
-            <Label 
-                Text="Review type (ex: Midterm or Final)"
-                
-                HorizontalOptions="Center" />
+            <Label Text="Review Type:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
             <Entry 
                 x:Name="ReviewTypeEntry"
-                Placeholder="Type"
+                Placeholder="Midterm"
                 HorizontalOptions="FillAndExpand"/>
             
-            <Label 
-                Text="Enter availability dates for students:"
-                
-                HorizontalOptions="Center" />
-            <Label 
-                Text="Start"
-                FontSize="Small"
-                HorizontalOptions="Center" />
+            <Label Text="Start Date:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
             <Entry 
                 x:Name="TimePeriodEntry1"
                 Placeholder="10/01/2024"
                 HorizontalOptions="FillAndExpand"
-
             />
-            <Label 
-                Text="End"
-                FontSize="Small"
-                HorizontalOptions="Center" />
+
+            <Label Text="End Date:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
             <Entry 
                 x:Name="TimePeriodEntry2"
                 Placeholder="10/08/2024"
@@ -154,6 +145,5 @@ Written by Sarah Yakum sny200000
 
             
         </StackLayout>
-    </ScrollView>
-     
+    </ScrollView> 
 </ContentPage>

@@ -6,6 +6,9 @@
     Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
         NETID: sny200000
 
+    Worked on by Emma Hockett for CS 4485.0W1, Senior Design Project, Started on November 20, 2024
+        NETID: ech210001
+
 */
 
 namespace MauiApp1.ViewModels;
@@ -49,33 +52,60 @@ public class PRSetUpViewModel : INotifyPropertyChanged
     }
 
     //Retrieves professors current criteria for a section
-    public async void GetCriteriaAsync(string section){
-        Criterias = await databaseService.GetSectionsCriteria(section);
+    public async void GetCriteriaAsync(string code){
+        Criterias = await databaseService.GetSectionsCriteria(code);
         
     }
 
     // Calls the method in the Database.cs model to create a new criteria for a peer review
-    public async Task<string> CreateCriteriaAsync(string netid, List<string> setupInfo)
+    public async Task<string> CreateCriteriaAsync(string netid, List<string> setupInfo, string code)
     {
         // Get the message from the stored procedure (success or error message)
         string criteriaResultMessage = await databaseService.CreateCriteria(netid, setupInfo);
-
-        // Log the result (or use it in the UI)
-        Console.WriteLine(criteriaResultMessage);
+        GetCriteriaAsync(code);
 
         return criteriaResultMessage;
     }
     // Calls the method in the Database.cs model to create a new peer review for a section
-    public async Task<string> PRAsync(string netid, List<string> PRDetails, List<DateTime> dates)
+    public async Task<string> PRAsync(string netid, List<string> PRDetails, List<DateTime> dates, string code)
     {
         // Get the message from the stored procedure (success or error message)
         string prResultMessage = await databaseService.CreatePeerReview(netid, PRDetails, dates);
-
-        // Log the result (or use it in the UI)
-        Console.WriteLine(prResultMessage);
-
+        GetPRAsync(code);
         return prResultMessage;
     }
+
+    // Calls the method in the Database.cs model to edit a criteria
+    public async Task<string>EditCriteriaAsync(string section, Criteria oldCriteria, Criteria newCriteria)
+    {
+        int oldCriteriaID = await databaseService.GetCriteriaID(section, oldCriteria.name, oldCriteria.description, oldCriteria.reviewType);
+        if(oldCriteriaID != -1)
+        {
+            string editResultMessage = await databaseService.EditCriteria(section, oldCriteriaID, newCriteria.name, newCriteria.description, newCriteria.reviewType);
+            GetCriteriaAsync(section);
+            return editResultMessage;
+        }
+        else{
+            return "Could not find criteria";
+        }
+    }
+
+    // Calls the method in the Database.cs model to edit a criteria
+    public async Task<string>CheckCriteriaInPRAsync(string section, string reviewType)
+    {
+        string  statusMessage = await databaseService.CheckCriteriaInPR(section, reviewType);
+        GetCriteriaAsync(section);
+        return statusMessage;
+    }
+
+    // Calls the method in the Database.cs model to delete a criterion
+    public async Task<string>DeleteCriteriaAsync(string section, string name, string reviewType)
+    {
+        string  statusMessage = await databaseService.DeleteCriteria(section, name, reviewType);
+        GetCriteriaAsync(section);
+        return statusMessage;
+    }
+
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
