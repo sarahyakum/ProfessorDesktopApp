@@ -1,0 +1,20 @@
+<!-- Move student to new team Popup XAML File -->
+<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 19, 2024 -->
+<?xaml version="1.0" encoding="utf-8" ?>
+
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="MauiApp1.Pages.ManageTeams.MoveTeamPopup" >
+    
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label Text="Move Student" FontSize="Large" HorizontalOptions="Center"/>
+        <Label Text="New Team"/>
+        <Entry x:Name="TeamEntry"/>
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Save" Clicked="OnSaveClicked"/>
+            <Button Text="Cancel" Clicked="OnCancelClicked"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</toolkit:Popup>

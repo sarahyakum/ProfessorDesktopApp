@@ -5,7 +5,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                x:Class="MauiApp1.Pages.ManageTeams"
+                x:Class="MauiApp1.Pages.ManageTeamsPages.ManageTeams"
                 Title="Manage Teams">
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
@@ -73,7 +73,7 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Vertical">
-                                    <Label FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Center">
+                                    <Label FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Team " />
@@ -85,12 +85,16 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <ViewCell>
-                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                                        <Label Text="{Binding name}" FontSize="Body"/>
-                                                        <Label Text=" (" TextColor="Gray"/>
-                                                        <Label Text="{Binding netid}" TextColor="Gray"/>
-                                                        <Label Text=")" TextColor="Gray"/>
-                                                    </StackLayout>
+                                                    <Grid ColumnDefinitions="2*, Auto, Auto">
+                                                        <StackLayout Orientation="Vertical" Grid.Column="0" VerticalOptions="Center">
+                                                        <Label Text="{Binding name}" FontSize="Medium" Grid.Column="0" />
+                                                        <Label Text="{Binding netid}" TextColor="Gray" FontSize="Medium" Grid.Column="1"  />
+                                                        <BoxView HeightRequest="15" Color="Transparent"/>
+                                                        </StackLayout>
+
+                                                        <Button x:Name="MoveTeams" Text="Move" Clicked="OnMoveTeamsClicked" CommandParameter="{Binding netid}" Margin="5,0,5,0" WidthRequest="80" HeightRequest="35" Grid.Column="1" />
+                                                        <Button x:Name="RemoveFromTeam" Text="Remove" Clicked="OnRemoveFromTeamClicked" CommandParameter="{Binding netid}" Margin="5,0,5,0" WidthRequest="80" HeightRequest="35" Grid.Column="2"/>
+                                                    </Grid>
                                                 </ViewCell>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>

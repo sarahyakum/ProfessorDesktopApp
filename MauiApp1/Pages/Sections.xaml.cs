@@ -12,6 +12,7 @@
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
 using MauiApp1.Pages.ManageStudentPages;
+using MauiApp1.Pages.ManageTeamsPages;
 
 namespace MauiApp1.Pages;
 
@@ -64,7 +65,7 @@ public partial class Sections : ContentPage
 
 		if(flag == "TEAM")
 		{
-			await Navigation.PushAsync(new ManageTeams(secCode));
+			await Navigation.PushAsync(new ManageTeamsPages.ManageTeams(secCode));
 		}
 	}
 }

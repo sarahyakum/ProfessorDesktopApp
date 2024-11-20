@@ -1,7 +1,9 @@
 /*
-    Add Students .cs
-        Allows the professor to add students to the database.
-        When the page pulls up, it had the option to upload a CSV file, add an individual student, and displays the students currently in the class
+    Manage Teams Page
+        Allows the professor to upload the team assignments through a csv file upload
+            or enter them manually
+
+        Displays a list of the current team assignments 
 
     Written by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
         NetID: ech210001
@@ -14,7 +16,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-namespace MauiApp1.Pages;
+using System.ComponentModel;
+using MauiApp1.Pages.ManageTeams;
+using CommunityToolkit.Maui.Views;
+//using Microsoft.UI.Xaml.Controls;
+namespace MauiApp1.Pages.ManageTeamsPages;
 
 public partial class ManageTeams : ContentPage
 {
@@ -132,6 +138,47 @@ public partial class ManageTeams : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+        }
+    }
+
+    // Allows the professor to move the student to a different team 
+    private async void OnMoveTeamsClicked(object sender, EventArgs e)
+    {
+        string netid = (string)((Button)sender).CommandParameter;
+        int teamNum = await viewModel.GetTeamNumberAsync(netid);
+        var popup = new MoveTeamPopup(netid, teamNum);
+
+        var result = (List<string>)await this.ShowPopupAsync(popup);
+
+        int updatedTeamNum = int.Parse(result[1]);
+
+        string changeValidation = await viewModel.ChangeTeamAsync(section, netid, updatedTeamNum);
+
+        if(changeValidation == "Success")
+        {
+            await DisplayAlert("Student Team Changed", $"{netid} was moved to team {updatedTeamNum}", "OK");
+        }
+        else{
+            await DisplayAlert("Student Not Moved", changeValidation, "OK");
+        }
+    }
+
+    private async void OnRemoveFromTeamClicked(object sender, EventArgs e)
+    {
+        string netid = (string)((Button)sender).CommandParameter;
+        bool isConfirmed = await DisplayAlert("Remove Student From Team", $"Are you sure you want to remove {netid}? If a Peer Review has already been created they cannot be removed.", "OK", "Cancel");
+
+        if(isConfirmed)
+        {
+            string deleteValidation = await viewModel.RemoveFromTeamAsync(netid, section);
+            
+            if(deleteValidation == "Success")
+            {
+                await DisplayAlert("Student Removed", "Sudent removed successfully", "OK");
+            }
+            else{
+                await DisplayAlert("Student Not Removed", deleteValidation, "OK");
+            }
         }
     }
 }

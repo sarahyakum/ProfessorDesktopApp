@@ -12,7 +12,7 @@ namespace MauiApp1.ViewModels;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MauiApp1.Models;
-
+using Microsoft.Extensions.Primitives;
 
 public class ManageTeamsViewModel : INotifyPropertyChanged
 {
@@ -39,6 +39,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
     // Getting the students on the various teams in the section 
     public async void LoadTeamsAsync(string section)
     {
+        Teams.Clear();
         var allteams = await databaseService.GetTeams(section);
         var teams = allteams.Where(t => t.section == section).ToList();
 
@@ -79,7 +80,44 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
     {
         int teamNumber = int.Parse(teamInfo[1]);
         string teamResultMessage = await databaseService.AddNewTeamMember(teamNumber, teamInfo[0], section);
+        LoadTeamsAsync(section);
         return teamResultMessage;
+    }
+
+    // Gets a students team number 
+    public async Task<int> GetTeamNumberAsync(string netid)
+    {
+        int teamNumber = await databaseService.GetTeamNumber(netid);
+        return teamNumber;
+    }
+
+    // Allows the professot to change a students team
+    public async Task<string> ChangeTeamAsync(string section, string netid, int updatedTeam)
+    {
+        string teamUpdated = updatedTeam.ToString();
+        string teamExist = await CheckTeamExistsAsync(section, teamUpdated);
+
+        // Checks whether the team already exists, and if it doesn't creates it before adding the student
+        if(teamExist == "Team exists")
+        {
+            string changeResultMessage = await databaseService.ChangeStuTeam(section, netid, updatedTeam);
+            LoadTeamsAsync(section);
+            return changeResultMessage;
+        }
+        else{
+            string createTeam = await CreateTeamAsync(section, teamUpdated);
+            string changeResultMessage = await databaseService.ChangeStuTeam(section, netid, updatedTeam);
+            LoadTeamsAsync(section);
+            return changeResultMessage;
+        }
+    }
+
+    // Allows the professot to change a students team
+    public async Task<string> RemoveFromTeamAsync(string netid, string section)
+    {
+        string removeResultMessage = await databaseService.RemoveFromTeam(netid);
+        LoadTeamsAsync(section);
+        return removeResultMessage;
     }
 
     protected virtual void OnPropertyChanged( string propertyName )  {

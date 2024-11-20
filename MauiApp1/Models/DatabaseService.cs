@@ -333,6 +333,39 @@ class DatabaseService{
         
     }
 
+    // Gets a student team number
+    // Written by Emma Hockett (ech210001), Started on November 19, 2024
+    public async Task<int> GetTeamNumber(string netid){
+
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            List<Team> teams = new List<Team>();
+            
+            string query = "SELECT TeamNum from MemberOf where StuNetID=@student_netID";
+            
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    
+
+                    cmd.Parameters.AddWithValue("@student_netID", netid);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        if(await reader.ReadAsync())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+            return -1;
+        }
+    }
+
     //Get Team members for each team
     public async Task<List<Student>> GetTeamMembers(string section, int team_num){
         int number = team_num;
@@ -703,14 +736,13 @@ class DatabaseService{
     }
     
     //Changes a students assigned team
-    public async Task<string> ChangeStuTeam(string profNetid, string section, string stuNetid, int newTeam){
+    public async Task<string> ChangeStuTeam(string section, string stuNetid, int newTeam){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
                 using(MySqlCommand cmd = new MySqlCommand("professor_change_student_team", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@professor_netID", profNetid);
                     cmd.Parameters.AddWithValue("@section_code",section);
                     cmd.Parameters.AddWithValue("@student_netID", stuNetid);
                     cmd.Parameters.AddWithValue("@new_team", newTeam);
@@ -724,6 +756,35 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+    //Changes a students from their team
+    public async Task<string> RemoveFromTeam(string stuNetid){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_remove_student_team", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@student_netID", stuNetid);
+
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
 
                 }
                 return error_message;

@@ -271,6 +271,13 @@ public partial class ManageStudents : ContentPage
 
         List<string> updatedInfo = new List<string> {result.netid, result.name, result.utdid};
 
+        // If there were no changes made or they chose to cancel
+        if(student.netid == result.netid && student.name == result.name && student.utdid == result.utdid)
+        {
+            return;
+        }
+
+        // Editing the student and returning whether it worked 
         string editValidation = await viewModel.EditStudentAsync(studentID, updatedInfo);
 
         if(editValidation == "Success")
@@ -288,6 +295,7 @@ public partial class ManageStudents : ContentPage
         var student = (Student)((Button)sender).CommandParameter;
         string studentnetid = student.netid;
 
+        // Confirming they wish to delete the student and all of their related data
         bool isConfirmed = await DisplayAlert("Delete Student", $"Are you sure you want to delete student {studentnetid}? They will be removed from the team and all of their timeslotes and Peer Reviews will be deleted.", "OK", "Cancel");
     
         if(isConfirmed)
