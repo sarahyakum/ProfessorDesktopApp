@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using MauiApp1.Models;
 
 
-public class AssignTeamsViewModel : INotifyPropertyChanged
+public class ManageTeamsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private ObservableCollection<Team> teams;
@@ -28,7 +28,7 @@ public class AssignTeamsViewModel : INotifyPropertyChanged
         }
     }
 
-    public AssignTeamsViewModel(string section)
+    public ManageTeamsViewModel(string section)
     {
         databaseService = new DatabaseService();
         Teams = new ObservableCollection<Team>();

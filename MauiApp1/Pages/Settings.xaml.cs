@@ -10,6 +10,8 @@
 
 
 */
+using MauiApp1.Pages;
+using MauiApp1.Pages.ManageSectionPages;
 namespace MauiApp1.Pages;
 
 public partial class Settings : ContentPage
@@ -25,7 +27,7 @@ public partial class Settings : ContentPage
 
     //creating new sections under the professor
     private async void OnManageSectionsButtonClicked(object sender, EventArgs e){
-        await Navigation.PushAsync(new AddSections(id));
+        await Navigation.PushAsync(new ManageSectionPages.ManageSections(id));
     }
 
     //adds students to a section

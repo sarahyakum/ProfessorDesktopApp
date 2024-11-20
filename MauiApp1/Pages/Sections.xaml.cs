@@ -1,7 +1,7 @@
 /*
 	Sections Page:
-		Promts the professor to choose which section they would like the view the timesheets for.
-		Upon choosing which section, taken to the page for that section to display the student's timesheets.
+		Displays the current sections for a professor
+		When a section is chosen it will look at the flag passed to determine which page to visit next 
 
 		If clicking the back arrow, will return to the professor home page.
 
@@ -58,12 +58,12 @@ public partial class Sections : ContentPage
 		// Navigating to the Add students Pages 
 		if(flag == "ADDSTU")
 		{
-			await Navigation.PushAsync(new AddStudents(secCode));
+			await Navigation.PushAsync(new ManageStudents(secCode));
 		}
 
 		if(flag == "TEAM")
 		{
-			await Navigation.PushAsync(new AssignTeams(secCode));
+			await Navigation.PushAsync(new ManageTeams(secCode));
 		}
 	}
 }

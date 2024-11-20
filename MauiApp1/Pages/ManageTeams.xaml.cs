@@ -16,19 +16,19 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace MauiApp1.Pages;
 
-public partial class AssignTeams : ContentPage
+public partial class ManageTeams : ContentPage
 {
     string section;
     string netid;
     string team;
 
-    private AssignTeamsViewModel viewModel;
+    private ManageTeamsViewModel viewModel;
 
-    public AssignTeams(string sectionCode)
+    public ManageTeams(string sectionCode)
     {
         InitializeComponent();
         section = sectionCode;
-        viewModel = new AssignTeamsViewModel(section);
+        viewModel = new ManageTeamsViewModel(section);
         BindingContext = viewModel;
     }
 

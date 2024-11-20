@@ -13,7 +13,7 @@ using System.ComponentModel;
 using MauiApp1.Models;
 
 
-public class AddStudentsViewModel : INotifyPropertyChanged
+public class ManageStudentsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
     private List<Student> students;
@@ -27,7 +27,7 @@ public class AddStudentsViewModel : INotifyPropertyChanged
         }
     }
 
-    public AddStudentsViewModel(string section)
+    public ManageStudentsViewModel(string section)
     {
         databaseService = new DatabaseService();
         GetStudentsAsync(section);

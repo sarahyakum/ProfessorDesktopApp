@@ -77,10 +77,16 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                                             while (await reader.ReadAsync())
                     {
+                        DateTime startDate = reader.GetDateTime("StartDate");
+                        DateTime endDate = reader.GetDateTime("EndDate");
+
                         sections.Add(new Section
                         {
                             code = reader.GetString("SecCode"), // Match column names with your query
-                            name = reader.GetString("SecName")
+                            name = reader.GetString("SecName"),
+                            startDate = DateOnly.FromDateTime(startDate),
+                            endDate = DateOnly.FromDateTime(endDate)
+ 
                         });
                     }
 
@@ -858,7 +864,7 @@ class DatabaseService{
     }
     
     //Add a new section for a professor
-    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateTime> dates){
+    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateOnly> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -889,11 +895,73 @@ class DatabaseService{
         }
     }
 
+    //Allows the professor to edit a section
+    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+    public async Task<string> EditSection(string netid, List<string> sectionInfo, List<DateOnly> dates){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_edit_section", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@original_section_code", netid);
+                    cmd.Parameters.AddWithValue("@updated_name", sectionInfo[0]);
+                    cmd.Parameters.AddWithValue("@updated_code", sectionInfo[1]);
+                    cmd.Parameters.AddWithValue("@updated_start_date", dates[0]);
+                    cmd.Parameters.AddWithValue("@updated_end_date", dates[1]);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+    //Allows the professor to edit a section
+    // Written by Emma Hockett (ech210001), Started on November 18, 2024
+    public async Task<string> DeleteSection(string sectionCode){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_delete_section", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", sectionCode);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
     //Retrieves sections start and end date
-    public async Task<List<DateTime>> GetCourseTimeFrame(string section){
+    public async Task<List<DateOnly>> GetCourseTimeFrame(string section){
 
         string error_message = string.Empty;
-        List<DateTime> window = new List<DateTime>();
+        List<DateOnly> window = new List<DateOnly>();
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
@@ -912,8 +980,10 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
                             
-                            window.Add(reader.GetDateTime("StartDate"));
-                            window.Add(reader.GetDateTime("EndDate"));
+                            DateTime startDate = reader.GetDateTime("StartDate");
+                            DateTime endDate = reader.GetDateTime("EndDate");
+                            window.Add(DateOnly.FromDateTime(startDate));
+                            window.Add(DateOnly.FromDateTime(endDate));
                             
                         }}
 

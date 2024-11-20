@@ -16,20 +16,20 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace MauiApp1.Pages;
 
-public partial class AddStudents : ContentPage
+public partial class ManageStudents : ContentPage
 {
     string section;
     string name;
     string netid;
     string utdid;
 
-    private AddStudentsViewModel viewModel;
+    private ManageStudentsViewModel viewModel;
 
-    public AddStudents(string sectionCode)
+    public ManageStudents(string sectionCode)
     {
         InitializeComponent();
         section = sectionCode;
-        viewModel = new AddStudentsViewModel(section);
+        viewModel = new ManageStudentsViewModel(section);
         BindingContext = viewModel;
     }
 
