@@ -11,6 +11,7 @@
 
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
+using MauiApp1.Pages;
 using MauiApp1.Pages.ManageStudentPages;
 using MauiApp1.Pages.ManageTeamsPages;
 
@@ -54,7 +55,7 @@ public partial class Sections : ContentPage
 
 		// Navigating the the Peer Review Pages 
 		if(flag == "PR"){
-			await Navigation.PushAsync(new PeerReview(professorID, secCode));
+			await Navigation.PushAsync(new PeerReviewHome(professorID, secCode));
 		}
 		
 		// Navigating to the Add students Pages 

@@ -106,6 +106,22 @@ public class PRSetUpViewModel : INotifyPropertyChanged
         return statusMessage;
     }
 
+    // Calls the method in the Database.cs model to edit a peer reviews dates 
+    public async Task<string>EditPRDatesAsync(string section, string type, DateOnly startDate, DateOnly endDate)
+    {
+        string  statusMessage = await databaseService.EditPRDates(section, type, startDate, endDate);
+        GetPRAsync(section);
+        return statusMessage;
+    }
+
+    // Calls the method in the Database.cs model to delete a peer review
+    public async Task<string>DeletePRAsync(string section, string type)
+    {
+        string  statusMessage = await databaseService.DeletePR(section, type);
+        GetPRAsync(section);
+        return statusMessage;
+    }
+
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

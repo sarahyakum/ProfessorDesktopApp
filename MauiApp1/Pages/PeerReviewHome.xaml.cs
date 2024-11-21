@@ -12,12 +12,12 @@
 using MauiApp1.Pages.PRSetUpPages;
 namespace MauiApp1.Pages;
 
-public partial class PeerReview : ContentPage
+public partial class PeerReviewHome : ContentPage
 {
 	
 	private string professorID;
 	private string secCode;
-	public PeerReview(string netid, string section)
+	public PeerReviewHome(string netid, string section)
 	{
 		InitializeComponent();
 		professorID = netid;

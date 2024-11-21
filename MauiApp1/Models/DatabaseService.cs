@@ -475,6 +475,73 @@ class DatabaseService{
         }
     }
 
+    // Written by Emma Hockett (ech210001), Started on November 20, 2024
+     //Edits the dates the peer review is available
+     public async Task<string> EditPRDates(string section, string type, DateOnly startDate, DateOnly endDate){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("edit_peer_review_dates", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@review_type", type);
+                    cmd.Parameters.AddWithValue("@start_date", startDate);
+                    cmd.Parameters.AddWithValue("@end_date", endDate);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
+    // Written by Emma Hockett (ech210001), Started on November 20, 2024
+     // Deletes Peer Reviews 
+     public async Task<string> DeletePR(string section, string type){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("delete_peer_review", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@review_type", type);
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+
+                }
+                return error_message;
+
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
+
    //Allows for professor to modify individual scores for a student if needed
     public async Task<string> EditScores(string netid, List<string> reviewInfo, int newScore){
         string error_message = string.Empty;
@@ -648,14 +715,13 @@ class DatabaseService{
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while(await reader.ReadAsync()){
+                            DateTime startDate = reader.GetDateTime("StartDate");
+                            DateTime endDate = reader.GetDateTime("EndDate");
                             peerReviews.Add(new PeerReview{
                                 section = secCode,
                                 type = reader.GetString("ReviewType"),
-                                startDate = reader.GetDateTime("StartDate"),
-                                endDate = reader.GetDateTime("EndDate")
-
-                               
-
+                                startDate = DateOnly.FromDateTime(startDate),
+                                endDate = DateOnly.FromDateTime(endDate)
                             });
                         }
                     }
