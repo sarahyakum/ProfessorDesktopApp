@@ -27,7 +27,7 @@ public class AddSectionsViewModel : INotifyPropertyChanged
         Sections = await databaseService.GetSections(netid);
     }
 
-    public async Task<string> AddSectionAsync(string netid, List<string> sectionInfo, List<DateTime> dates)
+    public async Task<string> AddSectionAsync(string netid, List<string> sectionInfo, List<DateOnly> dates)
     {
         string sectionResultMessage = await databaseService.AddSection(netid, sectionInfo, dates);
         Console.WriteLine(sectionResultMessage);

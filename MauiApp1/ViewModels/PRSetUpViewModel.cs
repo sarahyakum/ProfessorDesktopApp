@@ -66,7 +66,7 @@ public class PRSetUpViewModel : INotifyPropertyChanged
         return criteriaResultMessage;
     }
     // Calls the method in the Database.cs model to create a new peer review for a section
-    public async Task<string> PRAsync(string netid, List<string> PRDetails, List<DateTime> dates)
+    public async Task<string> PRAsync(string netid, List<string> PRDetails, List<DateOnly> dates)
     {
         // Get the message from the stored procedure (success or error message)
         string prResultMessage = await databaseService.CreatePeerReview(netid, PRDetails, dates);

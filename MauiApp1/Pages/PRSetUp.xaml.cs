@@ -51,7 +51,7 @@ public partial class PRSetUp : ContentPage
 		string start = TimePeriodEntry1.Text;
 		string end = TimePeriodEntry2.Text;
 		
-		List<DateTime> dates = new List<DateTime>{DateTime.Parse(start), DateTime.Parse(end)};	
+		List<DateOnly> dates = new List<DateOnly>{DateOnly.Parse(start), DateOnly.Parse(end)};	
 
 
 		string prValidation = await viewModel.PRAsync(professorID, peerReviewInfo, dates );

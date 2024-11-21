@@ -7,8 +7,8 @@ public partial class AddSections : ContentPage
     string professorID;
     string sectionName;
     string sectionCode;
-    DateTime startdate;
-    DateTime enddate;
+    DateOnly startdate;
+    DateOnly enddate;
 
     private AddSectionsViewModel viewModel;
 
@@ -26,7 +26,7 @@ public partial class AddSections : ContentPage
         string start = StartEntry.Text;
         string end = EndEntry.Text;
 
-        List<DateTime> dates = new List<DateTime>{DateTime.Parse(start), DateTime.Parse(end)};
+        List<DateOnly> dates = new List<DateOnly>{DateOnly.Parse(start), DateOnly.Parse(end)};
 
         string sectionValidation = await viewModel.AddSectionAsync(professorID, sectionInfo, dates);
         

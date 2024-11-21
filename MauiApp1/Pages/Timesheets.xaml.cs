@@ -17,151 +17,167 @@ namespace MauiApp1.Pages;
 
 public partial class Timesheets : ContentPage
 {
-	public DateTime Timestamp { get; set; }
-
-	public TimesheetsViewModel viewModel;
-	public ObservableCollection<Timeslot> WorkHours { get; set; }
-
+	public DateOnly Timestamp { get; set; }
+    public string section;
+    public ObservableCollection<Student> students { get; set; } = new ObservableCollection<Student>();
+	private TimesheetsViewModel viewModel;
+	
+    public async Task LoadDataAsync()
+        {
+            await viewModel.GetTimeFrameAsync(section);
+            foreach (var student in viewModel.Students)
+            {
+                students.Add(student);
+            }
+        }
 	public Timesheets(string className, string code)
 	{
+        section = code;
 		viewModel = new TimesheetsViewModel(code);
-        
 		BindingContext = viewModel;
 		InitializeComponent();
-		DisplayTime();
+		
 		SectionName.Text = className;
-        
-		// Static Data
-       WorkHours = new ObservableCollection<Timeslot>
+        try
         {
-            new Timeslot { studentName = "Alice", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Bob", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Charlie", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Diana", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Evan", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Fiona", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "George", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Holly", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Ian", HoursByDate = GenerateSampleHours() },
-            new Timeslot { studentName = "Jane", HoursByDate = GenerateSampleHours() }
-        };
-	
-		PopulateGrid();
+            _ = InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in InitializeAsync: {ex.Message}");
+        }
+        
 		
 
 	}
-
-    //Static
-	private Dictionary<DateTime, string> GenerateSampleHours()
+    private async Task InitializeAsync()
     {
-        var hoursByDate = new Dictionary<DateTime, string>();
-        for (int day = 1; day <= 14; day++) // Adding 14 dates to ensure horizontal scrolling
-        {
-            DateTime date = DateTime.Parse($"2024-11-{day:00}");
-            hoursByDate[date] = new Random().Next(0, 8).ToString(); // Random hours between 0 and 8
-        }
-        return hoursByDate;
+       try
+    {
+        await viewModel.StartAsync(section);
+        await LoadDataAsync();
+        PopulateGrid(); // Ensure this doesn't throw exceptions
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error during initialization: {ex.Message}");
+    }
     }
 	private void PopulateGrid()
     {
-        var students = viewModel.Students;
-        var timeslots = viewModel.Timeslots;
-        var window = viewModel.Window;
-
-
+        WorkHoursGrid.Clear();
         
+        //WorkHoursGrid.RowDefinitions.Clear(); // Clear previous rows
+        //WorkHoursGrid.ColumnDefinitions.Clear(); // Clear previous columns
 
-        
-        //Get Dates
-        var allDates = WorkHours
-            .SelectMany(student => student.HoursByDate.Keys)
-            .Distinct()
-            .OrderBy(date => date)
-            .ToList();
+        WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        var weekStart = viewModel.CurrentWeekStart;
+        var weekDates = Enumerable.Range(0, 7).Select(offset => weekStart.AddDays(offset)).ToList();
 
-        // Create column headers
-        for (int columnIndex = 1; columnIndex <= allDates.Count; columnIndex++)
+        for (int columnIndex = 1; columnIndex <= weekDates.Count; columnIndex++)
         {
-            WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+        WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            
+            
             var dateLabel = new Label
             {
-                Text = allDates[columnIndex - 1].Date.ToString(),
+                Text = weekDates[columnIndex - 1].ToString(),
                 FontAttributes = FontAttributes.Bold,
+                FontSize= 20,
                 HorizontalOptions = LayoutOptions.Center
             };
-            WorkHoursGrid.Add(dateLabel, columnIndex, 0); // Row 0, dynamic column
+            var date = new Frame{
+                Content = dateLabel,
+                BorderColor = Colors.Black
+
+
+            };
+            WorkHoursGrid.Add(date, columnIndex, 0); // Row 0, dynamic column
         }
 
-        // Create students and add rows
-        for (int rowIndex = 1; rowIndex <= WorkHours.Count; rowIndex++)
+        for (int rowIndex = 1; rowIndex <= students.Count; rowIndex++)
         {
-            var student = WorkHours[rowIndex - 1];
+            var student = students[rowIndex - 1];
 
-            // 
-            WorkHoursGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            // Add student name as row header
+        WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             var nameLabel = new Label
             {
-                Text = student.studentName,
+                Text = student.netid,
                 FontAttributes = FontAttributes.Bold,
+                FontSize= 20,
                 VerticalOptions = LayoutOptions.Center
             };
-            WorkHoursGrid.Add(nameLabel, 0, rowIndex); // Column 0, dynamic row
+            var name = new Frame{
+                Content = nameLabel,
+                BorderColor = Colors.Black
+
+
+            };
+            WorkHoursGrid.Add(name, 0, rowIndex); // Column 0, dynamic row
 
             // Add bordered buttons for hours worked, allowing editing on click
-            for (int columnIndex = 1; columnIndex <= allDates.Count; columnIndex++)
+            for (int columnIndex = 1; columnIndex <= weekDates.Count; columnIndex++)
             {
-                var date = allDates[columnIndex - 1];
-                var hours = student.HoursByDate.ContainsKey(date) ? student.HoursByDate[date] : "0";
-
+                var date = weekDates[columnIndex - 1];
+                var hours = student.timeslots[date].hours;
+                //var hours = student.timeslots.ContainsKey(date) ? student.timeslots[date] : "0";
+                    if (!student.timeslots.ContainsKey(date))
+                {
+                    student.timeslots[date] = new Timeslot
+                    {
+                        date = date,
+                        hours = "00:00",
+                        description = "No entry"
+                    };
+                }
                 var button = new Button
                 {
-                    Text = hours,
+                    Text = hours.ToString(),
                     HorizontalOptions = LayoutOptions.Center,
-                    WidthRequest = 60,  // Set cell width
-                    HeightRequest = 40  // Set cell height
+                    VerticalOptions = LayoutOptions.Center,
+                    WidthRequest = 100,  // Set cell width
+                    HeightRequest = 100  // Set cell height
                 };
 
                 // Button click event to open an edit prompt
                 button.Clicked += async (sender, e) =>
                 {
-                    string result = await DisplayPromptAsync("Edit Hours", $"Enter hours for {student.studentName} on {date}", 
+                    string result = await DisplayPromptAsync("Edit Hours for: "+student.timeslots[date].description,  $"\nEnter hours for {student.netid} on {date}", 
                                                               initialValue: button.Text, 
-                                                              maxLength: 3, 
+                                                              maxLength: 5, 
                                                               keyboard: Keyboard.Numeric);
                     
                     if (result != null)
                     {
                         button.Text = result; // Update button label
-                        student.HoursByDate[date] = result; // Update the data model
-                    }
+                        student.timeslots[date] = new Timeslot{
+                            date = date,
+                            hours = result,
+                            description = student.timeslots[date].description // Update the data model
+                    };
                 };
 
+               };
                 // Wrap button in a Frame to create a border effect
                 var borderedCell = new Frame
                 {
                     Content = button,
-                    Padding = 2,
-                    Margin = 1,
-                    BorderColor = Colors.Gray,
-                    CornerRadius = 5,
-                    HasShadow = false,
-                    WidthRequest = 60,
-                    HeightRequest = 40
+                    Padding = 10,  // Add padding inside the cell
+                    BorderColor = Colors.Black,
+                    //BackgroundColor = Colors.LightGray,
+                    WidthRequest = 120,
+                    HeightRequest = 120
                 };
 
                 WorkHoursGrid.Add(borderedCell, columnIndex, rowIndex); // Dynamic column, dynamic row
-            }
+            
+        }}
         }
-    } 
-
-	
-	//displays time can use datetime to keep up with current date
-	private void DisplayTime(){
-		
-		Time.Text = DateTime.Now.ToString("G");
-	}
-
-	//Allows for us to view the students and their timesheets in the section
+       
+       
+       
 
 	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
 		// Inside any page
@@ -170,4 +186,6 @@ public partial class Timesheets : ContentPage
 
 
 	}
+
 }
+

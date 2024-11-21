@@ -9,6 +9,8 @@
 
 
 namespace MauiApp1.ViewModels;
+
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MauiApp1.Models;
 
@@ -16,10 +18,10 @@ using MauiApp1.Models;
 public class AddStudentsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
-    private List<Student> students;
+    private ObservableCollection<Student> students;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public List<Student> Students{
+    public ObservableCollection<Student> Students{
         get => students;
         set{
             students = value;
@@ -41,7 +43,7 @@ public class AddStudentsViewModel : INotifyPropertyChanged
     }
 
     // Getting the information about the students in the section 
-    public async void GetStudentsInfoAsync(List<Student> students)
+    public async void GetStudentsInfoAsync(ObservableCollection<Student> students)
     {
         foreach (var student in students)
         {

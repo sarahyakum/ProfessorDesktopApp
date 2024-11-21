@@ -22,8 +22,7 @@ public class Student{
 
     public string utdid {get;set;}
     public string section{get;set;}
-
-    public ObservableCollection<Timeslot> timeslots{get;set;}
+    public Dictionary<DateOnly, Timeslot> timeslots{get;set;}
 
     public List<Score> scores{get;set;}
 

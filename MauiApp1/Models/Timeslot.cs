@@ -11,7 +11,11 @@ sny200000
 public class Timeslot{
     public string studentName { get; set; }
     public string netId{ get; set; }
-    public Dictionary<DateTime, string> HoursByDate { get; set; }
-    public Dictionary<DateTime, string> DescByDate { get; set; }
+    public DateOnly date{ get; set; }
+    //public DateOnly date { get; set; }
+    public string hours { get; set; }
+    public string description { get; set; }
+    //public Dictionary<DateOnly, string> HoursByDate { get; set; }
+    //public Dictionary<DateOnly, string> DescByDate { get; set; }
 
-}
+} 

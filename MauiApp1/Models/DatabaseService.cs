@@ -138,10 +138,10 @@ class DatabaseService{
 
 
     // Gets the NetIDs of all of the students in the section that the professor teaches
-    public async Task<List<Student>> GetStudents(string code){
+    public async Task<ObservableCollection<Student>> GetStudents(string code){
 
 
-        List<Student> students= new List<Student>();
+        ObservableCollection<Student> students= new ObservableCollection<Student>();
         
         using (var conn = new MySqlConnection(connectionString)){
             try{
@@ -217,42 +217,7 @@ class DatabaseService{
 
     }
 
-    //get timeslot for student by date
-    public async Task<ObservableCollection<Timeslot>> GetTimeslots(DateTime date, string netId){
-        ObservableCollection<Timeslot> timeslot = new ObservableCollection<Timeslot>();
-        Dictionary<DateTime, string> hours = new Dictionary<DateTime, string>();
-        Dictionary<DateTime, string> description = new Dictionary<DateTime, string>();
-        using(var conn = new MySqlConnection(connectionString)){
-           
-            try{
-                using (MySqlCommand cmd = new MySqlCommand("student_timeslot_by_date", conn)){
-                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@stu_netID", netId);
-                    cmd.Parameters.AddWithValue("@input_date", date);
-                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
-                        while (await reader.ReadAsync())
-                        {
-                            hours[date] = reader.GetString("TSDuration");
-                            description[date] = reader.GetString("TSDescription");
-                            timeslot.Add(new Timeslot
-                            {
-                                HoursByDate = hours,
-                                DescByDate = description
-                                
-                                
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception ex){
-                    Console.Write(ex.Message);
-
-            }
-        }
-        return timeslot;
-    }
-
+    
 
     // Gets the teams for the section that the professor teaches
     public async Task<List<Team>> GetTeams(string code){
@@ -368,7 +333,7 @@ class DatabaseService{
     }
 
      //Creates a peer review for a specific section with availability dates
-     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<DateTime> dates){
+     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<DateOnly> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -547,8 +512,8 @@ class DatabaseService{
                             peerReviews.Add(new PeerReview{
                                 section = secCode,
                                 type = reader.GetString("ReviewType"),
-                                startDate = reader.GetDateTime("StartDate"),
-                                endDate = reader.GetDateTime("EndDate")
+                                startDate = reader.GetDateOnly("StartDate"),
+                                endDate = reader.GetDateOnly("EndDate")
 
                                
 
@@ -863,7 +828,7 @@ class DatabaseService{
     }
     
     //Add a new section for a professor
-    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateTime> dates){
+    public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateOnly> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -875,7 +840,7 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@section_name", sectionInfo[0]);
                     cmd.Parameters.AddWithValue("@start_date", dates[0]);
                     cmd.Parameters.AddWithValue("@end_date", dates[1]);
-
+ 
                     var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
                     result.Direction= System.Data.ParameterDirection.Output;
                     result.Size = 255;
@@ -895,10 +860,10 @@ class DatabaseService{
     }
 
     //Retrieves sections start and end date
-    public async Task<List<DateTime>> GetCourseTimeFrame(string section){
+    public async Task<List<DateOnly>> GetCourseTimeFrame(string section){
 
         string error_message = string.Empty;
-        List<DateTime> window = new List<DateTime>();
+        List<DateOnly> window = new List<DateOnly>();
         using(var conn = new MySqlConnection(connectionString)){
             try{
                 await conn.OpenAsync();
@@ -912,13 +877,13 @@ class DatabaseService{
                     result.Direction= System.Data.ParameterDirection.Output;
                     result.Size = 255;
                     cmd.Parameters.Add(result);
-
+                    
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
                             
-                            window.Add(reader.GetDateTime("StartDate"));
-                            window.Add(reader.GetDateTime("EndDate"));
+                            window.Add(reader.GetDateOnly("StartDate"));
+                            window.Add(reader.GetDateOnly("EndDate"));
                             
                         }}
 
@@ -938,6 +903,93 @@ class DatabaseService{
 
     }
 
+
+    //retrieves student's time slot from given date
+
+    public async Task<Timeslot> GetTimeslot(DateOnly date, string netId){
+        Timeslot timeslot = new Timeslot();
+        //Dictionary<DateOnly, string> hours = new Dictionary<DateOnly, string>();
+        //Dictionary<DateOnly, string> description = new Dictionary<DateOnly, string>();
+        using(var conn = new MySqlConnection(connectionString)){
+           
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("student_timeslot_by_date", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@stu_netID", netId);
+                    cmd.Parameters.AddWithValue("@input_date", date);
+                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            
+                            
+                                timeslot.date = date;
+                                timeslot.hours = reader.GetString("TSDuration");
+                                timeslot.description = reader.GetString("Description");
+                                
+                                
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                    Console.Write(ex.Message);
+
+            }
+        }
+        return timeslot;
+    }
+    //retrieves current weeks timeslot
+
+    public async Task<List<Timeslot>> GetWeekTimeslots(DateOnly date, string netId){
+        //string error_message = string.Empty;
+        List<Timeslot> week = new List<Timeslot>();
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("student_timeslot_by_week", conn)){
+                    cmd.CommandType=CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@stu_netID", netId);
+                    cmd.Parameters.AddWithValue("@start_date",date);
+
+                    
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            week.Add(new Timeslot{
+                                studentName = reader.GetString("StuName"),
+                                netId = reader.GetString("StuNetID"),
+                                date = reader.GetDateOnly("TSDate"),
+                                description = reader.GetString("TSDescription"),
+                                hours = reader.GetString("TSDuration")
+                            }
+                                
+
+                                
+                                
+                            );
+                                
+                                
+                            
+                        }
+                    }
+
+                    
+
+
+                }
+                
+            }
+            catch(Exception ex){
+                Console.WriteLine(ex.Message);
+            }
+        }
+    
+        return week;
+    }
+    
     //Retrieves the students with unfinished reviews
 
     //Edits the timeslot of a student
