@@ -17,10 +17,6 @@ namespace MauiApp1.Pages.ManageSectionPages;
 public partial class ManageSections : ContentPage
 {
     string professorID;
-    string sectionName;
-    string sectionCode;
-    DateTime startdate;
-    DateTime enddate;
 
     private ManageSectionsViewModel viewModel;
 
@@ -35,51 +31,38 @@ public partial class ManageSections : ContentPage
     // For adding a section from the text input boxes on the page 
     private async void OnAddSectionClicked(object sender, EventArgs e)
     {
+
+        // Checks whether all of the fields are filled out and displays a message if they are not
+        if(string.IsNullOrWhiteSpace(NameEntry.Text) || string.IsNullOrWhiteSpace(CodeEntry.Text) || string.IsNullOrWhiteSpace(StartEntry.Text) || string.IsNullOrWhiteSpace(EndEntry.Text))
+        {
+            AddSectionErrorLabel.Text = "All fields must be filled out to add a section.";
+            return;
+        }
+
         List<string> sectionInfo = new List<string> {NameEntry.Text, CodeEntry.Text};
         string start = StartEntry.Text;
         string end = EndEntry.Text;
-
         List<DateOnly> dates = new List<DateOnly>{DateOnly.Parse(start), DateOnly.Parse(end)};
 
+        // Connecting to the database through the view model to add the section
         string sectionValidation = await viewModel.AddSectionAsync(professorID, sectionInfo, dates);
-        
         if(sectionValidation == "Success"){
             await DisplayAlert("New Section Added.", sectionInfo[0], "OK");
         }
         else{
-            await DisplayAlert("Error adding section", sectionValidation, "OK");
+            AddSectionErrorLabel.Text = sectionValidation;
+            return;
         }
     }
 
-    // For editing the section 
+    // For editing the section, all of the logic is taken care of in the popup
     private async void OnEditSectionClicked(object sender, EventArgs e)
     {
+        // Pulling the section that is being edited and then creating the popup
         var section = (Section)((Button)sender).CommandParameter;
         string sectionCode = section.code;
-        var popup = new EditSectionPopup(section);
+        var popup = new EditSectionPopup(viewModel, section);
         var result = await this.ShowPopupAsync(popup) as Section;
-
-
-        List<string> updatedInfo = new List<string>{result.name, result.code};
-        List<DateOnly> updatedDates = new List<DateOnly>{result.startDate, result.endDate};
-
-        // If no changes were made or they chose to cancel
-        if(section.name == result.name && section.code == result.code && section.startDate == result.startDate && section.endDate == result.endDate)
-        {
-            return;
-        }
-
-        string editValidation = await viewModel.EditSectionAsync(sectionCode, updatedInfo, updatedDates);
-
-
-        if(editValidation == "Success")
-        {
-            
-            await DisplayAlert("Section Edited", "Section edited successfully", "OK");
-        }
-        else{
-            await DisplayAlert("Section Not Altered", editValidation, "OK");
-        }
     }
 
     // Allows the professor to delete a section 
@@ -106,5 +89,4 @@ public partial class ManageSections : ContentPage
             return;
         }
     }
-
 }

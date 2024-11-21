@@ -42,7 +42,6 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> AddSectionAsync(string netid, List<string> sectionInfo, List<DateOnly> dates)
     {
         string sectionResultMessage = await databaseService.AddSection(netid, sectionInfo, dates);
-        Console.WriteLine(sectionResultMessage);
         GetSectionsAsync(professorid);
         return sectionResultMessage;
     }
@@ -51,7 +50,6 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> EditSectionAsync(string section, List<string> sectionInfo, List<DateOnly> dates)
     {
         string sectionResultMessage = await databaseService.EditSection(section, sectionInfo, dates);
-        Console.WriteLine(sectionResultMessage);
         GetSectionsAsync(professorid);
         return sectionResultMessage;
     }
@@ -60,7 +58,6 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> DeleteSectionAsync(string section)
     {
         string sectionResultMessage = await databaseService.DeleteSection(section);
-        Console.WriteLine(sectionResultMessage);
         GetSectionsAsync(professorid);
         return sectionResultMessage;
     }

@@ -87,6 +87,8 @@
                     HorizontalOptions="FillAndExpand"
                 />
 
+                <Label x:Name="AddStudentErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
+
                 <Button
                     x:Name="AddStudentButton"
                     Text="Submit Student"

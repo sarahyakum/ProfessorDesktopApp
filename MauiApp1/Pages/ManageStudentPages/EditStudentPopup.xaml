@@ -16,6 +16,7 @@
         <Entry x:Name="NetIDEntry" />
         <Label Text="Student UTDID"/>
         <Entry x:Name="UTDIDEntry"/>
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>

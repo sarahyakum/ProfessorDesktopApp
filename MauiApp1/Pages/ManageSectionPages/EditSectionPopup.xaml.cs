@@ -8,8 +8,10 @@
 
 */
 
+using System.Speech.Synthesis;
 using CommunityToolkit.Maui.Views;
 using MauiApp1.Models;
+using MauiApp1.ViewModels;
 namespace MauiApp1.Pages.ManageSections;
 
 
@@ -17,9 +19,11 @@ public partial class EditSectionPopup : Popup
 {
     string sectionCode;
     public Section sectionPassed;
-    public EditSectionPopup(Section section)
+    private readonly ManageSectionsViewModel viewModel;
+    public EditSectionPopup(ManageSectionsViewModel viewModel, Section section)
     {
         InitializeComponent();
+        this.viewModel = viewModel;
         sectionPassed = section;
         NameEntry.Text = section.name;
         CodeEntry.Text = section.code;
@@ -30,20 +34,45 @@ public partial class EditSectionPopup : Popup
     }
 
     // If the changes want to be saved 
-    private void OnSaveClicked(object Sender, EventArgs e)
+    private async void OnSaveClicked(object Sender, EventArgs e)
     {
+
+        // Checks whether all of the fields are filled out 
+        if(string.IsNullOrWhiteSpace(NameEntry.Text) || string.IsNullOrWhiteSpace(CodeEntry.Text) || string.IsNullOrWhiteSpace(StartDateEntry.Text) || string.IsNullOrWhiteSpace(EndDateEntry.Text))
+        {
+            ErrorLabel.Text = "All fields must be filled out to save changes.";
+            return;
+        }
+        else if(sectionPassed.name == NameEntry.Text && sectionPassed.code == CodeEntry.Text && sectionPassed.startDate == DateOnly.Parse(StartDateEntry.Text) && sectionPassed.endDate == DateOnly.Parse(EndDateEntry.Text) )
+        {
+            // If no changes were made return the same section 
+            Close(sectionPassed);
+        }
+
         string updatedName = NameEntry.Text;
         string updatedCode = CodeEntry.Text;
         DateOnly updatedStart = DateOnly.Parse(StartDateEntry.Text);
         DateOnly updatedEnd = DateOnly.Parse(EndDateEntry.Text);
 
-        Close(new Section
+        List<string> updatedInfo = new List<string>{updatedName, updatedCode};
+        List<DateOnly> updatedDates = new List<DateOnly>{updatedStart, updatedEnd};
+
+        // Editing the section
+        string editValidation = await viewModel.EditSectionAsync(sectionCode, updatedInfo, updatedDates);
+        if(editValidation == "Success")
         {
-            name = updatedName,
-            code = updatedCode, 
-            startDate = updatedStart, 
-            endDate = updatedEnd
-        });
+            Close(new Section
+            {
+                name = updatedName,
+                code = updatedCode, 
+                startDate = updatedStart, 
+                endDate = updatedEnd
+            });
+        }
+        else{
+            ErrorLabel.Text = editValidation;
+            return;
+        }
     }
 
     // If they choose their mind about editing, returns the same section 

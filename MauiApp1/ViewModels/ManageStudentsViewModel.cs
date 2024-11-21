@@ -13,7 +13,6 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MauiApp1.Models;
 
-
 public class ManageStudentsViewModel : INotifyPropertyChanged
 {
     private DatabaseService databaseService;
@@ -37,13 +36,11 @@ public class ManageStudentsViewModel : INotifyPropertyChanged
         GetStudentsAsync(section);
     }
 
-    // Getting the students that are in a section 
+    // Getting the students and their information that are in a section 
     public async Task GetStudentsAsync(string section)
     {
         var studentList = await databaseService.GetStudentAndInfo(section);
-
         Students = new ObservableCollection<Student>(studentList);
-
     }
 
     // Adding the students to the databse using the database service file 
@@ -51,6 +48,13 @@ public class ManageStudentsViewModel : INotifyPropertyChanged
     {
         string studentResultMessage = await databaseService.AddStudents(studentInfo[1], studentInfo[2], studentInfo[0], section);
         await GetStudentsAsync(section);
+        return studentResultMessage;
+    }
+
+    // Adding the students to the databse using the database service file, adds the student but doesnt reload the list until they have all been added
+    public async Task<string> AddStudentFromCSVAsync(string section, List<string> studentInfo)
+    {
+        string studentResultMessage = await databaseService.AddStudents(studentInfo[1], studentInfo[2], studentInfo[0], section);
         return studentResultMessage;
     }
 

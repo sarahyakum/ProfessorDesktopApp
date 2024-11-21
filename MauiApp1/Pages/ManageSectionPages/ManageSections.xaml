@@ -85,6 +85,8 @@
                 />
                 <BoxView HeightRequest="10" Color="Transparent"/>
 
+                <Label x:Name="AddSectionErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
+
                 <Button
                     x:Name="AddSectionButton"
                     Text="Submit Section"

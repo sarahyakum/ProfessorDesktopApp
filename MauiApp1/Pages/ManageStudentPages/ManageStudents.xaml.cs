@@ -38,6 +38,14 @@ public partial class ManageStudents : ContentPage
     // When the professor tries to add a singular student through the input boxes
     private async void OnAddStudentClicked(object sender, EventArgs e)
     {
+        // Checking whether the name, netid, or utdid are empty before moving on
+        if(string.IsNullOrWhiteSpace(NameEntry.Text) || string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(UTDIDEntry.Text))
+        {
+            AddStudentErrorLabel.Text = "Name, NetID, and UTDID must be filled out in order to add student.";
+            return;
+        }
+
+        // Pulling the information 
         name = NameEntry.Text;
         netid = NetIDEntry.Text;
         utdid = UTDIDEntry.Text;
@@ -45,7 +53,7 @@ public partial class ManageStudents : ContentPage
 
         List<string> studentInfo = new List<string> {name, netid, utdid};
 
-
+        // Adding the student to a team is optional, so testing whether the student has been assigned
         if(teamNumber != null)
         {
             List<string> teamInfo = new List<string> {netid, teamNumber};
@@ -55,9 +63,11 @@ public partial class ManageStudents : ContentPage
                 await DisplayAlert("New Student Added.", studentInfo[0], "OK");
             }
             else{
-                await DisplayAlert("Error adding section", studentValidation, "OK");
+                AddStudentErrorLabel.Text = studentValidation;
+                return;
             }
 
+            // Adding the student to a team as well, if the team does not exist then creates the team and then adds the student
             string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamNumber);
             if(teamValidation == "Team doesn't exist")
             {
@@ -72,14 +82,15 @@ public partial class ManageStudents : ContentPage
             }            
 
         }
-        else{
+        else{   // If the student is not being assigned to a team yet
             string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
         
             if(studentValidation == "Success"){
                 await DisplayAlert("New Student Added.", studentInfo[0], "OK");
             }
             else{
-                await DisplayAlert("Error adding section", studentValidation, "OK");
+                AddStudentErrorLabel.Text = studentValidation;
+                return;
             }
         }
     }
@@ -129,7 +140,7 @@ public partial class ManageStudents : ContentPage
                         string utdid = columns[3];
                         
                         List<string> studentInfo = new List<string> {name, netid, utdid};
-                        string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
+                        string studentValidation = await viewModel.AddStudentFromCSVAsync(section, studentInfo);
 
                         if(studentValidation != "Success")
                         {
@@ -146,6 +157,7 @@ public partial class ManageStudents : ContentPage
                 }
                 else{
                     await DisplayAlert("All students added", "All students were added!", "OK");
+                    await viewModel.GetStudentsAsync(section);
                 }
             }
             else
@@ -207,7 +219,7 @@ public partial class ManageStudents : ContentPage
                         
                         List<string> studentInfo = new List<string> {name, netid, utdid};
                         List<string> teamInfo = new List<string> {netid, teamNumber};
-                        string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
+                        string studentValidation = await viewModel.AddStudentFromCSVAsync(section, studentInfo);
 
                         if(studentValidation != "Success")
                         {
@@ -238,9 +250,10 @@ public partial class ManageStudents : ContentPage
                 }
                 else{
                     await DisplayAlert("All students added", "All students were added!", "OK");
+                    await viewModel.GetStudentsAsync(section);
                 }
 
-                
+                // If there were any teams that were not able to be added to their team
                 if(failedTeams.Any())
                 {
                     string errorMessage = string.Join("\n", failedTeams);
@@ -266,27 +279,8 @@ public partial class ManageStudents : ContentPage
     {
         var student = (Student)((Button)sender).CommandParameter;
         string studentID = student.netid;
-        var popup = new EditStudentPopup(student);
+        var popup = new EditStudentPopup(viewModel, student);
         var result = await this.ShowPopupAsync(popup) as Student;
-
-        List<string> updatedInfo = new List<string> {result.netid, result.name, result.utdid};
-
-        // If there were no changes made or they chose to cancel
-        if(student.netid == result.netid && student.name == result.name && student.utdid == result.utdid)
-        {
-            return;
-        }
-
-        // Editing the student and returning whether it worked 
-        string editValidation = await viewModel.EditStudentAsync(studentID, updatedInfo);
-
-        if(editValidation == "Success")
-        {
-            await DisplayAlert("Student Edited", "Student edited successfully", "OK");
-        }
-        else{
-            await DisplayAlert("Student Not Altered", editValidation, "OK");
-        }
     }
 
     // Professor deleting a student from the section 
