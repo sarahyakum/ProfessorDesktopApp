@@ -32,7 +32,7 @@ public partial class PeerReview : ContentPage
 
 	// Takes the professor to a page to allow them to enter new Peer Review Information
 	private async void OnSetUpButtonClicked(object sender, EventArgs e){
-		await Navigation.PushAsync(new PRSetUp(professorID, secCode));
+		await Navigation.PushAsync(new PRSetUpPages.PRSetUp(professorID, secCode));
 		
 	}
 

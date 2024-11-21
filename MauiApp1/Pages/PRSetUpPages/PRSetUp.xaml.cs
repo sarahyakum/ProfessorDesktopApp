@@ -1,6 +1,11 @@
 /*
-	PR SET UP Page: 	NEEDS UPDATING
-	Allows for professor to view current criteria as well as create new ones and create a peer review
+	PR SET UP Page: 
+		Displays a list of the current criterion for the section 
+		Allows the professor to add additional criteria
+		Allows the professor to edit or delete criteria as long as they are not already being used in a peer review 
+		Allows the professor to choose a criteria to reuse the name and description with a changed review type
+		Displays the current peer reviews for the section 
+		Allows the professor to add additional peer reviews 
 
 	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
         NetID: sny200000
@@ -12,6 +17,7 @@
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
 using CommunityToolkit.Maui.Views;
+using MauiApp1.Pages.PRSetUp;
 namespace MauiApp1.Pages.PRSetUpPages;
 
 public partial class PRSetUp : ContentPage
@@ -135,6 +141,32 @@ public partial class PRSetUp : ContentPage
 			else{
 				await DisplayAlert("Criterion Not Deleted", deleteValidation, "OK");
 			}
+		}
+	}
+
+	// To reuse the criteria name and description with a different type 
+	private async void OnReuseCriteriaClicked(object sender, EventArgs e)
+	{
+		var criteria = (Criteria)((Button)sender).CommandParameter;
+		string sectionCode = criteria.section;
+
+		var popup = new ReuseCriteriaPopup(criteria);
+		var result = await this.ShowPopupAsync(popup) as Criteria;
+
+		if(criteria.reviewType == result.reviewType)
+		{
+			return;
+		}
+
+		List<string> criteriaInfo = new List<string> { section, result.name, result.description, result.reviewType };
+
+		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, section);
+		if (criteriaValidation == "Success"){
+			await DisplayAlert("New Criteria Added." , criteriaInfo[1], "OK");
+		}
+		else{
+			await DisplayAlert("Error adding Criteria", criteriaValidation, "OK");
+			
 		}
 	}
 

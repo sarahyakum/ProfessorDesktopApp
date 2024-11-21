@@ -36,6 +36,7 @@ Written by Sarah Yakum sny200000
                                 <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
                                     <Button x:Name="EditCriteria" Text="Edit" Clicked="OnEditCriteriaClicked" CommandParameter="{Binding .}" />
                                     <Button x:Name="DeleteCriteria" Text="Delete" Clicked="OnDeleteCriteriaClicked" CommandParameter="{Binding .}" />
+                                    <Button x:Name="ReuseCriteria" Text="Reuse" Clicked="OnReuseCriteriaClicked" CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Frame>
