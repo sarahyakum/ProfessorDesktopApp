@@ -50,6 +50,8 @@
                     HorizontalOptions="FillAndExpand"
                 />
 
+                <Label x:Name="AssignTeamErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
+
                 <Button
                     x:Name="AssignTeamButton"
                     Text="Submit Team Assignment"
@@ -113,6 +115,9 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <Label Text="Students Without a Team" FontSize="Medium" HorizontalOptions="Center"/>
+                <Label x:Name="UnassignedStudentsLabel" HeightRequest="40" IsVisible="True" Text="" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

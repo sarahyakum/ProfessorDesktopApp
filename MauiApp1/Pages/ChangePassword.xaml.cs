@@ -32,35 +32,28 @@ public partial class ChangePassword : ContentPage{
 
     // When they try to submit their changes, calls a procedure for the database to test whether their input is vaid or has violated the consitions
     private async void OnResetButtonClicked(object sender, EventArgs e){
+
+        if(string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(OldPasswordEntry.Text) || string.IsNullOrWhiteSpace(NewPasswordEntry.Text))
+        {
+            ChangePasswordErrorLabel.Text = "All fields must be filled out.";
+            return;
+        }
+
         string usernameEntry = NetIDEntry.Text;
         string oldPasswordEntry = OldPasswordEntry.Text;
         newPassword = NewPasswordEntry.Text;
         string validation = await viewModel.ChangePasswordAsync(usernameEntry, oldPasswordEntry, newPassword);
 
         // Either accepts the change, or alerts the professor which condition was violated
-         if(validation == "Success"){
+        if(validation == "Success"){
 
             await DisplayAlert(validation, "Password was changed.", "OK");
             await Navigation.PushAsync(new HomePage(id));
         }
-        else if (validation == "Incorrect username or password"){
-            await DisplayAlert("Reenter Form", validation, "OK");
-
-        }else if(validation == "Password cannot be the same"){
-            await DisplayAlert("Change New Password", validation, "OK");
-
-        }else if(validation=="Password cannot be UTD ID"){
-            await DisplayAlert("Change New Password", validation, "OK");
+        else
+        {
+            ChangePasswordErrorLabel.Text = validation;
+            return;
         }
-        else{
-            await DisplayAlert("Database Issue", validation, "OK");
-        }
-
-        
-
-        
     }
-
-
-
 }

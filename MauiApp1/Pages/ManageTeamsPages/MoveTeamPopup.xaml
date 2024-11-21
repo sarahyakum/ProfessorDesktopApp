@@ -12,6 +12,7 @@
         <Label Text="Move Student" FontSize="Large" HorizontalOptions="Center"/>
         <Label Text="New Team"/>
         <Entry x:Name="TeamEntry"/>
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>

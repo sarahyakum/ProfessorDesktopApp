@@ -11,7 +11,8 @@
     <VerticalStackLayout Padding="20" Spacing="10">
         <Label Text="Edit Team" FontSize="Large" HorizontalOptions="Center"/>
         <Label Text="Team Number"/>
-        <Entry x:Name="NumberEntry" Placeholder="Student Name"/>
+        <Entry x:Name="NumberEntry" Placeholder="Team Number"/>
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>

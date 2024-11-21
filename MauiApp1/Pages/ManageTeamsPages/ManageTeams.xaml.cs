@@ -1,9 +1,12 @@
 /*
     Manage Teams Page
-        Allows the professor to upload the team assignments through a csv file upload
-            or enter them manually
-
-        Displays a list of the current team assignments 
+        Allows the professor to upload a CSV file containing the team assignments for sections
+        Allows the professor to assign a singular student to a team 
+        Shows a list of the current teams and their students 
+        Allows the professor to Move a student to a different team
+        Allows the professor to Remove a student from a team without adding them to a different team 
+        Allows the professor to change a team number 
+        Allows the professor to delete a team 
 
     Written by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
         NetID: ech210001
@@ -41,6 +44,13 @@ public partial class ManageTeams : ContentPage
     // When the professor assigns a singular student through the input fields 
     private async void OnAssignStudentClicked(object sender, EventArgs e)
     {
+        // Checking whether the netid and team number fields are filled out
+        if(string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(TeamNumEntry.Text))
+        {
+            AssignTeamErrorLabel.Text = "All fields must be filled to assign student";
+            return;
+        }
+
         netid = NetIDEntry.Text;
         team = TeamNumEntry.Text;
         List<string> teamInfo = new List<string> {netid, team};
@@ -58,7 +68,8 @@ public partial class ManageTeams : ContentPage
             await DisplayAlert("Student Assigned to Team", teamInfo[0], "OK");
         }
         else{
-            await DisplayAlert("Error adding section", teamValidation, "OK");
+            AssignTeamErrorLabel.Text = teamValidation;
+            return;
         }
     }
 
@@ -155,23 +166,11 @@ public partial class ManageTeams : ContentPage
             return;
         }
 
-        var popup = new MoveTeamPopup(netid, teamNum);
-
+        var popup = new MoveTeamPopup(viewModel, netid, teamNum, section);
         var result = (List<string>)await this.ShowPopupAsync(popup);
-
-        int updatedTeamNum = int.Parse(result[1]);
-
-        string changeValidation = await viewModel.ChangeTeamAsync(section, netid, updatedTeamNum);
-
-        if(changeValidation == "Success")
-        {
-            await DisplayAlert("Student Team Changed", $"{netid} was moved to team {updatedTeamNum}", "OK");
-        }
-        else{
-            await DisplayAlert("Student Not Moved", changeValidation, "OK");
-        }
     }
 
+    // Removing a student from the team without moving them to a new one
     private async void OnRemoveFromTeamClicked(object sender, EventArgs e)
     {
         string netid = (string)((Button)sender).CommandParameter;
@@ -186,8 +185,8 @@ public partial class ManageTeams : ContentPage
             return;
         }
 
-        bool isConfirmed = await DisplayAlert("Remove Student From Team", $"Are you sure you want to remove {netid}? If a Peer Review has already been created they cannot be removed.", "OK", "Cancel");
-
+        // Confirming whether they want to remove the student
+        bool isConfirmed = await DisplayAlert("Remove Student From Team", $"Are you sure you want to remove {netid}?", "OK", "Cancel");
         if(isConfirmed)
         {
             string deleteValidation = await viewModel.RemoveFromTeamAsync(netid, section);
@@ -202,33 +201,18 @@ public partial class ManageTeams : ContentPage
         }
     }
 
+    // Allows the professor to change the team number 
     private async void OnEditTeamClicked(object sender, EventArgs e)
     {
         var team = (Team)((Button)sender).CommandParameter;
         int teamNumber = team.number;
 
-        var popup = new EditTeamPopup(team);
+        var popup = new EditTeamPopup(viewModel, team, section);
         var result = await this.ShowPopupAsync(popup) as Team;
-
-        // If no changed were made 
-        if(result.number == team.number)
-        {
-            return;
-        }
-
-        string editValidation = await viewModel.EditTeamNumberAsync(section, team.number, result.number);
-
-        
-        if(editValidation == "Success")
-        {
-            await DisplayAlert("Team Edited", "Team edited successfully", "OK");
-        }
-        else{
-            await DisplayAlert("Team Not Altered", editValidation, "OK");
-        }
 
     }
 
+    // Allows the professor to delete a team only if a peer review with this team has not already been created 
     private async void OnDeleteTeamClicked(object sender, EventArgs e)
     {
         var team = (Team)((Button)sender).CommandParameter;
@@ -242,7 +226,6 @@ public partial class ManageTeams : ContentPage
         }
 
         bool isConfirmed = await DisplayAlert("Delete Team", $"Are you sure you want to delete team {team.number}? All members of the team will be removed.", "OK", "Cancel");
-
         if(isConfirmed)
         {
             string deleteValidation = await viewModel.DeleteTeamAsync(section, team.number);
@@ -255,7 +238,5 @@ public partial class ManageTeams : ContentPage
                 await DisplayAlert("Team Not Deleted", $"Team {team.number} was not deleted", "OK");
             }
         }
-
-
     }
 }
