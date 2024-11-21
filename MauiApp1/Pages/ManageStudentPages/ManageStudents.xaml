@@ -126,8 +126,8 @@
                                     <Label Grid.Column="3" Text="UTDID: " FontSize="Small" TextColor="Gray"/>
                                     <Label Grid.Column="4" Text="{Binding utdid}" FontSize="Small"/>
 
-                                    <Button Grid.Column="5" x:Name="EditStudent" Text="Edit" Clicked="OnEditStudentClicked" CommandParameter="{Binding .}"/>
-                                    <Button Grid.Column="6" x:Name="DeleteStudent" Text="Delete" Clicked="OnDeleteStudentClicked" CommandParameter="{Binding .}" />
+                                    <Button Grid.Column="5" x:Name="EditStudent" Text="Edit" Clicked="OnEditStudentClicked" CommandParameter="{Binding .}" Margin="5,0,5,0"/>
+                                    <Button Grid.Column="6" x:Name="DeleteStudent" Text="Delete" Clicked="OnDeleteStudentClicked" CommandParameter="{Binding .}" Margin="5,0,5,0"/>
                                 </Grid>
                             </ViewCell>  
                         </DataTemplate>

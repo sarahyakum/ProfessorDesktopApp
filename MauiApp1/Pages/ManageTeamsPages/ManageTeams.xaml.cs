@@ -39,6 +39,21 @@ public partial class ManageTeams : ContentPage
         section = sectionCode;
         viewModel = new ManageTeamsViewModel(section);
         BindingContext = viewModel;
+        UpdateUnassignedStudentsLabel();
+    }
+
+    // Fetching all of the students who have not been assigned a team 
+    private async void UpdateUnassignedStudentsLabel()
+    {
+        try
+        {
+            string unassignedStudents = await viewModel.GetUnassignedStudentsAsync(section);
+            UnassignedStudentsLabel.Text = unassignedStudents;
+        }
+        catch (Exception ex)
+        {
+            UnassignedStudentsLabel.Text = $"Error: {ex.Message}";
+        }
     }
 
     // When the professor assigns a singular student through the input fields 
@@ -66,6 +81,7 @@ public partial class ManageTeams : ContentPage
         
         if(teamValidation == "Success"){
             await DisplayAlert("Student Assigned to Team", teamInfo[0], "OK");
+            UpdateUnassignedStudentsLabel();
         }
         else{
             AssignTeamErrorLabel.Text = teamValidation;
@@ -140,6 +156,7 @@ public partial class ManageTeams : ContentPage
                 else{
                     await DisplayAlert("All students assigned", "All students were assigned!", "OK");
                 }
+                UpdateUnassignedStudentsLabel();
             }
             else
             {
@@ -168,6 +185,8 @@ public partial class ManageTeams : ContentPage
 
         var popup = new MoveTeamPopup(viewModel, netid, teamNum, section);
         var result = (List<string>)await this.ShowPopupAsync(popup);
+        
+        UpdateUnassignedStudentsLabel();
     }
 
     // Removing a student from the team without moving them to a new one
@@ -194,6 +213,7 @@ public partial class ManageTeams : ContentPage
             if(deleteValidation == "Success")
             {
                 await DisplayAlert("Student Removed", "Sudent removed successfully", "OK");
+                UpdateUnassignedStudentsLabel();
             }
             else{
                 await DisplayAlert("Student Not Removed", deleteValidation, "OK");
@@ -238,5 +258,6 @@ public partial class ManageTeams : ContentPage
                 await DisplayAlert("Team Not Deleted", $"Team {team.number} was not deleted", "OK");
             }
         }
+        UpdateUnassignedStudentsLabel();
     }
 }

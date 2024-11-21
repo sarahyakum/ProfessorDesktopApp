@@ -405,6 +405,40 @@ class DatabaseService{
             
         }
     }
+
+    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+    // Gets all of the students who are not assigned to a team 
+    public async Task<List<Student>> GetUnassignedStudents(string section){
+        
+        using (var conn = new MySqlConnection(connectionString)){
+            List<Student> students = new List<Student>();
+            
+            string query = "SELECT * from Student WHERE StuNetID NOT IN (SELECT StuNetID FROM MemberOf WHERE SecCode = @section_code)";
+            
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                    cmd.Parameters.AddWithValue("@section_code", section);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync()){
+                            students.Add(new Student{
+                                netid= reader.GetString("StuNetID"),
+                                name = reader.GetString("StuName"),
+                                utdid = reader.GetString("StuUTDID")
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            
+            }
+            return students;
+        }
+    }
+
     //Creates criteria for a review type in a specific section
     public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
         string error_message = string.Empty;

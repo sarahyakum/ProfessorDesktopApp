@@ -59,6 +59,24 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Teams));
     }
 
+    // Fetches all of the students who are not assigned a team
+    public async Task<string> GetUnassignedStudentsAsync(string section)
+    {
+        try{
+            var unassignedStudents = await databaseService.GetUnassignedStudents(section);
+            if(unassignedStudents == null || !unassignedStudents.Any())
+            {
+                return "All students are assigned to a team";
+            }
+            
+            return string.Join("\n", unassignedStudents.Select(s => $"{s.name} ({s.netid})"));
+        }
+        catch (Exception ex)
+        {
+            return $"Error etching unassigned students: {ex.Message}";
+        }
+    }
+
     // Checking if the team number already exists for this section
     public async Task<string> CheckTeamExistsAsync(string section, string teamNum)
     {

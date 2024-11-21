@@ -116,8 +116,10 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Label Text="Students Without a Team" FontSize="Medium" HorizontalOptions="Center"/>
-                <Label x:Name="UnassignedStudentsLabel" HeightRequest="40" IsVisible="True" Text="" />
+                <!-- Displaying the students who are not currently assigned to a team -->
+                <BoxView HeightRequest="50" Color="Transparent"/>
+                <Label Text="Unassigned Students" FontSize="Large" HorizontalOptions="Center"/>
+                <Label x:Name="UnassignedStudentsLabel" HeightRequest="40" IsVisible="True" Text="" HorizontalOptions="Center" FontSize="Medium" />
         </StackLayout>
     </ScrollView>
 </ContentPage>
