@@ -60,7 +60,7 @@ Written by Sarah Yakum sny200000
                 />
       
                 <Label Text="Description:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" />
-                <Editor x:Name="DescriptionEntry"
+                <Entry x:Name="DescriptionEntry"
                     Placeholder="How the person contributes to team..."
                     HorizontalOptions="FillAndExpand"
                     HeightRequest="20" 
@@ -73,6 +73,7 @@ Written by Sarah Yakum sny200000
                 Placeholder="Midterm"
                 HorizontalOptions="FillAndExpand"/>
 
+            <Label x:Name="AddCriteriaErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
 
              <Button
                 x:Name="CriteriaButton"
@@ -137,8 +138,10 @@ Written by Sarah Yakum sny200000
                 x:Name="TimePeriodEntry2"
                 Placeholder="10/08/2024"
                 HorizontalOptions="FillAndExpand"
-
             />
+
+            <Label x:Name="AddPRErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
+
             <Button
                 x:Name="PeerReviewButton"
                 Text="Submit Peer Review"

@@ -9,34 +9,61 @@
 
 using CommunityToolkit.Maui.Views;
 using MauiApp1.Models;
+using MauiApp1.ViewModels;
 namespace MauiApp1.Pages.PRSetUp;
 
 
 public partial class ReuseCriteriaPopup : Popup
 {
     string sectionCode;
+    string professorID;
     public Criteria criteriaPassed;
-    public ReuseCriteriaPopup(Criteria criteria)
+    private readonly PRSetUpViewModel viewModel;
+    public ReuseCriteriaPopup(PRSetUpViewModel viewModel, Criteria criteria, string netid)
     {
         InitializeComponent();
+        this.viewModel = viewModel;
         criteriaPassed = criteria;
         TypeEntry.Text = criteria.reviewType;
-
+        professorID = netid;
         sectionCode = criteria.section;
     }
 
     // If the changes want to be saved 
-    private void OnSaveClicked(object Sender, EventArgs e)
+    private async void OnSaveClicked(object Sender, EventArgs e)
     {
+        // If the new review type has not been filled out 
+        if(string.IsNullOrWhiteSpace(TypeEntry.Text))
+        {
+            ErrorLabel.Text = "New Type must be filled out";
+            return;
+        }
+        else if (criteriaPassed.reviewType == TypeEntry.Text)
+        {
+            // If the review type was not changed 
+            Close(criteriaPassed);
+        }
+
         string updatedType = TypeEntry.Text;
 
-        Close(new Criteria
-        {
-            name = criteriaPassed.name,
-            description = criteriaPassed.description,
-            reviewType = updatedType,
-            section = criteriaPassed.section
-        });
+        List<string> criteriaInfo = new List<string> { sectionCode, criteriaPassed.name, criteriaPassed.description, updatedType };
+
+        // Calls the viewmodel to perform the actions to reuse the criteria and exits pop up or tells what it wrong
+		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, sectionCode);
+		if (criteriaValidation == "Success"){
+			Close(new Criteria
+            {
+                name = criteriaPassed.name,
+                description = criteriaPassed.description,
+                reviewType = updatedType,
+                section = criteriaPassed.section
+            });
+		}
+		else{
+			ErrorLabel.Text = criteriaValidation;
+            return;
+			
+		}
     }
 
     // If they choose their mind about editing, returns the same section 

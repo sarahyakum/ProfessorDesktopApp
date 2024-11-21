@@ -14,6 +14,7 @@
         <Entry x:Name="StartDateEntry" Placeholder="Start Date"/>
         <Label Text="End Date"/>
         <Entry x:Name="EndDateEntry" />
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>

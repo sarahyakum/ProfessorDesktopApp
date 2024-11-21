@@ -39,7 +39,14 @@ public partial class PRSetUp : ContentPage
 	}
 
 	//Creates a new criteria category based on the input given
-	private async void OnCriteriaClicked(object sender, EventArgs e){
+	private async void OnCriteriaClicked(object sender, EventArgs e)
+	{
+		if(string.IsNullOrWhiteSpace(CriteriaEntry.Text) || string.IsNullOrWhiteSpace(DescriptionEntry.Text) || string.IsNullOrWhiteSpace(TypeEntry.Text) )
+		{
+			AddCriteriaErrorLabel.Text = "All fields must be filled out";
+			return;
+		}
+
 		List<string> criteriaInfo = new List<string> { section, CriteriaEntry.Text, DescriptionEntry.Text, TypeEntry.Text };
 
 		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, section);
@@ -47,20 +54,26 @@ public partial class PRSetUp : ContentPage
 			await DisplayAlert("New Criteria Added." , criteriaInfo[1], "OK");
 		}
 		else{
-			await DisplayAlert("Error adding Criteria", criteriaValidation, "OK");
-			
+			AddCriteriaErrorLabel.Text = criteriaValidation;
+			return;
 		}
 	}
 
 	//Creates a new peer review for a section when the button is clicked
-	private async void OnCreatePeerReviewClicked(object sender, EventArgs e){
+	private async void OnCreatePeerReviewClicked(object sender, EventArgs e)
+	{
+
+		if(string.IsNullOrWhiteSpace(ReviewTypeEntry.Text) || string.IsNullOrWhiteSpace(TimePeriodEntry1.Text) || string.IsNullOrWhiteSpace(TimePeriodEntry2.Text))
+		{
+			AddPRErrorLabel.Text = "All fields must be filled out";
+			return;
+		}
 
 		List<string> peerReviewInfo = new List<string>{ section, ReviewTypeEntry.Text} ;
 		string start = TimePeriodEntry1.Text;
 		string end = TimePeriodEntry2.Text;
 		
 		List<DateTime> dates = new List<DateTime>{DateTime.Parse(start), DateTime.Parse(end)};	
-
 
 		// Confirms the professor is ready to create the peer review, knowing the consequences
 		bool isConfirmed = await DisplayAlert("Create Peer Review", "Are you sure you want to create this peer review? Once it had been created you will not longer be able to: \n- Move students from teams\n- Remove teams\n- Edit criteria of this type\n- Delete criteria of this type\n- Change the Peer Review type", "OK", "Cancel");
@@ -72,7 +85,8 @@ public partial class PRSetUp : ContentPage
 				await DisplayAlert("New Peer Review Created." ,  ReviewTypeEntry.Text , "OK");
 			}
 			else{
-				await DisplayAlert("Error Creating Peer Review", prValidation, "OK");
+				AddPRErrorLabel.Text = prValidation;
+				return;
 			}
 		}
 	}
@@ -92,25 +106,8 @@ public partial class PRSetUp : ContentPage
 			return;
 		}
 
-		var popup = new EditCriteriaPopup(criteria);
+		var popup = new EditCriteriaPopup(viewModel, criteria);
 		var result = await this.ShowPopupAsync(popup) as Criteria;
-
-		// If no changes were made or the user chose to cancel
-		if(criteria.name == result.name && criteria.description == result.description && criteria.reviewType == result.reviewType)
-		{
-			return;
-		}
-
-		// Edit the criteria and return the result message
-		string editValidation = await viewModel.EditCriteriaAsync(section, criteria, result);
-
-		if(editValidation == "Success")
-		{
-			await DisplayAlert("Criteria Edited", "Criteria edited successfully", "OK");
-		}
-		else{
-			await DisplayAlert("Criteria Not Altered", editValidation, "OK");
-		}
 	}
 
 	// Deletes a criterion 
@@ -150,24 +147,8 @@ public partial class PRSetUp : ContentPage
 		var criteria = (Criteria)((Button)sender).CommandParameter;
 		string sectionCode = criteria.section;
 
-		var popup = new ReuseCriteriaPopup(criteria);
+		var popup = new ReuseCriteriaPopup(viewModel, criteria, professorID);
 		var result = await this.ShowPopupAsync(popup) as Criteria;
-
-		if(criteria.reviewType == result.reviewType)
-		{
-			return;
-		}
-
-		List<string> criteriaInfo = new List<string> { section, result.name, result.description, result.reviewType };
-
-		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, section);
-		if (criteriaValidation == "Success"){
-			await DisplayAlert("New Criteria Added." , criteriaInfo[1], "OK");
-		}
-		else{
-			await DisplayAlert("Error adding Criteria", criteriaValidation, "OK");
-			
-		}
 	}
 
 	// Allows the professor to alter the start date and end date of the Peer Reviews
@@ -175,24 +156,8 @@ public partial class PRSetUp : ContentPage
 	{
 		var peerReview = (PeerReview)((Button)sender).CommandParameter;
 		
-		var popup = new EditPRPopup(peerReview);
+		var popup = new EditPRPopup(viewModel, peerReview);
 		var result = await this.ShowPopupAsync(popup) as PeerReview;
-
-		// If no changes were made or they decided to cancel 
-		if(peerReview.endDate == result.endDate && peerReview.startDate == result.startDate)
-		{
-			return;
-		}
-
-		string editValidation = await viewModel.EditPRDatesAsync(result.section, result.type, result.startDate, result.endDate);
-
-		if(editValidation == "Success")
-		{
-			await DisplayAlert("Peer Review Edited", "Peer Review Dates edited successfully", "OK");
-		}
-        else{
-            await DisplayAlert("Peer Review Not Altered", editValidation, "OK");
-        }
 	}
 
 	private async void OnDeletePeerReviewClicked(object sender, EventArgs e)

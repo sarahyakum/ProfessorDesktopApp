@@ -12,6 +12,7 @@
         <Label Text="Reuse Criteria" FontSize="Large" HorizontalOptions="Center"/>
         <Label Text="New Review Type"/>
         <Entry x:Name="TypeEntry" Placeholder="Review Type"/>
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>

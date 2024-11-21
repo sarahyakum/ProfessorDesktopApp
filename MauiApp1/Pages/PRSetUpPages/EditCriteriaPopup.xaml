@@ -16,6 +16,7 @@
         <Entry x:Name="DescriptionEntry" Placeholder="Description"/>
         <Label Text="Review Type"/>
         <Entry x:Name="TypeEntry"/>
+        <Label x:Name="ErrorLabel" TextColor="Red" HeightRequest="40" Text="" />
         <HorizontalStackLayout Spacing="10">
             <Button Text="Save" Clicked="OnSaveClicked"/>
             <Button Text="Cancel" Clicked="OnCancelClicked"/>
