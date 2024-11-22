@@ -45,8 +45,6 @@ public class SectionsViewModel : INotifyPropertyChanged
         Sections = await databaseService.GetSections(netid);
         
     }
-
-
     
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

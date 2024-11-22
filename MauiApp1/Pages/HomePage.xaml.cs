@@ -30,22 +30,23 @@ public partial class HomePage : ContentPage
 	{
 		flag="TIME";
         await Navigation.PushAsync(new Sections(id, flag));
-        
-
 	}
 
     // If the professor chooses to visit the Peer Review
     private async void OnPeerReviewButtonClicked(object sender, EventArgs e)
-
     {
         flag="PR";
         await Navigation.PushAsync(new Sections(id, flag));
-
     }
 
     private async void OnSettingsButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new Settings(id));
 
+    }
+
+    private async void OnEmailStudentsButtonClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new EmailStudents(id));
     }
 }

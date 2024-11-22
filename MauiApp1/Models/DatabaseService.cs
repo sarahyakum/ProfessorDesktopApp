@@ -77,23 +77,21 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@prof_netID", netId);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
-                    while (await reader.ReadAsync())
-                    {
-                        DateTime startDate = reader.GetDateTime("StartDate");
-                        DateTime endDate = reader.GetDateTime("EndDate");
-
-                        sections.Add(new Section
+                        while (await reader.ReadAsync())
                         {
-                            code = reader.GetString("SecCode"), // Match column names with your query
-                            name = reader.GetString("SecName"),
-                            startDate = DateOnly.FromDateTime(startDate),
-                            endDate = DateOnly.FromDateTime(endDate)
- 
-                        });
-                    }
+                            DateTime startDate = reader.GetDateTime("StartDate");
+                            DateTime endDate = reader.GetDateTime("EndDate");
 
+                            sections.Add(new Section
+                            {
+                                code = reader.GetString("SecCode"), // Match column names with your query
+                                name = reader.GetString("SecName"),
+                                startDate = DateOnly.FromDateTime(startDate),
+                                endDate = DateOnly.FromDateTime(endDate)
+    
+                            });
+                        }
                     }
-
                 }
             }
             catch (Exception ex){
@@ -1390,10 +1388,67 @@ class DatabaseService{
     //Retrieves the students with unfinished reviews
 
     //Edits the timeslot of a student
+    
 
-    //Retrieves email addresses for students who have not logged any hours
+    //Retrieves email addresses for students who have not logged any hours for the week
+    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+    public async Task<List<string>> GetTTEmails(string sectionCode, DateOnly firstDay){
+        List<string> emails = new List<string>();
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("timetrack_student_emails", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", sectionCode);
+                    cmd.Parameters.AddWithValue("@start_week", firstDay);
+
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            string email = reader.GetString("Email");
+                            emails.Add(email);
+                        }
+                    }
+                }
+                return emails;
+
+            }
+            catch(Exception ex){
+                Console.WriteLine(ex.Message);
+                return new List<string>();
+            }
+        }
+    }
 
     //Retrieves email addresses for student who have not submitted their peer reviews
+    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+    public async Task<List<string>> GetPREmails(string sectionCode){
+        List<string> emails = new List<string>();
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("peerReview_student_emails", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@section_code", sectionCode);
+
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            string email = reader.GetString("Email");
+                            emails.Add(email);
+                        }
+                    }
+                }
+                return emails;
+
+            }
+            catch(Exception ex){
+                Console.WriteLine(ex.Message);
+                return new List<string>();
+            }
+        }
+    }
 
 
 
