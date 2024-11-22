@@ -15,7 +15,5 @@ public class Timeslot{
     //public DateOnly date { get; set; }
     public string hours { get; set; }
     public string description { get; set; }
-    //public Dictionary<DateOnly, string> HoursByDate { get; set; }
-    //public Dictionary<DateOnly, string> DescByDate { get; set; }
 
 } 

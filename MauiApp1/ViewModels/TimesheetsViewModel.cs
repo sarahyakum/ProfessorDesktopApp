@@ -17,18 +17,23 @@ using MauiApp1.Pages;
 
 public class TimesheetsViewModel : INotifyPropertyChanged
 {
+    
     private DatabaseService databaseService;
-    private ObservableCollection<Student> students = new ObservableCollection<Student>();
     
-    private DateOnly currentWeekStart;
-    private int weekOffset = 0;
-    //private ObservableCollection<Timeslot> timeslots = new ObservableCollection<Timeslot>();
-    private List<DateOnly> window = new List<DateOnly>();
-    //private List<Student> students = new List<Student>();
-    public event PropertyChangedEventHandler PropertyChanged;
-    
+    //Handles week changes
+    public event EventHandler WeekChanged;
     public ICommand MoveToNextWeekCommand { get; }
     public ICommand MoveToPreviousWeekCommand { get; }
+    
+    
+    private DateOnly currentWeekStart;
+    private string currentWeekRange;
+    private int weekOffset = 0;
+    private List<DateOnly> window = new List<DateOnly>();
+    private ObservableCollection<Student> students = new ObservableCollection<Student>();
+    public event PropertyChangedEventHandler PropertyChanged;
+    
+    //Sets list of students
     public ObservableCollection<Student> Students{
         get => students;
         set{
@@ -36,8 +41,19 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Students));
         }
         
+    }
+
+    //Sets up sections course time frame
+    public List<DateOnly> Window{
+        get => window;
+        set{
+            window=value;
+            OnPropertyChanged(nameof(Window));
         }
-        public DateOnly CurrentWeekStart
+    }
+
+    //Sets the current week
+    public DateOnly CurrentWeekStart
     {
         get => currentWeekStart;
          set
@@ -52,7 +68,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         }
     }
 
-    private string currentWeekRange;
+    //Sets up the range header
     public string CurrentWeekRange
     {
         get => currentWeekRange;
@@ -65,23 +81,10 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             }
         }
     }
-    /*public ObservableCollection<Timeslot> Timeslots{
-        get => timeslots;
-        set{
-            timeslots=value;
-            OnPropertyChanged(nameof(Timeslots));
-        }
-        
-        }*/
-    public List<DateOnly> Window{
-        get => window;
-        set{
-            window=value;
-            OnPropertyChanged(nameof(Window));
-        }
-    }
     
 
+    
+    //Handles acquire data for the timesheets page
     public TimesheetsViewModel(string section)
     {
         databaseService = new DatabaseService();
@@ -97,23 +100,21 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         _ = StartAsync(section);
         _ = GetTimeFrameAsync(section);
         
-        
-        
-        
-
     }
 
+    //Begin the functionality
     public async Task StartAsync(string section){
         CurrentWeekStart = GetStartOfWeek(DateOnly.FromDateTime(DateTime.Today));
         await LoadStudentsAsync(section);
     }
+    //get Monday of the week
     private DateOnly GetStartOfWeek(DateOnly date)
     {
         int daysToSubtract = (int)date.DayOfWeek - (int)DayOfWeek.Monday;
         return date.AddDays(-daysToSubtract);
     }
 
-
+    //Gets student information from database
     public async Task LoadStudentsAsync(string code){
         
         Students = await databaseService.GetStudents(code);
@@ -121,61 +122,68 @@ public class TimesheetsViewModel : INotifyPropertyChanged
 
 
     }
+
+    //changes the range
     private void UpdateCurrentWeekRange()
     {
         var currentWeekEnd = currentWeekStart.AddDays(6);
         CurrentWeekRange = $"{currentWeekStart:MMM dd} - {currentWeekEnd:MMM dd}";
     }
+
+    //Accesses the database to get the current weeks timesheets
     public async Task LoadWeeklyTimeslotsAsync()
     {
         try{
         var weekStart = CurrentWeekStart.AddDays(weekOffset * 7);
         var weekEnd = weekStart.AddDays(6);
-        // Create a list of tasks for loading timeslots for each student
-    var tasks = students.Select(async student =>
-    {
-        try{
-        // Fetch timeslots for the week from the database for this student
-        var timeslots = await databaseService.GetWeekTimeslots(weekStart, student.netid);
-        // Check if student.timeslots is null before using it
+
+        //Acquire timeslots for all students
+        var tasks = students.Select(async student =>
+        {
+            try{
+            var timeslots = await databaseService.GetWeekTimeslots(weekStart, student.netid);
+            
             if (student.timeslots == null)
             {
                 student.timeslots = new Dictionary<DateOnly, Timeslot>(); // Initialize if null
             }
 
-        // Add or update the student's timeslots
-        foreach (var timeslot in timeslots)
-        {
-            if(timeslot!=null){
-                student.timeslots[timeslot.date] = timeslot;
-            }
-            
-        }
-
-        // Ensure that all dates in the week have a timeslot entry
-        for (var date = weekStart; date <= weekEnd; date = date.AddDays(1))
-        {
-            if (!student.timeslots.ContainsKey(date))
+            //update time slots
+            foreach (var timeslot in timeslots)
             {
-                student.timeslots[date] = new Timeslot
-                {
-                    date = date,
-                    hours = "00:00",  // Default value
-                    description = "No entry"
-                };
+                if(timeslot!=null){
+                    student.timeslots[timeslot.date] = timeslot;
+                }
+                
             }
-        }}
-        catch(Exception ex){
-            Console.WriteLine($"Error for student {student.netid}: {ex.Message}");
-                // Log to a file or a crash reporting service
-        }
-    }).ToList();
 
-    // Wait for all tasks to complete
-    await Task.WhenAll(tasks);}
-    catch(Exception ex){
-        Console.WriteLine($"Error loading weekly timeslots: {ex.Message}");
-        }}
+            //Adds 0 slot for empty slots
+            for (var date = weekStart; date <= weekEnd; date = date.AddDays(1))
+            {
+                if (!student.timeslots.ContainsKey(date))
+                {
+                    student.timeslots[date] = new Timeslot
+                    {
+                        date = date,
+                        hours = "00:00",  // Default value
+                        description = "No entry"
+                    };
+                }
+            }}
+            catch(Exception ex){
+                Console.WriteLine($"Error for student {student.netid}: {ex.Message}");
+                 
+            }
+        }).ToList();
+
+        
+        await Task.WhenAll(tasks);}
+        catch(Exception ex){
+            Console.WriteLine($"Error loading weekly timeslots: {ex.Message}");
+        }
+    }
+
+    //Handles week changes
     public async Task MoveToNextWeekAsync()
     {
         weekOffset++;
@@ -198,5 +206,9 @@ public class TimesheetsViewModel : INotifyPropertyChanged
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        if (propertyName == nameof(CurrentWeekRange))
+    {
+        WeekChanged?.Invoke(this, EventArgs.Empty); // Custom event for the week change
+    }
     }
 }
