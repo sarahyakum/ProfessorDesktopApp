@@ -10,29 +10,25 @@
         NetID: sny200000
 */
 
-
 using MauiApp1.ViewModels;
-
 namespace MauiApp1.Pages;
 
 public partial class ChangePassword : ContentPage{
-    private string id;
-    private string oldPassword;
-    private string newPassword;
-    LoginViewModel viewModel;
+    private readonly string id;
+    private readonly LoginViewModel viewModel;
 
-    public ChangePassword(string netid){
-
-        
+    public ChangePassword(string netid)
+    {
         InitializeComponent();
         viewModel = new LoginViewModel();
         id = netid;
     }
 
 
-    // When they try to submit their changes, calls a procedure for the database to test whether their input is vaid or has violated the consitions
-    private async void OnResetButtonClicked(object sender, EventArgs e){
-
+    // When they try to submit their changes, calls a procedure for the database to test whether their input is vaid or has violated the constraints
+    private async void OnResetButtonClicked(object sender, EventArgs e)
+    {
+        // Makes sure all fields are filled in
         if(string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(OldPasswordEntry.Text) || string.IsNullOrWhiteSpace(NewPasswordEntry.Text))
         {
             ChangePasswordErrorLabel.Text = "All fields must be filled out.";
@@ -41,12 +37,13 @@ public partial class ChangePassword : ContentPage{
 
         string usernameEntry = NetIDEntry.Text;
         string oldPasswordEntry = OldPasswordEntry.Text;
-        newPassword = NewPasswordEntry.Text;
+        string newPassword = NewPasswordEntry.Text;
+
         string validation = await viewModel.ChangePasswordAsync(usernameEntry, oldPasswordEntry, newPassword);
 
         // Either accepts the change, or alerts the professor which condition was violated
-        if(validation == "Success"){
-
+        if(validation == "Success")
+        {
             await DisplayAlert(validation, "Password was changed.", "OK");
             await Navigation.PushAsync(new HomePage(id));
         }

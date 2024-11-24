@@ -15,9 +15,9 @@ namespace MauiApp1.Pages.ManageTeams;
 
 public partial class MoveTeamPopup : Popup
 {
-    string studentID;
-    int teamNumber;
-    string section;
+    readonly string studentID;
+    readonly int teamNumber;
+    readonly string section;
     private readonly ManageTeamsViewModel viewModel;
     public MoveTeamPopup(ManageTeamsViewModel viewModel, string netid, int teamNum, string sectionCode)
     {
@@ -29,10 +29,11 @@ public partial class MoveTeamPopup : Popup
         TeamEntry.Text = teamNum.ToString();
     }
 
+
     // If the changes want to be saved 
     private async void OnSaveClicked(object Sender, EventArgs e)
     {
-        int teamNum = await viewModel.GetTeamNumberAsync(studentID);
+        int teamNum = int.Parse(TeamEntry.Text);
 
         // Checking whether the new team field has been filled out 
         if(string.IsNullOrWhiteSpace(TeamEntry.Text))
@@ -40,31 +41,28 @@ public partial class MoveTeamPopup : Popup
             ErrorLabel.Text = "All fields must be filled out to move the student.";
             return;
         }
-        else if(teamNum == int.Parse(TeamEntry.Text))   // if nothing was changed 
+        else if(teamNumber == teamNum) 
         {
-            List<string> sameInfo = new List<string>{studentID, teamNum.ToString()};
-            Close(sameInfo);
+            // If no changes were made 
+            Close();
         }
         
         // Either changing the team or presenting the condition not met
-        string changeValidation = await viewModel.ChangeTeamAsync(section, studentID, int.Parse(TeamEntry.Text));
+        string changeValidation = await viewModel.ChangeTeamAsync(section, studentID, teamNum);
         if(changeValidation == "Success")
         {
-            List<string>  updatedInfo = new List<string>{studentID, TeamEntry.Text};
-            Close(updatedInfo);
+            Close();
         }
         else{
             ErrorLabel.Text = changeValidation;
             return;
         }
-
     }
 
-    // If they choose their mind about editing, returns the same information 
+    // If they choose their mind about editing, closes the popup
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        List<string> sameInfo = new List<string>{studentID, teamNumber.ToString()};
-        Close(sameInfo);
+        Close();
     }
 
 }

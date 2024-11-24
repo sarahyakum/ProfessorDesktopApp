@@ -51,6 +51,5 @@ Written by Sarah Yakum sny200000
             />
         
     </VerticalStackLayout>
-    </ScrollView>
-     
+    </ScrollView> 
 </ContentPage>

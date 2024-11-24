@@ -2,13 +2,13 @@
     Edit Section Popup:
         From the Manage Sections Page when the professor chooses to edit a section 
         Shows a pop up with the current information in text input fields where it can be altered
+        Allows to save the changes or cancel and close the popup
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
         NetID: ech210001
 
 */
 
-using System.Speech.Synthesis;
 using CommunityToolkit.Maui.Views;
 using MauiApp1.Models;
 using MauiApp1.ViewModels;
@@ -17,7 +17,7 @@ namespace MauiApp1.Pages.ManageSections;
 
 public partial class EditSectionPopup : Popup
 {
-    string sectionCode;
+    readonly string sectionCode;
     public Section sectionPassed;
     private readonly ManageSectionsViewModel viewModel;
     public EditSectionPopup(ManageSectionsViewModel viewModel, Section section)
@@ -33,7 +33,7 @@ public partial class EditSectionPopup : Popup
         sectionCode = section.code;
     }
 
-    // If the changes want to be saved 
+    // If the professor tries to save the changes that were made 
     private async void OnSaveClicked(object Sender, EventArgs e)
     {
 
@@ -45,8 +45,8 @@ public partial class EditSectionPopup : Popup
         }
         else if(sectionPassed.name == NameEntry.Text && sectionPassed.code == CodeEntry.Text && sectionPassed.startDate == DateOnly.Parse(StartDateEntry.Text) && sectionPassed.endDate == DateOnly.Parse(EndDateEntry.Text) )
         {
-            // If no changes were made return the same section 
-            Close(sectionPassed);
+            // If no changes were made close the popup
+            Close();
         }
 
         string updatedName = NameEntry.Text;
@@ -57,28 +57,23 @@ public partial class EditSectionPopup : Popup
         List<string> updatedInfo = new List<string>{updatedName, updatedCode};
         List<DateOnly> updatedDates = new List<DateOnly>{updatedStart, updatedEnd};
 
-        // Editing the section
+        // Editing the section by calling the viewModel method for editing a section 
         string editValidation = await viewModel.EditSectionAsync(sectionCode, updatedInfo, updatedDates);
         if(editValidation == "Success")
         {
-            Close(new Section
-            {
-                name = updatedName,
-                code = updatedCode, 
-                startDate = updatedStart, 
-                endDate = updatedEnd
-            });
+            Close();
         }
         else{
+            // If the changes were not able to be made, displays the reason why
             ErrorLabel.Text = editValidation;
             return;
         }
     }
 
-    // If they choose their mind about editing, returns the same section 
+    // If they choose their mind about editing, closes the popup 
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        Close(sectionPassed);
+        Close();
     }
 
 }

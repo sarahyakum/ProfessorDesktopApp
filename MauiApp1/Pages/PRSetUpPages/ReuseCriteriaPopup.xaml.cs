@@ -2,7 +2,7 @@
     Reuse Criteria Popup:
         Allows the professor to select a criteria from a previous review type and add it with a new type
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
         NetID: ech210001
 
 */
@@ -15,8 +15,8 @@ namespace MauiApp1.Pages.PRSetUp;
 
 public partial class ReuseCriteriaPopup : Popup
 {
-    string sectionCode;
-    string professorID;
+    readonly string sectionCode;
+    readonly string professorID;
     public Criteria criteriaPassed;
     private readonly PRSetUpViewModel viewModel;
     public ReuseCriteriaPopup(PRSetUpViewModel viewModel, Criteria criteria, string netid)
@@ -41,7 +41,7 @@ public partial class ReuseCriteriaPopup : Popup
         else if (criteriaPassed.reviewType == TypeEntry.Text)
         {
             // If the review type was not changed 
-            Close(criteriaPassed);
+            Close();
         }
 
         string updatedType = TypeEntry.Text;
@@ -51,25 +51,18 @@ public partial class ReuseCriteriaPopup : Popup
         // Calls the viewmodel to perform the actions to reuse the criteria and exits pop up or tells what it wrong
 		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, sectionCode);
 		if (criteriaValidation == "Success"){
-			Close(new Criteria
-            {
-                name = criteriaPassed.name,
-                description = criteriaPassed.description,
-                reviewType = updatedType,
-                section = criteriaPassed.section
-            });
+			Close();
 		}
 		else{
 			ErrorLabel.Text = criteriaValidation;
             return;
-			
 		}
     }
 
-    // If they choose their mind about editing, returns the same section 
+    // If they choose their mind about editing, closes the popup
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        Close(criteriaPassed);
+        Close();
     }
 
 }

@@ -8,7 +8,7 @@
         Allows the professor to change a team number 
         Allows the professor to delete a team 
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
         NetID: ech210001
 
 */
@@ -22,14 +22,11 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using MauiApp1.Pages.ManageTeams;
 using CommunityToolkit.Maui.Views;
-//using Microsoft.UI.Xaml.Controls;
 namespace MauiApp1.Pages.ManageTeamsPages;
 
 public partial class ManageTeams : ContentPage
 {
-    string section;
-    string netid;
-    string team;
+    readonly string section;
 
     private ManageTeamsViewModel viewModel;
 
@@ -41,6 +38,7 @@ public partial class ManageTeams : ContentPage
         BindingContext = viewModel;
         UpdateUnassignedStudentsLabel();
     }
+
 
     // Fetching all of the students who have not been assigned a team 
     private async void UpdateUnassignedStudentsLabel()
@@ -56,6 +54,7 @@ public partial class ManageTeams : ContentPage
         }
     }
 
+
     // When the professor assigns a singular student through the input fields 
     private async void OnAssignStudentClicked(object sender, EventArgs e)
     {
@@ -66,15 +65,15 @@ public partial class ManageTeams : ContentPage
             return;
         }
 
-        netid = NetIDEntry.Text;
-        team = TeamNumEntry.Text;
+        string netid = NetIDEntry.Text;
+        string team = TeamNumEntry.Text;
         List<string> teamInfo = new List<string> {netid, team};
 
         // Checks whether the team exists already or a new one needs to be made
         string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamInfo[1]);
         if(teamValidation == "Team doesn't exist")
         {
-            teamValidation = await viewModel.CreateTeamAsync(section, teamInfo[1]);
+            await viewModel.CreateTeamAsync(section, teamInfo[1]);
         }
         
         teamValidation = await viewModel.AssignTeamAsync(section, teamInfo);
@@ -124,7 +123,7 @@ public partial class ManageTeams : ContentPage
 
                     var columns = line.Split(',').Select(col => col.Trim()).Where(col => !string.IsNullOrWhiteSpace(col)).ToArray();
 
-                    // Getting the information from the csv, to call the database function 
+                    // Getting the information from the csv, to call the viewmodel method 
                     if(columns.Length == 2)
                     {
                         string netid = columns[0];
@@ -169,6 +168,7 @@ public partial class ManageTeams : ContentPage
         }
     }
 
+
     // Allows the professor to move the student to a different team 
     private async void OnMoveTeamsClicked(object sender, EventArgs e)
     {
@@ -177,6 +177,7 @@ public partial class ManageTeams : ContentPage
 
         string checkPR = await viewModel.CheckPeerReviewStatusAsync(teamNum, section);
 
+        // If a peer review has already been made with the team then the students cannot be moved 
         if(checkPR == "Peer Reviews have already been created")
         {
             await DisplayAlert("Cannot Move Team", "A peer review has already been created for this team, so the members cannot be changed.", "OK");
@@ -184,10 +185,10 @@ public partial class ManageTeams : ContentPage
         }
 
         var popup = new MoveTeamPopup(viewModel, netid, teamNum, section);
-        var result = (List<string>)await this.ShowPopupAsync(popup);
-        
+        await this.ShowPopupAsync(popup);
         UpdateUnassignedStudentsLabel();
     }
+
 
     // Removing a student from the team without moving them to a new one
     private async void OnRemoveFromTeamClicked(object sender, EventArgs e)
@@ -221,15 +222,13 @@ public partial class ManageTeams : ContentPage
         }
     }
 
+
     // Allows the professor to change the team number 
     private async void OnEditTeamClicked(object sender, EventArgs e)
     {
         var team = (Team)((Button)sender).CommandParameter;
-        int teamNumber = team.number;
-
         var popup = new EditTeamPopup(viewModel, team, section);
-        var result = await this.ShowPopupAsync(popup) as Team;
-
+        await this.ShowPopupAsync(popup);
     }
 
     // Allows the professor to delete a team only if a peer review with this team has not already been created 

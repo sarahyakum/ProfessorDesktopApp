@@ -10,6 +10,8 @@
     
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
+
+            <!-- Emails for students who haven't entered a timeslot this week -->
             <Label Text="Timeslots" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" />
             <Label Text="Students who have not entered timeslots for the current week." FontSize="Medium" HorizontalOptions="Center" />
             <CollectionView ItemsSource="{Binding TTsections}" SelectionMode="Single" Margin="5">
@@ -27,6 +29,8 @@
 
             <BoxView HeightRequest="50" Color="Transparent"/>
 
+
+            <!-- Emails for students who haven't completed the current peer review (if there is one)-->
             <Label Text="Peer Reviews" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center"/>
             <Label Text="Students who have not completed the current peer review (if there is one open)" FontSize="Medium" HorizontalOptions="Center" />
 

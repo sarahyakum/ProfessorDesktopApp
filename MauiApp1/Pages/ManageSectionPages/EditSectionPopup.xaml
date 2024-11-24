@@ -9,7 +9,10 @@
     x:Class="MauiApp1.Pages.ManageSections.EditSectionPopup" >
     
     <VerticalStackLayout Padding="20" Spacing="10">
+
         <Label Text="Edit Section" FontSize="Large" HorizontalOptions="Center"/>
+
+        <!-- Displays the current information about the setion in editable text boxes -->
         <Label Text="Section Name"/>
         <Entry x:Name="NameEntry" Placeholder="Section Name"/>
         <Label Text="Section Code"/>

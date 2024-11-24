@@ -85,6 +85,7 @@
                 />
                 <BoxView HeightRequest="10" Color="Transparent"/>
 
+                <!-- Label for any error with adding the section -->
                 <Label x:Name="AddSectionErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
 
                 <Button

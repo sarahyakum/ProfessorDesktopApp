@@ -1,5 +1,5 @@
 <!-- Add Students Page XAML File -->
-<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
+<!-- Written entirely by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
 
 <?xaml version="1.0" encoding="utf-8" ?>
 
@@ -12,7 +12,7 @@
                 <Label 
                     Text="Upload Students" FontSize ="Large" HorizontalOptions="Center"/>
 
-                <!-- Uploading a CSV File Functionality -->
+                <!-- Uploading a CSV File Functionality for just the students -->
                 <Label
                     Text="To upload students select a CSV file with the following columns: Last Name, First Name, NetID, UTDID" FontSize="Body" HorizontalOptions="Center"/>
                 <Label
@@ -30,7 +30,7 @@
                 <Label 
                     Text="Upload Students and Teams" FontSize ="Large" HorizontalOptions="Center"/>
 
-                <!-- Uploading a CSV File Functionality -->
+                <!-- Uploading a CSV File Functionality for students and teams -->
                 <Label
                     Text="To upload students and assign them to a team select a CSV file with the following columns: Last Name, First Name, NetID, UTDID, Team Number" FontSize="Body" HorizontalOptions="Center"/>
                 <Label

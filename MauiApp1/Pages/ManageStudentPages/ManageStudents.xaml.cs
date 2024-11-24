@@ -3,7 +3,7 @@
         Allows the professor to add students to the database.
         When the page pulls up, it had the option to upload a CSV file, add an individual student, and displays the students currently in the class
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15th, 2024
         NetID: ech210001
 
 */
@@ -20,12 +20,12 @@ namespace MauiApp1.Pages.ManageStudentPages;
 
 public partial class ManageStudents : ContentPage
 {
-    string section;
+    readonly string section;
     string name;
     string netid;
     string utdid;
 
-    private ManageStudentsViewModel viewModel;
+    private readonly ManageStudentsViewModel viewModel;
 
     public ManageStudents(string sectionCode)
     {
@@ -35,7 +35,8 @@ public partial class ManageStudents : ContentPage
         BindingContext = viewModel;
     }
 
-    // When the professor tries to add a singular student through the input boxes
+
+    // When the professor tries to add a single student from the test fields 
     private async void OnAddStudentClicked(object sender, EventArgs e)
     {
         // Checking whether the name, netid, or utdid are empty before moving on
@@ -45,7 +46,6 @@ public partial class ManageStudents : ContentPage
             return;
         }
 
-        // Pulling the information 
         name = NameEntry.Text;
         netid = NetIDEntry.Text;
         utdid = UTDIDEntry.Text;
@@ -53,20 +53,24 @@ public partial class ManageStudents : ContentPage
 
         List<string> studentInfo = new List<string> {name, netid, utdid};
 
+
+        // Calling the viewmodel to add the student to this section 
+        string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
+        
+        if(studentValidation == "Success"){
+            await DisplayAlert("New Student Added.", studentInfo[0], "OK");
+        }
+        else{
+            AddStudentErrorLabel.Text = studentValidation;
+            return;
+        }
+
+
         // Adding the student to a team is optional, so testing whether the student has been assigned
         if(teamNumber != null)
         {
             List<string> teamInfo = new List<string> {netid, teamNumber};
-            string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
-
-            if(studentValidation == "Success"){
-                await DisplayAlert("New Student Added.", studentInfo[0], "OK");
-            }
-            else{
-                AddStudentErrorLabel.Text = studentValidation;
-                return;
-            }
-
+            
             // Adding the student to a team as well, if the team does not exist then creates the team and then adds the student
             string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamNumber);
             if(teamValidation == "Team doesn't exist")
@@ -80,28 +84,17 @@ public partial class ManageStudents : ContentPage
             {
                 await DisplayAlert("Couldn't add student to team", name, "OK");
             }            
-
-        }
-        else{   // If the student is not being assigned to a team yet
-            string studentValidation = await viewModel.AddStudentAsync(section, studentInfo);
-        
-            if(studentValidation == "Success"){
-                await DisplayAlert("New Student Added.", studentInfo[0], "OK");
-            }
-            else{
-                AddStudentErrorLabel.Text = studentValidation;
-                return;
-            }
         }
     }
 
-    // When professor wants to upload a CSV file with the student information 
+    // When professor wants to upload a CSV file with just the student information 
     private async void OnUploadCsvClicked(object sender, EventArgs e)
     {
         try
         {
             var fileResult = await FilePicker.PickAsync();
 
+            // If the file uploaded correctly 
             if(fileResult != null)
             {
                 var filePath = fileResult.FullPath;
@@ -130,7 +123,7 @@ public partial class ManageStudents : ContentPage
 
                     var columns = line.Split(',').Select(col => col.Trim()).Where(col => !string.IsNullOrWhiteSpace(col)).ToArray();
 
-                    // Getting the information from the csv, to call the database function 
+                    // Getting the information from the csv, to call the viewmodel to add the student 
                     if(columns.Length == 4)
                     {
                         string lastName = columns[0];
@@ -171,13 +164,15 @@ public partial class ManageStudents : ContentPage
         }
     }
 
-       // When professor wants to upload a CSV file with the student information 
+
+    // When professor wants to upload a CSV file with the student information and the team assignment 
     private async void OnUploadStudentAndTeamClicked(object sender, EventArgs e)
     {
         try
         {
             var fileResult = await FilePicker.PickAsync();
 
+            // If the file is uploaded correctly 
             if(fileResult != null)
             {
                 var filePath = fileResult.FullPath;
@@ -196,6 +191,7 @@ public partial class ManageStudents : ContentPage
                 
                 List<string> failedStudents = new List<string>();
                 List<string> failedTeams = new List<string>();
+
 
                 // Parsing each line in the csv and calling for the student to be added to the database
                 foreach(var line in lines)
@@ -226,6 +222,7 @@ public partial class ManageStudents : ContentPage
                             failedStudents.Add($"{name}: {studentValidation}");
                         }
 
+                        // Checking whether the team exists, if not creating it, then adding the student to the team
                         string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamNumber);
                         if(teamValidation == "Team doesn't exist")
                         {
@@ -238,7 +235,6 @@ public partial class ManageStudents : ContentPage
                         {
                             failedTeams.Add($"{netid}: {teamValidation}");
                         }
-
                     }
                 }
 
@@ -274,16 +270,17 @@ public partial class ManageStudents : ContentPage
         }
     }
 
-    // Professor editing a student 
+
+    // If the professor wants to edit an individual student 
     private async void OnEditStudentClicked(object sender, EventArgs e)
     {
         var student = (Student)((Button)sender).CommandParameter;
-        string studentID = student.netid;
         var popup = new EditStudentPopup(viewModel, student);
-        var result = await this.ShowPopupAsync(popup) as Student;
+        await this.ShowPopupAsync(popup);
     }
 
-    // Professor deleting a student from the section 
+
+    // If the professor chooses to delete an individual student
     private async void OnDeleteStudentClicked(object sender, EventArgs e)
     {
         var student = (Student)((Button)sender).CommandParameter;

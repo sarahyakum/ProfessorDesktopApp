@@ -23,8 +23,8 @@ namespace MauiApp1.Pages;
 
 public partial class LoginPage : ContentPage
 {
-	private LoginViewModel viewModel;
-    private Professor professor;
+	private readonly LoginViewModel viewModel;
+    private readonly Professor professor;
 
 	public LoginPage()
 	{
@@ -35,8 +35,10 @@ public partial class LoginPage : ContentPage
 	}
 
 
+    // When the professor tries to login to their account
 	private async void OnLoginButtonClicked(object sender, EventArgs e)
 	{
+        // Checks whether all of the fields have been filled out 
         if(string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(PasswordEntry.Text))
         {
             LoginErrorLabel.Text = "All fields must be filled out";
@@ -56,7 +58,9 @@ public partial class LoginPage : ContentPage
             professor.password = password;
 
         }
-        else if(loginValidation == "Change password"){
+        else if(loginValidation == "Change password")
+        {
+            // Upon first time logins the professor must change their password
             await Navigation.PushAsync(new ChangePassword(netid));
         }
         else
@@ -65,9 +69,6 @@ public partial class LoginPage : ContentPage
             return;
         }
 	}
-
-    
-    
 
 }
 

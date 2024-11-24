@@ -1,8 +1,11 @@
 /*
     Email Students View Model:
         Relationship between the email students page and the database
+        Pulls the students who have either:
+            - Not entered any timeslots for the week
+            - Not completed the current peer review 
 
-    Written by Emma Hockett for CS 4485.0W1, Started on November 21, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1, Started on November 21, 2024
         NetID" ech21001
 */
 
@@ -13,8 +16,8 @@ namespace MauiApp1.ViewModels;
 
 public class EmailStudentsViewModel : INotifyPropertyChanged
 {
-    public string professorID;
-    private DatabaseService databaseService;
+    public readonly string professorID;
+    private readonly  DatabaseService databaseService;
     private List<Section> sections;
     private ObservableCollection<SectionWithEmails> _TTsections;
     private ObservableCollection<SectionWithEmails> _PRsections;
@@ -55,7 +58,7 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
         LoadSectionsAsync();
     }
 
-
+    // Loads the sections and calls the Method to load the emails into the section 
     private async Task LoadSectionsAsync()
     {
         var timeslotSections = await LoadSectionsWithEmailsAsync(isTimeslot: true);
@@ -77,6 +80,7 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(PRsections));
     }
 
+    // Retrieves the emails of the students for the Timetracking and Peer Review
     private async Task<List<SectionWithEmails>> LoadSectionsWithEmailsAsync(bool isTimeslot)
     {
         Sections = await databaseService.GetSections(professorID);
@@ -117,6 +121,7 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
 
 
 
+// Wrapper class of the section with the name of the section and the student emails 
 public class SectionWithEmails
 {
     public string name { get; set;}

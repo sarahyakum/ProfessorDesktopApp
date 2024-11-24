@@ -22,11 +22,11 @@ namespace MauiApp1.Pages.PRSetUpPages;
 
 public partial class PRSetUp : ContentPage
 {
-	string professorID;
-	string section;
-	string type;
+	readonly string professorID;
+	readonly string section;
+	readonly string type;
 	//List<string> criteriaInfo;
-	private PRSetUpViewModel viewModel;
+	private readonly  PRSetUpViewModel viewModel;
 
 	public PRSetUp(string netid, string sectionCode)
 	{
@@ -38,9 +38,12 @@ public partial class PRSetUp : ContentPage
 		BindingContext = viewModel;
 	}
 
-	//Creates a new criteria category based on the input given
+
+	//Creates a new criteria based on the input fields
+	// Written by Sarah Yakum (sny200000)
 	private async void OnCriteriaClicked(object sender, EventArgs e)
 	{
+		// Checing whether all of the fields are filled out 
 		if(string.IsNullOrWhiteSpace(CriteriaEntry.Text) || string.IsNullOrWhiteSpace(DescriptionEntry.Text) || string.IsNullOrWhiteSpace(TypeEntry.Text) )
 		{
 			AddCriteriaErrorLabel.Text = "All fields must be filled out";
@@ -59,10 +62,12 @@ public partial class PRSetUp : ContentPage
 		}
 	}
 
+
 	//Creates a new peer review for a section when the button is clicked
+	// Written by Sarah Yakum (sny200000)
 	private async void OnCreatePeerReviewClicked(object sender, EventArgs e)
 	{
-
+		// Checks whether all of the input fields are filled out 
 		if(string.IsNullOrWhiteSpace(ReviewTypeEntry.Text) || string.IsNullOrWhiteSpace(TimePeriodEntry1.Text) || string.IsNullOrWhiteSpace(TimePeriodEntry2.Text))
 		{
 			AddPRErrorLabel.Text = "All fields must be filled out";
@@ -92,14 +97,14 @@ public partial class PRSetUp : ContentPage
 	}
 
 	//Edits a criteria
-	// Written by Emma Hockett (ech210001), Started on November 20, 2024
+	// Written by Emma Hockett (ech210001)
 	private async void OnEditCriteriaClicked(object sender, EventArgs e){
 		
 		var criteria = (Criteria)((Button)sender).CommandParameter;
-		string sectionCode = criteria.section;
 
 		string checkPRs = await viewModel.CheckCriteriaInPRAsync(section, criteria.reviewType);
 
+		// If a peer review uses this criteria it cannot be edited 
 		if(checkPRs == "Peer Review exists")
 		{
 			await DisplayAlert("Criteria Cannot Be Edited", "Criteria is already involved in a Peer Review, and cannot be edited", "OK");
@@ -107,18 +112,17 @@ public partial class PRSetUp : ContentPage
 		}
 
 		var popup = new EditCriteriaPopup(viewModel, criteria);
-		var result = await this.ShowPopupAsync(popup) as Criteria;
+		await this.ShowPopupAsync(popup);
 	}
 
 	// Deletes a criterion 
-	// Written by Emma Hockett (ech210001), Started on November 20, 2024
+	// Written by Emma Hockett (ech210001)
 	private async void OnDeleteCriteriaClicked(object sender, EventArgs e)
 	{
 		var criteria = (Criteria)((Button)sender).CommandParameter;
-		string sectionCode = criteria.section;
 
+		// If a peer review exists with this criterion, then it cannot be deleted 
 		string checkPRs = await viewModel.CheckCriteriaInPRAsync(section, criteria.reviewType);
-
 		if(checkPRs == "Peer Review exists")
 		{
 			await DisplayAlert("Criteria Cannot Be Deleted", "Criteria is already involved in a Peer Review, and cannot be deleted", "OK");
@@ -141,29 +145,33 @@ public partial class PRSetUp : ContentPage
 		}
 	}
 
+
 	// To reuse the criteria name and description with a different type 
+	// Written by Emma Hockett (ech210001)
 	private async void OnReuseCriteriaClicked(object sender, EventArgs e)
 	{
 		var criteria = (Criteria)((Button)sender).CommandParameter;
-		string sectionCode = criteria.section;
-
 		var popup = new ReuseCriteriaPopup(viewModel, criteria, professorID);
-		var result = await this.ShowPopupAsync(popup) as Criteria;
+		await this.ShowPopupAsync(popup);
 	}
 
+
 	// Allows the professor to alter the start date and end date of the Peer Reviews
+	// Written by Emma Hockett (ech210001)
 	private async void OnEditPeerReviewClicked(object sender, EventArgs e)
 	{
 		var peerReview = (PeerReview)((Button)sender).CommandParameter;
-		
 		var popup = new EditPRPopup(viewModel, peerReview);
-		var result = await this.ShowPopupAsync(popup) as PeerReview;
+		await this.ShowPopupAsync(popup);
 	}
 
+	// Allows the professor to delete a peer review 
+	// Written by Emma Hockett (ech210001)
 	private async void OnDeletePeerReviewClicked(object sender, EventArgs e)
 	{
 		var peerReview = (PeerReview)((Button)sender).CommandParameter;
 
+		// Confirms whether the professot wants to delete the peer review and lists the consequences 
         bool isConfirmed = await DisplayAlert("Delete Peer Review", $"Are you sure you want to delete the {peerReview.type} Peer Review? All data including scores will be deleted as well.", "OK", "Cancel");
 
         if(isConfirmed)

@@ -30,6 +30,7 @@ class DatabaseService{
 
     // Professor Login connection to check the inputted values against the database
     // Also returns whether the professor needs to change their password because it is a first time login
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> Login(string username, string password){
 
         string error_message = string.Empty;
@@ -63,6 +64,7 @@ class DatabaseService{
     
 
     // Gets the sections that a professor teaches 
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Section>> GetSections(string netId){
 
 
@@ -100,12 +102,11 @@ class DatabaseService{
             }
             return sections;
 
-
         }
     }
 
     // Checks whether the inputted username, old password, and new password are within the constraints:
-        // Username and old password must match, new password cannot be the same as the old or the UTDID
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> ChangePassword(string netid, string oldPassword, string newPassword){
 
         string error_message = string.Empty;
@@ -128,11 +129,9 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
                 
-
                 }
                 return error_message;
-                
-
+            
             }
             catch(Exception ex){
                 return "Error: " + ex.Message;
@@ -142,6 +141,7 @@ class DatabaseService{
 
 
     // Gets the NetIDs of all of the students in the section that the professor teaches
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Student>> GetStudents(string code){
 
 
@@ -156,34 +156,31 @@ class DatabaseService{
 
                     cmd.Parameters.AddWithValue("@section_code", code);
 
-                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
                         while (await reader.ReadAsync())
+                        {
+                            students.Add(new Student
                             {
-                                students.Add(new Student
-                                {
-                                    netid=reader.GetString("StuNetID"),
-                                    section = code
-                                });
-                            }
-
+                                netid=reader.GetString("StuNetID"),
+                                section = code
+                            });
                         }
-
+                    }
                 }
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
             return students;
-
 
         }
     }
 
     // Get all of the students and their info in this section 
-    public async Task<List<Student>> GetStudentAndInfo(string code){
-
-
+    // Written by Emma Hockett (ech210001)
+    public async Task<List<Student>> GetStudentAndInfo(string code)
+    {
         var students = new List<Student>();
         
         using (var conn = new MySqlConnection(connectionString)){
@@ -197,28 +194,27 @@ class DatabaseService{
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync())
+                        {
+                            students.Add(new Student
                             {
-                                students.Add(new Student
-                                {
-                                    netid=reader.GetString("StuNetID"),
-                                    name = reader.GetString("StuName"),
-                                    utdid = reader.GetString("StuUTDID"),
-                                });
-                            }
+                                netid=reader.GetString("StuNetID"),
+                                name = reader.GetString("StuName"),
+                                utdid = reader.GetString("StuUTDID"),
+                            });
+                        }
                     }
                 }
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
             return students;
-
         }
     }
 
-    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+
     // Based on the student's NetID, returns their Name and UTDID
+    // Written by Emma Hockett (ech210001)
     public async Task<Student> GetStudentsInfo(string netid){
 
 
@@ -231,9 +227,8 @@ class DatabaseService{
             
             try{
                 await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
-                    
-
+                using(MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
                     cmd.Parameters.AddWithValue("@StuNetID", studentNetid);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
@@ -241,25 +236,22 @@ class DatabaseService{
                             studentName = reader["StuName"] != DBNull.Value ? reader["StuName"].ToString() ?? string.Empty : string.Empty;
                             studentUtdId = reader["StuUTDID"] != DBNull.Value ? reader["StuUTDID"].ToString() ?? string.Empty : string.Empty;
                         }
-
                     }
                 }
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
-            
         }
         student.name = studentName;
         student.netid = studentNetid;
         student.utdid = studentUtdId;
 
         return student;
-
     }
 
-    //get timeslot for student by date
+    //Get timeslot for student by date
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Timeslot>> GetTimeslots(DateTime date, string netId){
         List<Timeslot> timeslots = new List<Timeslot>();
         using(var conn = new MySqlConnection(connectionString)){
@@ -284,8 +276,7 @@ class DatabaseService{
                 }
             }
             catch (Exception ex){
-                    Console.Write(ex.Message);
-
+                Console.Write(ex.Message);
             }
         }
         return timeslots;
@@ -293,6 +284,7 @@ class DatabaseService{
 
 
     // Gets the teams for the section that the professor teaches
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Team>> GetTeams(string code){
 
         
@@ -321,20 +313,15 @@ class DatabaseService{
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
-
             return teams;
-            
         }
-        
     }
 
     // Gets a student team number
-    // Written by Emma Hockett (ech210001), Started on November 19, 2024
-    public async Task<int> GetTeamNumber(string netid){
-
-        
+    // Written by Emma Hockett (ech210001)
+    public async Task<int> GetTeamNumber(string netid)
+    {
         using (var conn = new MySqlConnection(connectionString)){
             List<Team> teams = new List<Team>();
             
@@ -342,9 +329,9 @@ class DatabaseService{
             
             try{
                 await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand(query, conn)){
+                using(MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
                     
-
                     cmd.Parameters.AddWithValue("@student_netID", netid);
 
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
@@ -364,13 +351,11 @@ class DatabaseService{
     }
 
     //Get Team members for each team
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Student>> GetTeamMembers(string section, int team_num){
-        int number = team_num;
-
         
         using (var conn = new MySqlConnection(connectionString)){
             List<Student> students = new List<Student>();
-            
             
             
             string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
@@ -388,30 +373,27 @@ class DatabaseService{
                             students.Add(new Student{
                                 netid= reader.GetString("StuNetID")
 
-                            });
-                            
+                            }); 
                         }
                     }
                 }
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
-
             return students;
-            
         }
     }
 
-    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+
     // Gets all of the students who are not assigned to a team 
+    // Written by Emma Hockett (ech210001)
     public async Task<List<Student>> GetUnassignedStudents(string section){
         
         using (var conn = new MySqlConnection(connectionString)){
             List<Student> students = new List<Student>();
             
-            string query = "SELECT * from Student WHERE StuNetID NOT IN (SELECT StuNetID FROM MemberOf WHERE SecCode = @section_code)";
+            string query = "SELECT * from Student WHERE StuNetID NOT IN (SELECT StuNetID FROM MemberOf WHERE SecCode = @section_code) AND StuNetID IN (SELECT StuNetID FROM Attends WHERE SecCode = @section_code)";
             
             try{
                 await conn.OpenAsync();
@@ -431,13 +413,13 @@ class DatabaseService{
             }
             catch (Exception ex){
                 Console.Write(ex.Message);
-            
             }
             return students;
         }
     }
 
     //Creates criteria for a review type in a specific section
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> CreateCriteria(string netid, List<string> criteriaSetup){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -460,11 +442,8 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
-
                 }
                 return error_message;
-
             }
             catch(Exception ex){
                 return "Error: " + ex.Message;
@@ -472,8 +451,9 @@ class DatabaseService{
         }
     }
 
-     //Creates a peer review for a specific section with availability dates
-     public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<DateTime> dates){
+    //Creates a peer review for a specific section with availability dates
+    // Written by Sarah Yakum (sny200000)
+    public async Task<string> CreatePeerReview(string netid, List<string> prDetails, List<DateTime> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
             try{
@@ -495,8 +475,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
-
                 }
                 return error_message;
 
@@ -507,8 +485,9 @@ class DatabaseService{
         }
     }
 
-    // Written by Emma Hockett (ech210001), Started on November 20, 2024
-     //Edits the dates the peer review is available
+
+    //Edits the dates the peer review is available
+    // Written by Emma Hockett (ech210001)
      public async Task<string> EditPRDates(string section, string type, DateOnly startDate, DateOnly endDate){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -531,10 +510,8 @@ class DatabaseService{
                     error_message = result.Value?.ToString() ?? string.Empty;
 
 
-
                 }
                 return error_message;
-
             }
             catch(Exception ex){
                 return "Error: " + ex.Message;
@@ -542,8 +519,9 @@ class DatabaseService{
         }
     }
 
-    // Written by Emma Hockett (ech210001), Started on November 20, 2024
-     // Deletes Peer Reviews 
+
+    // Deletes Peer Reviews 
+    // Written by Emma Hockett (ech210001)
      public async Task<string> DeletePR(string section, string type){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -563,10 +541,8 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
-
             }
             catch(Exception ex){
                 return "Error: " + ex.Message;
@@ -575,6 +551,7 @@ class DatabaseService{
     }
 
    //Allows for professor to modify individual scores for a student if needed
+   // Written by Sarah Yakum (sny200000)
     public async Task<string> EditScores(string netid, List<string> reviewInfo, int newScore){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -599,7 +576,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -610,6 +586,7 @@ class DatabaseService{
     }
 
     //Inserts a team number into for the section
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> InsertTeamNum(string section, int teamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -630,7 +607,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -641,6 +617,7 @@ class DatabaseService{
     }
 
     // Allows the professot to edit a team number 
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> EditTeamNumber(string section, int teamNum, int updatedTeamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -662,7 +639,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -672,7 +648,9 @@ class DatabaseService{
         }
     }
 
+
     //Deletes a team for a section based on given team number
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> DeleteTeam(string section, int teamNum){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -693,7 +671,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -703,7 +680,8 @@ class DatabaseService{
         }
     }
 
-    //Gets criteria based
+    //Gets criteria based on the section 
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Criteria>> GetSectionsCriteria(string secCode){
         List<Criteria> criterias = new List<Criteria>();
 
@@ -736,6 +714,7 @@ class DatabaseService{
     }
    
     //Gets the peer reviews for a section
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<PeerReview>> GetPeerReviews(string secCode) {
         List<PeerReview> peerReviews = new List<PeerReview>();
         string query = " SELECT DISTINCT ReviewType, StartDate, EndDate FROM PeerReview WHERE SecCode=@SecCode";
@@ -765,7 +744,9 @@ class DatabaseService{
         }
         return peerReviews;
     }
+
     //Retrieves criteria ID for a section in order to edit it
+    // Written by Sarah Yakum (sny200000)
      public async Task<string> GetAllCriteriaID(string netid, string section, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -787,7 +768,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -797,8 +777,9 @@ class DatabaseService{
         }
     }
 
-    // Written by Emma Hockett (ec210001), Started on November 20, 2024
+
     //Retrieves criteria ID for a section in order to edit it
+    // Written by Emma Hockett (ech210001)
      public async Task<int> GetCriteriaID(string section, string name, string description, string reviewType){
 
         string query = "SELECT CriteriaID FROM Criteria WHERE SecCode=@SecCode AND CriteriaName=@criteria_name AND CriteriaDescription=@criteria_description AND ReviewType=@review_type";
@@ -826,8 +807,9 @@ class DatabaseService{
         return -1;
     }
 
-    // Written by Emma Hockett (ec210001), Started on November 20, 2024
+
     //Retrieves criteria ID for a section in order to edit it
+    // Written by Emma Hockett (ech210001)
     public async Task<string> CheckCriteriaInPR(string section, string reviewType)
     {
         string error_message = string.Empty;
@@ -849,7 +831,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -860,6 +841,7 @@ class DatabaseService{
     }
 
     //Edits a specific criteria created
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> EditCriteria(string section, int criteriaID, string name, string description, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -883,7 +865,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -894,6 +875,7 @@ class DatabaseService{
     }
    
     //Deletes a specific criteria
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> DeleteCriteria(string section, string criteriaName, string reviewType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -923,6 +905,7 @@ class DatabaseService{
     }
     
     //Changes a students assigned team
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> ChangeStuTeam(string section, string stuNetid, int newTeam){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -943,7 +926,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -955,6 +937,7 @@ class DatabaseService{
 
     
     //Allows professor to reuse criteria for different types of reviews
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> ReuseCriteria(string netid, string section, string oldType, string newType){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -985,7 +968,8 @@ class DatabaseService{
         }
     }
 
-       //Changes a students from their team
+    //Removes a student from a team 
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> RemoveFromTeam(string stuNetid){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1014,9 +998,10 @@ class DatabaseService{
         }
     }
     
-    // Written by Emma Hockett (ech210001), Started on November 20, 2024
+
     //Allows professor to check whether a peer review already exists 
     // (Helps in determing whether a team/ members can be edited or not)
+    // Written by Emma Hockett (ech210001)
     public async Task<string> CheckPeerReviewStatus(int teamNum, string section){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1046,6 +1031,7 @@ class DatabaseService{
     }
     
     //Adds students to a professors class
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> AddStudents(string netid, string utdid, string name, string section){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1068,7 +1054,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -1078,8 +1063,8 @@ class DatabaseService{
         }
     }
 
-       //Allows the professor to edit a student
-    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+    //Allows the professor to edit a student
+    // Written by Emma Hockett (ech210001) 
     public async Task<string> EditStudent(string netid, List<string> studentInfo){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1139,7 +1124,9 @@ class DatabaseService{
         }
     }
     
+
     //Adds a student to a team
+    // Written by Sarah Yakum (sny200000)
      public async Task<string> AddNewTeamMember(int teamNum, string netid, string section){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1160,7 +1147,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -1171,7 +1157,7 @@ class DatabaseService{
     }
 
     // Checks whether a team number already exists for a section
-    // Written by Emma Hockett (ech210001), Started November 16, 2024
+    // Written by Emma Hockett (ech210001)
      public async Task<string> CheckTeamExists(string section, int teamNumber){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1191,7 +1177,6 @@ class DatabaseService{
 
                     error_message = result.Value?.ToString() ?? string.Empty;
 
-
                 }
                 return error_message;
             }
@@ -1201,7 +1186,9 @@ class DatabaseService{
         }
     }
     
+
     //Creates view for each teams peer review scores
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<Score>> GetReviews(string profID, string section, string stuID, string reviewType){
         string error_message = string.Empty;
         List<Score> scores= new List<Score>();
@@ -1229,7 +1216,6 @@ class DatabaseService{
                                 criteria = reader.GetString("CriteriaName")
 
                             });
-                            
                         }}
 
                     await cmd.ExecuteNonQueryAsync();
@@ -1246,6 +1232,7 @@ class DatabaseService{
     }
     
     //Add a new section for a professor
+    // Written by Sarah Yakum (sny200000)
     public async Task<string> AddSection(string netid, List<string> sectionInfo, List<DateOnly> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1278,7 +1265,7 @@ class DatabaseService{
     }
 
     //Allows the professor to edit a section
-    // Written by Emma Hockett (ech210001) Started on November 19, 2024
+    // Written by Emma Hockett (ech210001)
     public async Task<string> EditSection(string netid, List<string> sectionInfo, List<DateOnly> dates){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1311,7 +1298,7 @@ class DatabaseService{
     }
 
     //Allows the professor to edit a section
-    // Written by Emma Hockett (ech210001), Started on November 18, 2024
+    // Written by Emma Hockett (ech210001)
     public async Task<string> DeleteSection(string sectionCode){
         string error_message = string.Empty;
         using(var conn = new MySqlConnection(connectionString)){
@@ -1340,6 +1327,7 @@ class DatabaseService{
     }
 
     //Retrieves sections start and end date
+    // Written by Sarah Yakum (sny200000)
     public async Task<List<DateOnly>> GetCourseTimeFrame(string section){
 
         string error_message = string.Empty;
@@ -1370,9 +1358,7 @@ class DatabaseService{
                         }}
 
                     await cmd.ExecuteNonQueryAsync();
-
                     error_message = result.Value?.ToString() ?? string.Empty;
-
 
                 }
                 Console.Write(error_message);
@@ -1382,16 +1368,10 @@ class DatabaseService{
             }
         }
         return window;
-
     }
 
-    //Retrieves the students with unfinished reviews
-
-    //Edits the timeslot of a student
-    
-
     //Retrieves email addresses for students who have not logged any hours for the week
-    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+    // Written by Emma Hockett (ech210001)
     public async Task<List<string>> GetTTEmails(string sectionCode, DateOnly firstDay){
         List<string> emails = new List<string>();
         using(var conn = new MySqlConnection(connectionString)){
@@ -1412,7 +1392,6 @@ class DatabaseService{
                     }
                 }
                 return emails;
-
             }
             catch(Exception ex){
                 Console.WriteLine(ex.Message);
@@ -1422,7 +1401,7 @@ class DatabaseService{
     }
 
     //Retrieves email addresses for student who have not submitted their peer reviews
-    // Written by Emma Hockett (ech210001), Started on November 21, 2024
+    // Written by Emma Hockett (ech210001)
     public async Task<List<string>> GetPREmails(string sectionCode){
         List<string> emails = new List<string>();
         using(var conn = new MySqlConnection(connectionString)){
@@ -1441,7 +1420,6 @@ class DatabaseService{
                     }
                 }
                 return emails;
-
             }
             catch(Exception ex){
                 Console.WriteLine(ex.Message);

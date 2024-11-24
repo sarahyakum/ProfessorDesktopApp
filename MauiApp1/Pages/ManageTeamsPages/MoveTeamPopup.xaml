@@ -1,5 +1,5 @@
 <!-- Move student to new team Popup XAML File -->
-<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 19, 2024 -->
+<!-- Written enitrely by Emma Hockett ech210001 for CS 4485.0W1 Started on November 19, 2024 -->
 <?xaml version="1.0" encoding="utf-8" ?>
 
 <toolkit:Popup

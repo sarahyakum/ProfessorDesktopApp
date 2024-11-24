@@ -2,7 +2,7 @@
     Edit Team Popup:
         Allows the professor to edit the team number and handles the logic of changing it 
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
         NetID: ech210001
 
 */
@@ -17,7 +17,7 @@ public partial class EditTeamPopup : Popup
 {
 
     public Team teamPassed;
-    string section;
+    readonly string section;
     private readonly ManageTeamsViewModel viewModel;
     public EditTeamPopup(ManageTeamsViewModel viewModel, Team team, string sectionCode)
     {
@@ -25,7 +25,7 @@ public partial class EditTeamPopup : Popup
         this.viewModel = viewModel;
         teamPassed = team;
         section = sectionCode;
-        NumberEntry.Text = (team.number).ToString();
+        NumberEntry.Text = team.number.ToString();
     }
 
     // If the changes want to be saved 
@@ -40,7 +40,7 @@ public partial class EditTeamPopup : Popup
         else if(teamPassed.number == int.Parse(NumberEntry.Text))
         {
             // If no changes were made
-            Close(teamPassed);
+            Close();
         }
 
         
@@ -49,12 +49,7 @@ public partial class EditTeamPopup : Popup
         
         if(editValidation == "Success")
         {
-            Close(new Team
-            {
-                number = int.Parse(NumberEntry.Text),
-                section = teamPassed.section,
-                members = teamPassed.members
-            });
+            Close();
         }
         else{
             ErrorLabel.Text = editValidation;
@@ -62,10 +57,10 @@ public partial class EditTeamPopup : Popup
         }
     }
 
-    // If they choose their mind about editing, returns the same student
+    // If they choose their mind about editing, closes the popup
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        Close(teamPassed);
+        Close();
     }
 
 }

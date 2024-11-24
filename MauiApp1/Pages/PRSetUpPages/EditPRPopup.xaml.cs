@@ -2,7 +2,7 @@
     Edit Peer Review Popup:
         Allows the professor to edit the start and end date of the peer reviews
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 20, 2024
         NetID: ech210001
 
 */
@@ -15,7 +15,7 @@ namespace MauiApp1.Pages.PRSetUp;
 
 public partial class EditPRPopup : Popup
 {
-    string sectionCode;
+    readonly string sectionCode;
     public PeerReview prPassed;
     private readonly PRSetUpViewModel viewModel;
     public EditPRPopup(PRSetUpViewModel viewModel, PeerReview pr)
@@ -41,7 +41,7 @@ public partial class EditPRPopup : Popup
         else if(prPassed.startDate == DateOnly.Parse(StartDateEntry.Text) && prPassed.endDate == DateOnly.Parse(EndDateEntry.Text))
         {
             // If nothing was changed
-            Close(prPassed);
+            Close();
         }
 
         DateOnly updatedStart = DateOnly.Parse(StartDateEntry.Text);
@@ -51,13 +51,7 @@ public partial class EditPRPopup : Popup
 
 		if(editValidation == "Success")
 		{
-		    Close(new PeerReview
-            {
-                section = sectionCode,
-                type = prPassed.type,
-                startDate = updatedStart, 
-                endDate = updatedEnd
-            });
+		    Close();
 		}
         else{
             ErrorLabel.Text = editValidation;
@@ -65,10 +59,10 @@ public partial class EditPRPopup : Popup
         }
     }
 
-    // If they choose their mind about editing, returns the same section 
+    // If they choose their mind about editing, closes the popup
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        Close(prPassed);
+        Close();
     }
 
 }

@@ -2,7 +2,7 @@
     Add Sections View Model 
         The relationship between the page and the database for the add sections
 
-    Written by Emma Hockett for CS 4485.0W1, Started on November 15, 2024
+    Written etirely by Emma Hockett for CS 4485.0W1, Started on November 15, 2024
         NetID" ech21001
 */
 
@@ -13,7 +13,7 @@ using MauiApp1.Models;
 public class ManageSectionsViewModel : INotifyPropertyChanged
 {
     public string professorid;
-    private DatabaseService databaseService;
+    private readonly DatabaseService databaseService;
     private List<Section> sections;
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -38,6 +38,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
         Sections = await databaseService.GetSections(netid);
     }
 
+
     // Takes the information for adding the section and passes it to the database 
     public async Task<string> AddSectionAsync(string netid, List<string> sectionInfo, List<DateOnly> dates)
     {
@@ -46,6 +47,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
         return sectionResultMessage;
     }
 
+
     // Takes the information from the edited section and passes it to the database 
     public async Task<string> EditSectionAsync(string section, List<string> sectionInfo, List<DateOnly> dates)
     {
@@ -53,6 +55,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
         GetSectionsAsync(professorid);
         return sectionResultMessage;
     }
+
 
     // Takes the information about the section being deleted and passes it to the database 
     public async Task<string> DeleteSectionAsync(string section)

@@ -3,7 +3,7 @@
         From the Manage Sections Page when the professor chooses to edit a section 
         Shows a pop up with the current information in text input fields where it can be altered
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
         NetID: ech210001
 
 */
@@ -16,7 +16,7 @@ namespace MauiApp1.Pages.ManageStudents;
 
 public partial class EditStudentPopup : Popup
 {
-    string studentID;
+    readonly string studentID;
     public Student studentPassed;
     private readonly ManageStudentsViewModel viewModel;
     public EditStudentPopup(ManageStudentsViewModel viewModel, Student student)
@@ -31,7 +31,7 @@ public partial class EditStudentPopup : Popup
         studentID = student.netid;
     }
 
-    // If the changes want to be saved 
+    // If the professor attempts to save the changes made 
     private async void OnSaveClicked(object Sender, EventArgs e)
     {
         
@@ -44,27 +44,22 @@ public partial class EditStudentPopup : Popup
         else if(studentPassed.name == NameEntry.Text && studentPassed.netid == NetIDEntry.Text && studentPassed.utdid == UTDIDEntry.Text)
         {
             // If nothing was changed return the same student 
-            Close(studentPassed);
+            Close();
         }
 
-        // Gathering the information 
+
         string updatedName = NameEntry.Text;
         string updatedNetID = NetIDEntry.Text;
         string updatedUTDID = UTDIDEntry.Text;
         List<string> updatedInfo = new List<string> {updatedNetID, updatedName, updatedUTDID};
 
 
-        // Editing the student and returning whether it worked 
+        // Editing the student, if it was not able to, displays the reason why 
         string editValidation = await viewModel.EditStudentAsync(studentID, updatedInfo);
 
         if(editValidation == "Success")
         {
-            Close(new Student
-            {
-                name = updatedName,
-                netid = updatedNetID,
-                utdid = updatedUTDID
-            });
+            Close();
         }
         else{
             ErrorLabel.Text = editValidation;
@@ -72,10 +67,9 @@ public partial class EditStudentPopup : Popup
         }
     }
 
-    // If they choose their mind about editing, returns the same student
+    // If they choose their mind about editing closes the popup
     private void OnCancelClicked(object sender, EventArgs e)
     {
-        Close(studentPassed);
+        Close();
     }
-
 }

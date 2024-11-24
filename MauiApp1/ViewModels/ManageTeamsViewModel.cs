@@ -2,7 +2,7 @@
     AssignTeamsViewModel
         The view model for assigning students to a team
 
-    Written by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15, 2024
+    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Project, Started on November 15, 2024
         NetID: ech210001
 
 */
@@ -12,11 +12,10 @@ namespace MauiApp1.ViewModels;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MauiApp1.Models;
-using Microsoft.Extensions.Primitives;
 
 public class ManageTeamsViewModel : INotifyPropertyChanged
 {
-    private DatabaseService databaseService;
+    private readonly DatabaseService databaseService;
     private ObservableCollection<Team> teams;
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -59,6 +58,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Teams));
     }
 
+
     // Fetches all of the students who are not assigned a team
     public async Task<string> GetUnassignedStudentsAsync(string section)
     {
@@ -77,6 +77,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         }
     }
 
+
     // Checking if the team number already exists for this section
     public async Task<string> CheckTeamExistsAsync(string section, string teamNum)
     {
@@ -85,6 +86,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         return teamResultMessage;
     }
 
+
     // Adding the team number to the database if it needs to be added
     public async Task<string> CreateTeamAsync(string section, string teamNum)
     {
@@ -92,6 +94,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         string teamResultMessage = await databaseService.InsertTeamNum(section, teamNumber);
         return teamResultMessage;
     }
+
 
     // Assigning the students to a team with the database service file 
     public async Task<string> AssignTeamAsync(string section, List<string> teamInfo)
@@ -102,6 +105,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         return teamResultMessage;
     }
 
+
     // Gets a students team number 
     public async Task<int> GetTeamNumberAsync(string netid)
     {
@@ -109,28 +113,26 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         return teamNumber;
     }
 
-    // Allows the professot to change a students team
+
+    // Allows the professor to change a students team
     public async Task<string> ChangeTeamAsync(string section, string netid, int updatedTeam)
     {
         string teamUpdated = updatedTeam.ToString();
         string teamExist = await CheckTeamExistsAsync(section, teamUpdated);
 
         // Checks whether the team already exists, and if it doesn't creates it before adding the student
-        if(teamExist == "Team exists")
+        if(teamExist != "Team exists")
         {
-            string changeResultMessage = await databaseService.ChangeStuTeam(section, netid, updatedTeam);
-            LoadTeamsAsync(section);
-            return changeResultMessage;
+            await CreateTeamAsync(section, teamUpdated);
         }
-        else{
-            string createTeam = await CreateTeamAsync(section, teamUpdated);
-            string changeResultMessage = await databaseService.ChangeStuTeam(section, netid, updatedTeam);
-            LoadTeamsAsync(section);
-            return changeResultMessage;
-        }
+
+        string changeResultMessage = await databaseService.ChangeStuTeam(section, netid, updatedTeam);
+        LoadTeamsAsync(section);
+        return changeResultMessage;
+
     }
 
-    // Allows the professot to change a students team
+    // Allows the professor to remove a student from a team 
     public async Task<string> RemoveFromTeamAsync(string netid, string section)
     {
         string removeResultMessage = await databaseService.RemoveFromTeam(netid);
@@ -146,6 +148,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         return prResultMessage;
     }
 
+
     // Allows the professor to edit the team number  
     public async Task<string> EditTeamNumberAsync(string section, int teamNum, int updatedTeamNum)
     {
@@ -153,6 +156,7 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
         LoadTeamsAsync(section);
         return editResultMessage;
     }
+
 
     // Allows the professor to delete a team 
     public async Task<string> DeleteTeamAsync(string section, int teamNum)
