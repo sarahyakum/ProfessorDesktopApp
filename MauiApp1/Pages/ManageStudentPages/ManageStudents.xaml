@@ -60,7 +60,7 @@
                 <Entry  
                     x:Name="NameEntry"
                     Placeholder="Alison Swift"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
             
                 <Label 
@@ -68,7 +68,7 @@
                 <Entry  
                     x:Name="NetIDEntry"
                     Placeholder="abc123456"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
 
                 <Label
@@ -76,7 +76,7 @@
                 <Entry  
                     x:Name="UTDIDEntry"
                     Placeholder="0123456789"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
 
                 <Label
@@ -84,7 +84,7 @@
                 <Entry  
                     x:Name="TeamEntry"
                     Placeholder="75"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
 
                 <Label x:Name="AddStudentErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />

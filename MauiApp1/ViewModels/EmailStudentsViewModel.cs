@@ -18,12 +18,12 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
 {
     public readonly string professorID;
     private readonly  DatabaseService databaseService;
-    private List<Section> sections;
-    private ObservableCollection<SectionWithEmails> _TTsections;
-    private ObservableCollection<SectionWithEmails> _PRsections;
+    private List<Section>? sections;
+    private ObservableCollection<SectionWithEmails>? _TTsections;
+    private ObservableCollection<SectionWithEmails>? _PRsections;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public List<Section> Sections{
+    public List<Section>? Sections{
         get => sections;
         set{
             sections=value;
@@ -31,7 +31,7 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<SectionWithEmails> TTsections
+    public ObservableCollection<SectionWithEmails>? TTsections
     {
         get => _TTsections;
         set{
@@ -40,7 +40,7 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<SectionWithEmails> PRsections
+    public ObservableCollection<SectionWithEmails>? PRsections
     {
         get => _PRsections;
         set{
@@ -55,14 +55,25 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
         professorID = netid;
         TTsections = new ObservableCollection<SectionWithEmails>();
         PRsections = new ObservableCollection<SectionWithEmails>();
-        LoadSectionsAsync();
+    }
+
+    public async Task InitializeAsync()
+    {
+        await LoadSectionsAsync();
     }
 
     // Loads the sections and calls the Method to load the emails into the section 
     private async Task LoadSectionsAsync()
     {
         var timeslotSections = await LoadSectionsWithEmailsAsync(isTimeslot: true);
-        TTsections.Clear();
+        if(TTsections != null)
+        {
+            TTsections.Clear();
+        }
+        else{
+            TTsections = new ObservableCollection<SectionWithEmails>();
+        }
+        
         foreach (var section in timeslotSections)
         {
             TTsections.Add(section);
@@ -70,7 +81,15 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
 
 
         var peerReviewSections = await LoadSectionsWithEmailsAsync(isTimeslot: false);
-        PRsections.Clear();
+        
+        if(PRsections != null)
+        {
+            PRsections.Clear();
+        }
+        else{
+            PRsections = new ObservableCollection<SectionWithEmails>();
+        }
+
         foreach( var section in peerReviewSections)
         {
             PRsections.Add(section);
@@ -124,6 +143,6 @@ public class EmailStudentsViewModel : INotifyPropertyChanged
 // Wrapper class of the section with the name of the section and the student emails 
 public class SectionWithEmails
 {
-    public string name { get; set;}
-    public string emails { get; set;}
+    public required string name { get; set;}
+    public string? emails { get; set;}
 }

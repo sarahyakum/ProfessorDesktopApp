@@ -19,12 +19,12 @@ public partial class Timesheets : ContentPage
 {
 	public DateTime Timestamp { get; set; }
 
-	private StudentSheetsViewModel viewModel;
+	private TimesheetsViewModel viewModel;
 	public ObservableCollection<WorkHoursEntry> WorkHours { get; set; }
 
 	public Timesheets(string className, string code)
 	{
-		viewModel = new StudentSheetsViewModel(code);
+		viewModel = new TimesheetsViewModel(code);
 		BindingContext = viewModel;
 		InitializeComponent();
 		DisplayTime();

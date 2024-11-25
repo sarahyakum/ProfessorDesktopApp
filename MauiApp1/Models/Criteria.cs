@@ -11,8 +11,8 @@
 namespace MauiApp1.Models;
 
 public class Criteria{
-    public string section{ get; set; }
-    public string name{ get; set; }
-    public string description{ get; set; }
-    public string reviewType{ get; set; }
+    public required string section{ get; set; }
+    public required string name{ get; set; }
+    public string? description{ get; set; }
+    public required string reviewType{ get; set; }
 }

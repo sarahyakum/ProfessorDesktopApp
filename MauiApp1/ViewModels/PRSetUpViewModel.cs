@@ -18,11 +18,11 @@ public class PRSetUpViewModel : INotifyPropertyChanged
 {
     private readonly DatabaseService databaseService;
 
-    private List<Criteria> criterias;
-    public List<PeerReview> peerReviews;
+    private List<Criteria>? criterias;
+    public List<PeerReview>? peerReviews;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public List<Criteria> Criterias{
+    public List<Criteria>? Criterias{
         get => criterias;
         set{
             criterias = value;
@@ -30,7 +30,7 @@ public class PRSetUpViewModel : INotifyPropertyChanged
         }
     }
 
-     public List<PeerReview> PeerReviews{
+     public List<PeerReview>? PeerReviews{
         get => peerReviews;
         set{
             peerReviews = value;
@@ -88,10 +88,10 @@ public class PRSetUpViewModel : INotifyPropertyChanged
     // Written by Emma Hockett (ech210001)
     public async Task<string>EditCriteriaAsync(string section, Criteria oldCriteria, Criteria newCriteria)
     {
-        int oldCriteriaID = await databaseService.GetCriteriaID(section, oldCriteria.name, oldCriteria.description, oldCriteria.reviewType);
+        int oldCriteriaID = await databaseService.GetCriteriaID(section, oldCriteria.name, oldCriteria.description ?? string.Empty, oldCriteria.reviewType);
         if(oldCriteriaID != -1)
         {
-            string editResultMessage = await databaseService.EditCriteria(section, oldCriteriaID, newCriteria.name, newCriteria.description, newCriteria.reviewType);
+            string editResultMessage = await databaseService.EditCriteria(section, oldCriteriaID, newCriteria.name, newCriteria.description ?? string.Empty, newCriteria.reviewType);
             GetCriteriaAsync(section);
             return editResultMessage;
         }

@@ -18,7 +18,7 @@ public partial class ManageSections : ContentPage
 {
     readonly string professorID;
 
-    private ManageSectionsViewModel viewModel;
+    private readonly ManageSectionsViewModel viewModel;
 
     public ManageSections(string netid)
     {
@@ -27,6 +27,17 @@ public partial class ManageSections : ContentPage
         viewModel = new ManageSectionsViewModel(netid);
         BindingContext = viewModel;
     }
+
+    // Pulls up the list of sections immediately upon opening th epage 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if(BindingContext is ManageSectionsViewModel viewModel)
+        {
+            await viewModel.InitializeAsync();
+        }
+    }
+
 
 
     // When the professor tries to add a section from the input fields

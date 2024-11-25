@@ -24,8 +24,7 @@ public partial class PRSetUp : ContentPage
 {
 	readonly string professorID;
 	readonly string section;
-	readonly string type;
-	//List<string> criteriaInfo;
+
 	private readonly  PRSetUpViewModel viewModel;
 
 	public PRSetUp(string netid, string sectionCode)

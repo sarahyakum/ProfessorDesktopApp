@@ -24,14 +24,12 @@ namespace MauiApp1.Pages;
 public partial class LoginPage : ContentPage
 {
 	private readonly LoginViewModel viewModel;
-    private readonly Professor professor;
+    //private Professor professor;
 
 	public LoginPage()
 	{
 		InitializeComponent();
         viewModel = new LoginViewModel();
-        professor = new Professor();
-        
 	}
 
 
@@ -54,9 +52,7 @@ public partial class LoginPage : ContentPage
         if (loginValidation == "Success")
         {
             await Navigation.PushAsync(new HomePage(netid));
-            professor.username = netid;
-            professor.password = password;
-
+            Professor professor = new Professor(){username = netid};
         }
         else if(loginValidation == "Change password")
         {

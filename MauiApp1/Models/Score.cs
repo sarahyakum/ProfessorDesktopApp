@@ -9,9 +9,9 @@ namespace MauiApp1.Models;
         NetID: sny200000
 */
 public class Score{
-    public int team{get;set;}
-    public string reviewer { get; set; }   
-    public int score { get; set; }
-    public string criteria { get; set; }
-    public string average{ get; set; }
+    public int? team{get;set;}
+    public required string reviewer { get; set; }   
+    public int? score { get; set; }
+    public required string criteria { get; set; }
+    public string? average{ get; set; }
 }

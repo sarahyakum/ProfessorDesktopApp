@@ -46,7 +46,7 @@ public partial class ReuseCriteriaPopup : Popup
 
         string updatedType = TypeEntry.Text;
 
-        List<string> criteriaInfo = new List<string> { sectionCode, criteriaPassed.name, criteriaPassed.description, updatedType };
+        List<string> criteriaInfo = new List<string> { sectionCode, criteriaPassed.name, criteriaPassed.description ?? string.Empty, updatedType };
 
         // Calls the viewmodel to perform the actions to reuse the criteria and exits pop up or tells what it wrong
 		string criteriaValidation = await viewModel.CreateCriteriaAsync(professorID, criteriaInfo, sectionCode);

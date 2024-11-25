@@ -10,10 +10,10 @@
 
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+//using System.Collections.Generic;
+//using System.IO;
+//using System.Linq;
+//using System.Threading.Tasks;
 using CommunityToolkit.Maui.Views;
 using MauiApp1.Pages.ManageStudents;
 namespace MauiApp1.Pages.ManageStudentPages;
@@ -21,9 +21,6 @@ namespace MauiApp1.Pages.ManageStudentPages;
 public partial class ManageStudents : ContentPage
 {
     readonly string section;
-    string name;
-    string netid;
-    string utdid;
 
     private readonly ManageStudentsViewModel viewModel;
 
@@ -33,6 +30,16 @@ public partial class ManageStudents : ContentPage
         section = sectionCode;
         viewModel = new ManageStudentsViewModel(section);
         BindingContext = viewModel;
+    }
+
+    // Pulls up the list of students immediately upon opening the page 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if(BindingContext is ManageStudentsViewModel viewModel)
+        {
+            await viewModel.InitializeAsync();
+        }
     }
 
 
@@ -46,9 +53,9 @@ public partial class ManageStudents : ContentPage
             return;
         }
 
-        name = NameEntry.Text;
-        netid = NetIDEntry.Text;
-        utdid = UTDIDEntry.Text;
+        string name = NameEntry.Text;
+        string netid = NetIDEntry.Text;
+        string utdid = UTDIDEntry.Text;
         string teamNumber = TeamEntry.Text;
 
         List<string> studentInfo = new List<string> {name, netid, utdid};
@@ -75,7 +82,7 @@ public partial class ManageStudents : ContentPage
             string teamValidation = await viewModel.CheckTeamExistsAsync(section, teamNumber);
             if(teamValidation == "Team doesn't exist")
             {
-                teamValidation = await viewModel.CreateTeamAsync(section, teamNumber);
+                await viewModel.CreateTeamAsync(section, teamNumber);
             }
 
             teamValidation = await viewModel.AssignTeamAsync(section, teamInfo);

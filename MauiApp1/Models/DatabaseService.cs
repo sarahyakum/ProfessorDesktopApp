@@ -312,49 +312,10 @@ class DatabaseService{
     ****************************************************************************************/
 
 
-    // Gets the NetIDs of all of the students in the section that the professor teaches
-    // Written by Sarah Yakum (sny200000)
-    public async Task<List<Student>> GetStudents(string code){
-
-
-        List<Student> students= new List<Student>();
-        
-        using (var conn = new MySqlConnection(connectionString)){
-            try{
-                await conn.OpenAsync();
-                using(MySqlCommand cmd = new MySqlCommand("get_section_students", conn)){
-                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
-                    cmd.Connection = conn;
-
-                    cmd.Parameters.AddWithValue("@section_code", code);
-
-                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            students.Add(new Student
-                            {
-                                netid=reader.GetString("StuNetID"),
-                                section = code
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception ex){
-                Console.Write(ex.Message);
-            }
-            return students;
-
-        }
-    }
-
     // Based on the student's NetID, returns their Name and UTDID
     // Written by Emma Hockett (ech210001)
     public async Task<Student> GetStudentsInfo(string netid){
 
-
-        Student student = new Student();
         string studentNetid = netid;
         string studentName = "";
         string studentUtdId = "";
@@ -379,6 +340,7 @@ class DatabaseService{
                 Console.Write(ex.Message);
             }
         }
+        Student student = new Student() {name = studentName, netid = studentNetid, utdid = studentUtdId};
         student.name = studentName;
         student.netid = studentNetid;
         student.utdid = studentUtdId;
@@ -597,7 +559,7 @@ class DatabaseService{
             List<Student> students = new List<Student>();
             
             
-            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
+            string query = "SELECT StuNetID, StuName, StuUTDID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
             
             try{
                 await conn.OpenAsync();
@@ -610,8 +572,9 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
                             students.Add(new Student{
-                                netid= reader.GetString("StuNetID")
-
+                                netid= reader.GetString("StuNetID"),
+                                name = reader.GetString("StuName"),
+                                utdid = reader.GetString("StuUTDID")
                             }); 
                         }
                     }
@@ -894,7 +857,7 @@ class DatabaseService{
                         {
                             timeslots.Add(new Timeslot
                             {
-                                
+                                date = date,
                                 desciption = reader.GetString("TSDate"),
                                 duration = reader.GetString("TSDuration")
                                 

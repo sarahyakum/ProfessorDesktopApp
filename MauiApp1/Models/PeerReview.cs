@@ -11,8 +11,8 @@
 namespace MauiApp1.Models;
 
 public class PeerReview{
-    public string section { get; set; }
-    public string type { get; set; }
-    public DateOnly startDate{ get; set; }
-    public DateOnly endDate{ get; set; }
+    public required string section { get; set; }
+    public required string type { get; set; }
+    public required DateOnly startDate{ get; set; }
+    public required DateOnly endDate{ get; set; }
 }

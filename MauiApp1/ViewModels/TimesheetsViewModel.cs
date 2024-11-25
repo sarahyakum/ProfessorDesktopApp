@@ -17,7 +17,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     private List<Timeslot> timeslots = new List<Timeslot>();
     private List<DateTime> window = new List<DateTime>();
     //public event PropertyChangedEventHandler PropertyChanged;
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     
     public List<Timeslot> Timeslots{
         get => timeslots;
@@ -26,7 +26,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Timeslots));
         }
         
-        }
+    }
     public List<DateTime> Window{
         get => window;
         set{
@@ -49,8 +49,8 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         DateTime currDate = startDate;
         for(DateTime i = startDate; i <= endDate; i.AddDays(1)){
             Timeslots = await databaseService.GetTimeslots(i,netid);
-            Student curr_student =  new Student();
-            curr_student.netid = netid;
+            Student curr_student =  new Student(){netid = netid};
+
             foreach(Timeslot slot in Timeslots){
                 curr_student.timeslots.Add(slot);
             }
@@ -58,9 +58,6 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             Timeslots = curr_student.timeslots;
 
         }
-        
-        
-        
     }
     //Retrieves courses time frame
     //private async void GetTimeFrameAsync()

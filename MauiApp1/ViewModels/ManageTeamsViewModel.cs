@@ -16,10 +16,10 @@ using MauiApp1.Models;
 public class ManageTeamsViewModel : INotifyPropertyChanged
 {
     private readonly DatabaseService databaseService;
-    private ObservableCollection<Team> teams;
+    private ObservableCollection<Team>? teams;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public ObservableCollection<Team> Teams{
+    public ObservableCollection<Team>? Teams{
         get => teams;
         set{
             teams = value;
@@ -38,7 +38,14 @@ public class ManageTeamsViewModel : INotifyPropertyChanged
     // Getting the students on the various teams in the section 
     public async void LoadTeamsAsync(string section)
     {
-        Teams.Clear();
+        if(Teams != null)
+        {
+            Teams.Clear();
+        }
+        else{
+            Teams = new ObservableCollection<Team>();
+        }
+        
         var allteams = await databaseService.GetTeams(section);
         var teams = allteams.Where(t => t.section == section).ToList();
 

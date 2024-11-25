@@ -14,10 +14,10 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
 {
     public string professorid;
     private readonly DatabaseService databaseService;
-    private List<Section> sections;
+    private List<Section>? sections;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public List<Section> Sections{
+    public List<Section>? Sections{
         get => sections;
         set{
             sections = value;
@@ -29,13 +29,17 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     {
         databaseService = new DatabaseService();
         professorid = netid;
-        GetSectionsAsync(netid);
+    }
+
+    public async Task InitializeAsync()
+    {
+        await GetSectionsAsync();
     }
 
     // Pulls all of the section information from the database
-    public async void GetSectionsAsync(string netid)
+    public async Task GetSectionsAsync()
     {
-        Sections = await databaseService.GetSections(netid);
+        Sections = await databaseService.GetSections(professorid);
     }
 
 
@@ -43,7 +47,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> AddSectionAsync(string netid, List<string> sectionInfo, List<DateOnly> dates)
     {
         string sectionResultMessage = await databaseService.AddSection(netid, sectionInfo, dates);
-        GetSectionsAsync(professorid);
+        await GetSectionsAsync();
         return sectionResultMessage;
     }
 
@@ -52,7 +56,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> EditSectionAsync(string section, List<string> sectionInfo, List<DateOnly> dates)
     {
         string sectionResultMessage = await databaseService.EditSection(section, sectionInfo, dates);
-        GetSectionsAsync(professorid);
+        await GetSectionsAsync();
         return sectionResultMessage;
     }
 
@@ -61,7 +65,7 @@ public class ManageSectionsViewModel : INotifyPropertyChanged
     public async Task<string> DeleteSectionAsync(string section)
     {
         string sectionResultMessage = await databaseService.DeleteSection(section);
-        GetSectionsAsync(professorid);
+        await GetSectionsAsync();
         return sectionResultMessage;
     }
 

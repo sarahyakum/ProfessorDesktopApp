@@ -16,12 +16,12 @@ using MauiApp1.Models;
 public class ManageStudentsViewModel : INotifyPropertyChanged
 {
     private readonly DatabaseService databaseService;
-    private ObservableCollection<Student> students;
+    private ObservableCollection<Student>? students;
 
     public string section;
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public ObservableCollection<Student> Students{
+    public ObservableCollection<Student>? Students{
         get => students;
         set{
             students = value;
@@ -33,9 +33,13 @@ public class ManageStudentsViewModel : INotifyPropertyChanged
     {
         databaseService = new DatabaseService();
         section = sectionCode;
-        GetStudentsAsync(section);
+        Students = new ObservableCollection<Student>();
     }
 
+    public async Task InitializeAsync()
+    {
+        await GetStudentsAsync(section);
+    }
 
     // Getting the students and their information that are in a section 
     public async Task GetStudentsAsync(string section)
