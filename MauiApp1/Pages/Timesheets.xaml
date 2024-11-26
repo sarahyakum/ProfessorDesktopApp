@@ -24,14 +24,14 @@ Written by Sarah Yakum sny200000
                 <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle" Padding="5"></Label>
                 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="10" Padding ="10">
-                    <Button Text="Previous Week" Command="{Binding MoveToPreviousWeekCommand}" Padding ="10"/>
+                    <Button Text="Previous Week" Command="{Binding MoveToPreviousWeekCommand}" Padding ="10" />
                     <Label Text="{Binding CurrentWeekRange}" Padding ="10"/>
                     <Button Text="Next Week" Command="{Binding MoveToNextWeekCommand}" Padding ="10"/>
                 </StackLayout>
             
            
                  
-            <ScrollView Orientation="Both">
+            <ScrollView>
                <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="10" ColumnSpacing="10" >
                     <!-- The grid will be populated dynamically in the code-behind -->
                      <Grid.RowDefinitions>

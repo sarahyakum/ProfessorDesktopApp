@@ -35,9 +35,7 @@ public partial class Timesheets : ContentPage
         //Moving from week to week
         viewModel.WeekChanged += async (sender, args) => {
             try{
-                
-                await LoadDataAsync();
-                PopulateGrid(); 
+                _ = InitializeAsync();
             }
             catch (Exception ex){
                 Console.WriteLine($"Error during initialization: {ex.Message}");
@@ -67,6 +65,7 @@ public partial class Timesheets : ContentPage
     private async Task InitializeAsync()
     {
        try{
+        students.Clear();
         await viewModel.StartAsync(section);
         await LoadDataAsync();
         PopulateGrid(); 
@@ -121,7 +120,7 @@ public partial class Timesheets : ContentPage
         WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             var nameLabel = new Label
             {
-                Text = student.netid,
+                Text = student.name,
                 FontAttributes = FontAttributes.Bold,
                 FontSize= 20,
                 VerticalOptions = LayoutOptions.Center
@@ -149,14 +148,17 @@ public partial class Timesheets : ContentPage
                         description = "No entry"
                     };
                 }
+                var timeslot = student.timeslots[date];
                 var button = new Button
                 {
                     Text = hours.ToString(),
-                    FontSize = 15,
+                    FontSize = 20,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
-                    WidthRequest = 70,  // Set cell width
-                    HeightRequest = 70  // Set cell height
+                    //BackgroundColor = Colors.White,
+                    //BorderColor = Colors.Black,
+                    WidthRequest = 95,  // Set cell width
+                    HeightRequest = 95  // Set cell height
                 };
 
                 //THIS NEEDS TO BE CONNECTED TO THE DB
@@ -183,10 +185,10 @@ public partial class Timesheets : ContentPage
                 {
                     Content = button,
                     //Padding = 10,  
-                    BorderColor = Colors.Black,
+                    //BorderColor = Colors.Black,
                     //BackgroundColor = Colors.LightGray,
-                    WidthRequest = 75,
-                    HeightRequest = 75
+                    WidthRequest = 100,
+                    HeightRequest = 100
                 };
 
                 WorkHoursGrid.Add(borderedCell, columnIndex, rowIndex); // Dynamic column, dynamic row

@@ -157,6 +157,7 @@ class DatabaseService{
                             {
                                 students.Add(new Student
                                 {
+                                    name = reader.GetString("StuName"),
                                     netid=reader.GetString("StuNetID"),
                                     section = code
                                 });

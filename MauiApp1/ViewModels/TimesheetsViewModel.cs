@@ -104,8 +104,15 @@ public class TimesheetsViewModel : INotifyPropertyChanged
 
     //Begin the functionality
     public async Task StartAsync(string section){
-        CurrentWeekStart = GetStartOfWeek(DateOnly.FromDateTime(DateTime.Today));
+        if (currentWeekStart == DateOnly.MinValue)
+        {
+            CurrentWeekStart = GetStartOfWeek(DateOnly.FromDateTime(DateTime.Today));
+        }
+
+        // Load students and initialize data
+        
         await LoadStudentsAsync(section);
+        
     }
     //get Monday of the week
     private DateOnly GetStartOfWeek(DateOnly date)
@@ -134,7 +141,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     public async Task LoadWeeklyTimeslotsAsync()
     {
         try{
-        var weekStart = CurrentWeekStart.AddDays(weekOffset * 7);
+        var weekStart = CurrentWeekStart;
         var weekEnd = weekStart.AddDays(6);
 
         //Acquire timeslots for all students
