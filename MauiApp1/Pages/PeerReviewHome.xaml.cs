@@ -9,14 +9,15 @@
         NetID: sny200000
 */
 
+using MauiApp1.Pages.PRSetUpPages;
 namespace MauiApp1.Pages;
 
-public partial class PeerReview : ContentPage
+public partial class PeerReviewHome : ContentPage
 {
 	
 	private string professorID;
 	private string secCode;
-	public PeerReview(string netid, string section)
+	public PeerReviewHome(string netid, string section)
 	{
 		InitializeComponent();
 		professorID = netid;
@@ -31,7 +32,7 @@ public partial class PeerReview : ContentPage
 
 	// Takes the professor to a page to allow them to enter new Peer Review Information
 	private async void OnSetUpButtonClicked(object sender, EventArgs e){
-		await Navigation.PushAsync(new PRSetUp(professorID, secCode));
+		await Navigation.PushAsync(new PRSetUpPages.PRSetUp(professorID, secCode));
 		
 	}
 

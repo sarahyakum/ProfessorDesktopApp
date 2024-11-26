@@ -37,6 +37,13 @@ Written by Sarah Yakum sny200000
                 Text="Student Peer Reviews" 
                 Clicked="OnPeerReviewButtonClicked"
             />
+
+            <Button
+                x:Name="EmailStudentsButton"
+                Text="Email Students" 
+                Clicked="OnEmailStudentsButtonClicked"
+            />
+
             <Button
                 x:Name="SettingsButton"
                 Text="Settings" 
@@ -44,6 +51,5 @@ Written by Sarah Yakum sny200000
             />
         
     </VerticalStackLayout>
-    </ScrollView>
-     
+    </ScrollView> 
 </ContentPage>

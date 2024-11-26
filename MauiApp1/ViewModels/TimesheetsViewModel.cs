@@ -31,7 +31,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     private int weekOffset = 0;
     private List<DateOnly> window = new List<DateOnly>();
     private ObservableCollection<Student> students = new ObservableCollection<Student>();
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     
     //Sets list of students
     public ObservableCollection<Student> Students{
@@ -124,7 +124,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     //Gets student information from database
     public async Task LoadStudentsAsync(string code){
         
-        Students = await databaseService.GetStudents(code);
+        Students = await databaseService.GetStudentAndInfo(code);
         await LoadWeeklyTimeslotsAsync();
 
 

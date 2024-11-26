@@ -29,7 +29,7 @@ Written by Sarah Yakum sny200000
             HorizontalOptions="FillAndExpand"/>
 
             
-            
+            <Label x:Name="LoginErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
     
             <Button
                 x:Name="LoginButton"

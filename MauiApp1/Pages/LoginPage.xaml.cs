@@ -23,20 +23,26 @@ namespace MauiApp1.Pages;
 
 public partial class LoginPage : ContentPage
 {
-	private LoginViewModel viewModel;
-    private Professor professor;
+	private readonly LoginViewModel viewModel;
+    //private Professor professor;
 
 	public LoginPage()
 	{
 		InitializeComponent();
         viewModel = new LoginViewModel();
-        professor = new Professor();
-        
 	}
 
 
+    // When the professor tries to login to their account
 	private async void OnLoginButtonClicked(object sender, EventArgs e)
 	{
+        // Checks whether all of the fields have been filled out 
+        if(string.IsNullOrWhiteSpace(NetIDEntry.Text) || string.IsNullOrWhiteSpace(PasswordEntry.Text))
+        {
+            LoginErrorLabel.Text = "All fields must be filled out";
+            return;
+        }
+
 		string netid = NetIDEntry.Text;
         string password = PasswordEntry.Text;
 
@@ -45,25 +51,20 @@ public partial class LoginPage : ContentPage
         // Determing which page to direct the user to based on the feedback from the procedure
         if (loginValidation == "Success")
         {
-
             await Navigation.PushAsync(new HomePage(netid));
-            professor.username = netid;
-            professor.password = password;
-
-            //DisplayAlert("Login", "Login Successful!", "OK");
+            Professor professor = new Professor(){username = netid};
         }
-        else if(loginValidation == "Change password"){
+        else if(loginValidation == "Change password")
+        {
+            // Upon first time logins the professor must change their password
             await Navigation.PushAsync(new ChangePassword(netid));
         }
         else
         {
-            await DisplayAlert("Login Error", loginValidation, "OK");
+            LoginErrorLabel.Text = loginValidation;
+            return;
         }
-
 	}
-
-    
-    
 
 }
 

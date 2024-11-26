@@ -1,7 +1,7 @@
 /*
 	Sections Page:
-		Promts the professor to choose which section they would like the view the timesheets for.
-		Upon choosing which section, taken to the page for that section to display the student's timesheets.
+		Displays the current sections for a professor
+		When a section is chosen it will look at the flag passed to determine which page to visit next 
 
 		If clicking the back arrow, will return to the professor home page.
 
@@ -11,6 +11,9 @@
 
 using MauiApp1.ViewModels;
 using MauiApp1.Models;
+using MauiApp1.Pages;
+using MauiApp1.Pages.ManageStudentPages;
+using MauiApp1.Pages.ManageTeamsPages;
 
 namespace MauiApp1.Pages;
 
@@ -52,18 +55,18 @@ public partial class Sections : ContentPage
 
 		// Navigating the the Peer Review Pages 
 		if(flag == "PR"){
-			await Navigation.PushAsync(new PeerReview(professorID, secCode));
+			await Navigation.PushAsync(new PeerReviewHome(professorID, secCode));
 		}
 		
 		// Navigating to the Add students Pages 
 		if(flag == "ADDSTU")
 		{
-			await Navigation.PushAsync(new AddStudents(secCode));
+			await Navigation.PushAsync(new ManageStudentPages.ManageStudents(secCode));
 		}
 
 		if(flag == "TEAM")
 		{
-			await Navigation.PushAsync(new AssignTeams(secCode));
+			await Navigation.PushAsync(new ManageTeamsPages.ManageTeams(secCode));
 		}
 	}
 }

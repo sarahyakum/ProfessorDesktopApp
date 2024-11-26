@@ -1,11 +1,11 @@
 <!-- Add Students to Teams Page XAML File -->
-<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
+<!-- Written entirely by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
 
 <?xaml version="1.0" encoding="utf-8" ?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                x:Class="MauiApp1.Pages.AssignTeams"
+                x:Class="MauiApp1.Pages.ManageTeamsPages.ManageTeams"
                 Title="Manage Teams">
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
@@ -50,6 +50,8 @@
                     HorizontalOptions="FillAndExpand"
                 />
 
+                <Label x:Name="AssignTeamErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
+
                 <Button
                     x:Name="AssignTeamButton"
                     Text="Submit Team Assignment"
@@ -73,7 +75,8 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Vertical">
-                                    <Label FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Center">
+                                    <Grid ColumnDefinitions="2*, Auto, Auto" RowSpacing="5">
+                                    <Label FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Team " />
@@ -81,16 +84,27 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+
+                                    <!-- Edit and Delete Team Buttons -->
+                                    <Button x:Name="EditTeam" Text="Edit" Clicked="OnEditTeamClicked" CommandParameter="{Binding .}" Grid.Column="1" Margin="5,0,5,0"/>
+                                    <Button x:Name="DeleteTeam" Text="Delete" Clicked="OnDeleteTeamClicked" CommandParameter="{Binding .}" Grid.Column="2" Margin="5,0,5,0"/>
+                                    </Grid>
+
+                                    <!-- Displaying the members of the teams -->
                                     <ListView ItemsSource="{Binding members}" SelectionMode="None" HorizontalOptions="Center">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <ViewCell>
-                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                                        <Label Text="{Binding name}" FontSize="Body"/>
-                                                        <Label Text=" (" TextColor="Gray"/>
-                                                        <Label Text="{Binding netid}" TextColor="Gray"/>
-                                                        <Label Text=")" TextColor="Gray"/>
-                                                    </StackLayout>
+                                                    <Grid ColumnDefinitions="2*, Auto, Auto">
+                                                        <StackLayout Orientation="Vertical" Grid.Column="0" VerticalOptions="Center">
+                                                        <Label Text="{Binding name}" FontSize="Body" Grid.Column="0" />
+                                                        <Label Text="{Binding netid}" TextColor="Gray" FontSize="Body" Grid.Column="1"  />
+                                                        <BoxView HeightRequest="15" Color="Transparent"/>
+                                                        </StackLayout>
+
+                                                        <Button x:Name="MoveTeams" Text="Move" Clicked="OnMoveTeamsClicked" CommandParameter="{Binding netid}" Margin="5,0,5,0" WidthRequest="80" HeightRequest="20" Grid.Column="1" />
+                                                        <Button x:Name="RemoveFromTeam" Text="Remove" Clicked="OnRemoveFromTeamClicked" CommandParameter="{Binding netid}" Margin="5,0,5,0" WidthRequest="80" HeightRequest="20" Grid.Column="2"/>
+                                                    </Grid>
                                                 </ViewCell>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -101,6 +115,11 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <!-- Displaying the students who are not currently assigned to a team -->
+                <BoxView HeightRequest="50" Color="Transparent"/>
+                <Label Text="Unassigned Students" FontSize="Large" HorizontalOptions="Center"/>
+                <Label x:Name="UnassignedStudentsLabel" HeightRequest="70" IsVisible="True" Text="" HorizontalOptions="Center" FontSize="Body" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -1,18 +1,18 @@
 <!-- Add Students Page XAML File -->
-<!-- Written by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
+<!-- Written entirely by Emma Hockett ech210001 for CS 4485.0W1 Started on November 15, 2024 -->
 
 <?xaml version="1.0" encoding="utf-8" ?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                x:Class="MauiApp1.Pages.AddStudents"
+                x:Class="MauiApp1.Pages.ManageStudentPages.ManageStudents"
                 Title="Manage Students">
     <ScrollView>
         <StackLayout Padding="20" Spacing="10">
                 <Label 
                     Text="Upload Students" FontSize ="Large" HorizontalOptions="Center"/>
 
-                <!-- Uploading a CSV File Functionality -->
+                <!-- Uploading a CSV File Functionality for just the students -->
                 <Label
                     Text="To upload students select a CSV file with the following columns: Last Name, First Name, NetID, UTDID" FontSize="Body" HorizontalOptions="Center"/>
                 <Label
@@ -30,7 +30,7 @@
                 <Label 
                     Text="Upload Students and Teams" FontSize ="Large" HorizontalOptions="Center"/>
 
-                <!-- Uploading a CSV File Functionality -->
+                <!-- Uploading a CSV File Functionality for students and teams -->
                 <Label
                     Text="To upload students and assign them to a team select a CSV file with the following columns: Last Name, First Name, NetID, UTDID, Team Number" FontSize="Body" HorizontalOptions="Center"/>
                 <Label
@@ -60,7 +60,7 @@
                 <Entry  
                     x:Name="NameEntry"
                     Placeholder="Alison Swift"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
             
                 <Label 
@@ -68,7 +68,7 @@
                 <Entry  
                     x:Name="NetIDEntry"
                     Placeholder="abc123456"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
 
                 <Label
@@ -76,7 +76,7 @@
                 <Entry  
                     x:Name="UTDIDEntry"
                     Placeholder="0123456789"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
 
                 <Label
@@ -84,8 +84,10 @@
                 <Entry  
                     x:Name="TeamEntry"
                     Placeholder="75"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                 />
+
+                <Label x:Name="AddStudentErrorLabel" TextColor="Red" HeightRequest="40" Text="" HorizontalOptions="Center" FontSize="Medium" />
 
                 <Button
                     x:Name="AddStudentButton"
@@ -114,6 +116,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Grid.Column="0" Text="{Binding name}" FontSize="Medium" FontAttributes="Bold"/>
@@ -121,6 +125,9 @@
                                     <Label Grid.Column="2" Text="{Binding netid}" FontSize="Small"/>
                                     <Label Grid.Column="3" Text="UTDID: " FontSize="Small" TextColor="Gray"/>
                                     <Label Grid.Column="4" Text="{Binding utdid}" FontSize="Small"/>
+
+                                    <Button Grid.Column="5" x:Name="EditStudent" Text="Edit" Clicked="OnEditStudentClicked" CommandParameter="{Binding .}" Margin="5,0,5,0"/>
+                                    <Button Grid.Column="6" x:Name="DeleteStudent" Text="Delete" Clicked="OnDeleteStudentClicked" CommandParameter="{Binding .}" Margin="5,0,5,0"/>
                                 </Grid>
                             </ViewCell>  
                         </DataTemplate>

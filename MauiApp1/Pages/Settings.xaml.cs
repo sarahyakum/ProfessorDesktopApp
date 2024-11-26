@@ -10,13 +10,14 @@
 
 
 */
+using MauiApp1.Pages;
+using MauiApp1.Pages.ManageSectionPages;
 namespace MauiApp1.Pages;
 
 public partial class Settings : ContentPage
 
 {
-    private string id;
-    private string flag;
+    private readonly string id;
     public Settings(string netid)
     {
         InitializeComponent();
@@ -25,25 +26,24 @@ public partial class Settings : ContentPage
 
     //creating new sections under the professor
     private async void OnManageSectionsButtonClicked(object sender, EventArgs e){
-        await Navigation.PushAsync(new AddSections(id));
+        await Navigation.PushAsync(new ManageSectionPages.ManageSections(id));
     }
 
-    //adds students to a section
+    //Adds students to a section, Directs them to choose the setion first 
     private async void OnManageStudentsButtonClicked(object sender, EventArgs e){
-        flag="ADDSTU";
+        string flag="ADDSTU";
         await Navigation.PushAsync(new Sections(id, flag));
     }
 
-    //adds students to a team
+    //Adds students to a team, Directs them to choose the section first 
     private async void OnManageTeamsButtonClicked(object sender, EventArgs e){
-        flag="TEAM";
+        string flag="TEAM";
         await Navigation.PushAsync(new Sections(id, flag));
     }
 
-    //allows for professor to change password any time
+    // Allows for professor to change password any time
     private async void OnChangePasswordButtonClicked(object sender, EventArgs e){
         await Navigation.PushAsync(new ChangePassword(id));
     }
-
     
 }
