@@ -17,8 +17,16 @@ public class ReviewViewModel : INotifyPropertyChanged
     private List<Team> teams = new List<Team>();
     private List<Student> members = new List<Student>();
     private List<Score> scores = new List<Score>();
+    public List<PeerReview>? peerReviews;
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public List<PeerReview>? PeerReviews{
+        get => peerReviews;
+        set{
+            peerReviews = value;
+            OnPropertyChanged(nameof(PeerReviews));
+        }
+    }
     public List<Team> Teams{
         get => teams; 
         set{
@@ -49,6 +57,7 @@ public class ReviewViewModel : INotifyPropertyChanged
     private async Task InitializeAsync(string code)
     {
         await LoadTeamsAsync(code);
+        GetPRAsync(code);
     }
     //calls database service that retrieves teams and members based on a section and adds to 
     //team class for the professor
@@ -69,6 +78,10 @@ public class ReviewViewModel : INotifyPropertyChanged
         }
 
         Teams = new_teams;
+    }
+
+    public async void GetPRAsync(string code){
+        PeerReviews = await databaseService.GetPeerReviews(code);
     }
 
 

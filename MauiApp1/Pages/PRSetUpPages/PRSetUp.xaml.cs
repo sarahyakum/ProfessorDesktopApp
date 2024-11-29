@@ -32,7 +32,6 @@ public partial class PRSetUp : ContentPage
 		InitializeComponent();
 		professorID = netid;
 		section = sectionCode;
-		this.section = sectionCode;
 		viewModel = new PRSetUpViewModel(netid, section);
 		BindingContext = viewModel;
 	}
