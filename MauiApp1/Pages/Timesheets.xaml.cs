@@ -22,7 +22,7 @@ public partial class Timesheets : ContentPage
    	private TimesheetsViewModel viewModel;
     public ObservableCollection<Student> students { get; set; } = new ObservableCollection<Student>();
 
-
+    private DatabaseService databaseService;
 	public Timesheets(string className, string code)
 	{
         //get binding context from view model
@@ -31,6 +31,7 @@ public partial class Timesheets : ContentPage
 		BindingContext = viewModel;
 		InitializeComponent();
 		SectionName.Text = className;
+        databaseService = new DatabaseService();
         
         //Moving from week to week
         viewModel.WeekChanged += async (sender, args) => {
@@ -171,15 +172,25 @@ public partial class Timesheets : ContentPage
                     
                     if (result != null)
                     {
-                        button.Text = result; // Update button label
-                        student.timeslots[date] = new Timeslot{
-                            date = date,
-                            hours = result,
-                            description = student.timeslots[date].description // Update the data model
-                    };
-                };
+                        
+                        string change = await UpdateSlot(student.netid, date, student.timeslots[date].description, result);
+                        if (change != "success"){
 
-               };
+                        }
+                        else{
+                            button.Text = result;
+                            student.timeslots[date] = new Timeslot{
+                                date = date,
+                                hours = result,
+                                description = student.timeslots[date].description 
+                            };
+
+                        }
+                        
+
+                    };
+
+                };
                
                 var borderedCell = new Frame
                 {
@@ -206,6 +217,15 @@ public partial class Timesheets : ContentPage
 
 
 	}
+
+    public async Task<string> UpdateSlot(string netid, DateOnly date, string desc, string dur){
+        string result = await databaseService.EditTimeslot(netid, date, desc, dur);
+        if(result != "Success"){
+            await DisplayAlert("System Error", result, "OK" );
+            return "error";
+        }
+        return "success";
+    }
 
 }
 

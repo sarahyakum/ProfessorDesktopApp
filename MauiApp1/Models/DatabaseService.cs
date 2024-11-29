@@ -923,8 +923,6 @@ class DatabaseService{
                     cmd.Parameters.AddWithValue("@stu_netID", netId);
                     cmd.Parameters.AddWithValue("@start_date",date);
 
-                    
-
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync())
                         {
@@ -934,23 +932,11 @@ class DatabaseService{
                                 date = reader.GetDateOnly("TSDate"),
                                 description = reader.GetString("TSDescription"),
                                 hours = reader.GetString("TSDuration")
-                            }
-                                
-
-                                
-                                
+                                }
                             );
-                                
-                                
-                            
                         }
                     }
-
-                    
-
-
                 }
-                
             }
             catch(Exception ex){
                 Console.WriteLine(ex.Message);
@@ -960,6 +946,39 @@ class DatabaseService{
         return week;
     }
 
+    //Modifies student's timeslot based on given information to the professor
+    //Written by Sarah Yakum (sny200000)
+    public async Task<string> EditTimeslot(string netid, DateOnly date, string desc, string time){
+        string error_message = string.Empty;
+        using(var conn = new MySqlConnection(connectionString)){
+            try{
+                await conn.OpenAsync();
+                using(MySqlCommand cmd = new MySqlCommand("professor_edit_timeslot", conn)){
+                    cmd.CommandType=CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@student_netID", netid);
+                    cmd.Parameters.AddWithValue("@ts_date", date);
+                    cmd.Parameters.AddWithValue("@updated_description", desc);
+                    cmd.Parameters.AddWithValue("@updated_duration", time);
+
+                    
+
+                    var result = new MySqlParameter("@error_message", MySqlDbType.VarChar);
+                    result.Direction= System.Data.ParameterDirection.Output;
+                    result.Size = 255;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    error_message = result.Value?.ToString() ?? string.Empty;
+
+                }
+                return error_message;
+            }
+            catch(Exception ex){
+                return "Error: " + ex.Message;
+            }
+        }
+    }
 
 
     /* *************************************************************************************
