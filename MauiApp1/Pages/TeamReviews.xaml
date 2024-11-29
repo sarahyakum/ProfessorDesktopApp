@@ -20,11 +20,11 @@ Written by Sarah Yakum sny200000
                 Text="" FontSize="Title" HorizontalOptions="Center" />
             <Label x:Name="Time" FontSize="Large" HorizontalOptions="Center" ></Label>
             <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle"></Label>
-            <ListView ItemsSource="{Binding Teams}" HasUnevenRows="True" SeparatorColor="Black" SelectionMode="Single" Margin="10"  >
+            <CollectionView ItemsSource="{Binding Teams}"  SelectionMode="Single" Margin="10"  >
                 
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
+                        
                             <Frame BorderColor="Gray"
                            CornerRadius="5"
                            Margin="5"
@@ -55,12 +55,12 @@ Written by Sarah Yakum sny200000
                         </VerticalStackLayout>
                             </Frame>
                             
-                        </ViewCell>
+                        
                         
                     </DataTemplate>
-                </ListView.ItemTemplate>
+                </CollectionView.ItemTemplate>
 
-            </ListView>
+            </CollectionView>
 
         </StackLayout>
     </ScrollView>

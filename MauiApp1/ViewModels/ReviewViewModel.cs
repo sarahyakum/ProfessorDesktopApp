@@ -55,22 +55,22 @@ public class ReviewViewModel : INotifyPropertyChanged
     private async Task LoadTeamsAsync(string code){
         var curr_teams = await databaseService.GetTeams(code);
         var new_teams = new List<Team>();
+        var students = new List<Student>();
 
         foreach (var team in curr_teams)
         {
+            team.members = new List<Student>();
             var membersForTeam = await databaseService.GetTeamMembers(code, team.number);
-            team.members = membersForTeam; // Assign members directly to the team
-            new_teams.Add(team);
+            foreach(var member in membersForTeam){
+                var student = await databaseService.GetStudentsInfo(member.netid);
+                team.members.Add(student);
+            }
+           new_teams.Add(team);
         }
 
         Teams = new_teams;
     }
-    //Calls database service to add students to their respective teams
-    private async void LoadMembersAsync(string code, int number){
-        Members = await databaseService.GetTeamMembers(code, number);
-        List<Student> new_members = [.. members];
-        Members = new_members;
-    }
+
 
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

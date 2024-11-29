@@ -559,7 +559,7 @@ class DatabaseService{
             List<Student> students = new List<Student>();
             
             
-            string query = "SELECT StuNetID, StuName, StuUTDID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
+            string query = "SELECT StuNetID from MemberOf where TeamNum=@TeamNum and SecCode=@section_code";
             
             try{
                 await conn.OpenAsync();
@@ -572,9 +572,7 @@ class DatabaseService{
                     using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
                         while (await reader.ReadAsync()){
                             students.Add(new Student{
-                                netid= reader.GetString("StuNetID"),
-                                name = reader.GetString("StuName"),
-                                utdid = reader.GetString("StuUTDID")
+                                netid= reader.GetString("StuNetID")
                             }); 
                         }
                     }

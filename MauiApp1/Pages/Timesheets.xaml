@@ -22,6 +22,7 @@ Written by Sarah Yakum sny200000
                     Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
                 
                 <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle" Padding="5"></Label>
+                <Label Text="Click Student's name for total hours logged to date" HorizontalOptions="Center" FontSize="Medium" Padding="5"></Label>
                 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="10" Padding ="10">
                     <Button Text="Previous Week" Command="{Binding MoveToPreviousWeekCommand}" Padding ="10" />
@@ -32,7 +33,7 @@ Written by Sarah Yakum sny200000
            
                  
             <ScrollView>
-               <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="10" ColumnSpacing="10" >
+               <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="10" ColumnSpacing="10"  >
                     <!-- The grid will be populated dynamically in the code-behind -->
                      <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" /> <!-- Header row -->

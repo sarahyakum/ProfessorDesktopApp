@@ -7,6 +7,8 @@
 
 */
 
+using System.Collections.ObjectModel;
+
 namespace MauiApp1.Models;
 
 public class Team(){
