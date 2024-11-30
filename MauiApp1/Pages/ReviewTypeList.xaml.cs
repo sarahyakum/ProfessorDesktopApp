@@ -40,7 +40,7 @@ public partial class ReviewTypeList : ContentPage
 			return;
 		}
 
-        await Navigation.PushAsync(new TeamReviews(section, reviewPick));
+        await Navigation.PushAsync(new TeamReviews(id, section, reviewPick));
     }
 
 

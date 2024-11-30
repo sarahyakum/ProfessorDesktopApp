@@ -13,5 +13,5 @@ public class Score{
     public required string reviewer { get; set; }   
     public int? score { get; set; }
     public required string criteria { get; set; }
-    public string? average{ get; set; }
+    //public string? average{ get; set; }
 }

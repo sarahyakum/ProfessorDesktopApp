@@ -28,7 +28,7 @@ public partial class ManageSections : ContentPage
         BindingContext = viewModel;
     }
 
-    // Pulls up the list of sections immediately upon opening th epage 
+    // Pulls up the list of sections immediately upon opening the page 
     protected override async void OnAppearing()
     {
         base.OnAppearing();

@@ -34,7 +34,8 @@ public partial class Timesheets : ContentPage
         databaseService = new DatabaseService();
         
         //Moving from week to week
-        viewModel.WeekChanged += async (sender, args) => {
+        viewModel.WeekChanged +=  (sender, args) => {
+            
             try{
                 _ = InitializeAsync();
             }
@@ -53,6 +54,14 @@ public partial class Timesheets : ContentPage
 		
 
 	}
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if(BindingContext is TimesheetsViewModel viewModel)
+        {
+            await InitializeAsync();
+        }
+    }
     //Get all the students time slot data
     public async Task LoadDataAsync()
     {
@@ -138,8 +147,10 @@ public partial class Timesheets : ContentPage
             for (int columnIndex = 1; columnIndex <= weekDates.Count; columnIndex++)
             {
                 var date = weekDates[columnIndex - 1];
-                var hours = student.timeslots[date].hours;
-                
+                var hours = student?.timeslots?[date]?.hours;
+                if(student?.timeslots == null){
+                    return;
+                }
                 if (!student.timeslots.ContainsKey(date))
                 {
                     student.timeslots[date] = new Timeslot
@@ -152,7 +163,7 @@ public partial class Timesheets : ContentPage
                 var timeslot = student.timeslots[date];
                 var button = new Button
                 {
-                    Text = hours.ToString(),
+                    Text = hours?.ToString(),
                     FontSize = 20,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
@@ -175,6 +186,7 @@ public partial class Timesheets : ContentPage
                         
                         string change = await UpdateSlot(student.netid, date, student.timeslots[date].description, result);
                         if (change != "success"){
+                            
 
                         }
                         else{
@@ -209,14 +221,14 @@ public partial class Timesheets : ContentPage
        
        
        
-
+    /*
 	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
 		// Inside any page
 		var student = e.SelectedItem as Student;
 		string netid = student.netid;
 
 
-	}
+	}*/
 
     public async Task<string> UpdateSlot(string netid, DateOnly date, string desc, string dur){
         string result = await databaseService.EditTimeslot(netid, date, desc, dur);
