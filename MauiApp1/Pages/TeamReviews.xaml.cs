@@ -7,6 +7,7 @@
 
 */
 
+using MauiApp1.Models;
 using MauiApp1.ViewModels;
 namespace MauiApp1.Pages;
 
@@ -17,13 +18,17 @@ public partial class TeamReviews : ContentPage
 
 	private ReviewViewModel viewModel;
 
-	public TeamReviews(string netid, string code)
+	public TeamReviews(string code, PeerReview pr)
 	{
 		InitializeComponent();
         viewModel = new ReviewViewModel(code);
 		BindingContext = viewModel;
 		//SectionName.Text = className;
 		
+
+	}
+
+	private void OnMemberClicked(object sender, SelectedItemChangedEventArgs args){
 
 	}
 

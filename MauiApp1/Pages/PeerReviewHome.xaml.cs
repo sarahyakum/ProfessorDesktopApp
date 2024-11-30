@@ -26,7 +26,7 @@ public partial class PeerReviewHome : ContentPage
 
 	// Takes the professor to a page to choose between their sections 
 	private async void OnViewButtonClicked(object sender, EventArgs e){
-		await Navigation.PushAsync(new TeamReviews(professorID, secCode));
+		await Navigation.PushAsync(new ReviewTypeList(professorID, secCode));
 
 	}
 

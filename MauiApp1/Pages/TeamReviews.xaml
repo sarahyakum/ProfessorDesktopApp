@@ -37,7 +37,7 @@ Written by Sarah Yakum sny200000
                                     FontAttributes="Bold"
                                     FontSize="Medium"
                                     Margin="0,5,0,5" />
-                                <CollectionView ItemsSource="{Binding members}" SelectionMode="Single">
+                                <CollectionView ItemsSource="{Binding members}" SelectionMode="Single" ItemSelected="">
                                     <CollectionView.EmptyView>
                                         <Label Text="No members available" HorizontalOptions="Center" VerticalOptions="Center" />
                                     </CollectionView.EmptyView>
