@@ -8,12 +8,13 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="MauiApp1.Pages.ViewScoresPopup" >
     <StackLayout>
-         <Label Text ="{Binding review_type}" FontSize="Large" HorizontalOptions="Center" Padding="5"></Label>
-        <Label Text="{Binding Student.name, StringFormat='{0} Peer Reviews'}" FontSize="Large" HorizontalOptions="Center" Padding="5"/>
+        <Label Text ="{Binding ReviewType}" FontSize="Large" HorizontalOptions="Center" Padding="5" FontAttributes="Bold" TextColor="Black"></Label>
+        <Label Text="{Binding Reviewed.name, StringFormat='{0}\'s Peer Review Scores'}" FontSize="Medium" HorizontalOptions="Center" Padding="5" FontAttributes="Bold" TextColor="DimGray"/>
         
-    
     <Grid>
-        <Frame VerticalOptions="Center">
+        <Frame VerticalOptions="Center" BorderColor="DarkViolet" BackgroundColor="Lavender">
+
+            
             
        
         

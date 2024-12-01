@@ -15,5 +15,6 @@ public class Timeslot{
     
     public string? hours { get; set; }
     public string? description { get; set; }
+    public string? total { get; set; }
 
 } 

@@ -22,7 +22,6 @@ Written by Sarah Yakum sny200000
                     Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
                 
                 <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle" Padding="5"></Label>
-                <Label Text="Click Student's name for total hours logged to date" HorizontalOptions="Center" FontSize="Medium" Padding="5"></Label>
                 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="10" Padding ="10">
                     <Button Text="Previous Week" Command="{Binding MoveToPreviousWeekCommand}" Padding ="10" />

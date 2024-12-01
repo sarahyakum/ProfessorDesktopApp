@@ -3,7 +3,7 @@
         From the Manage Sections Page when the professor chooses to edit a section 
         Shows a pop up with the current information in text input fields where it can be altered
 
-    Written entirely by Emma Hockett for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
+    Written entirely by Sarah Yakum for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
         NetID: sny200000
 
 */
@@ -32,6 +32,7 @@ public partial class ViewScoresPopup : ContentPage
         this.netid = netid;
         this.review = review;
         this.student = student;
+        
         
         viewModel = new ScoresViewModel(netid, review, student);
         

@@ -25,14 +25,21 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     public ICommand MoveToNextWeekCommand { get; }
     public ICommand MoveToPreviousWeekCommand { get; }
     
-    
+    //private string total;
     private DateOnly currentWeekStart;
     public string? currentWeekRange;
     private int weekOffset = 0;
     private List<DateOnly> window = new List<DateOnly>();
     private ObservableCollection<Student> students = new ObservableCollection<Student>();
     public event PropertyChangedEventHandler? PropertyChanged;
-    
+    /*
+    public string Total{
+        get => total;
+        set{
+            total=value;
+            OnPropertyChanged(nameof(Total));
+        }
+    }*/
     //Sets list of students
     public ObservableCollection<Student> Students{
         get => students;
@@ -125,6 +132,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     public async Task LoadStudentsAsync(string code){
         
         Students = await databaseService.GetStudentAndInfo(code);
+
         await LoadWeeklyTimeslotsAsync();
 
 
@@ -149,6 +157,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         {
             try{
             var timeslots = await databaseService.GetWeekTimeslots(weekStart, student.netid);
+            string total = await databaseService.GetTotalTime(student.netid);
             
             if (student.timeslots == null)
             {
@@ -160,6 +169,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
             {
                 if(timeslot!=null){
                     student.timeslots[timeslot.date] = timeslot;
+                    student.timeslots[timeslot.date].total = total;
                 }
                 
             }
@@ -173,7 +183,8 @@ public class TimesheetsViewModel : INotifyPropertyChanged
                     {
                         date = date,
                         hours = "00:00",  // Default value
-                        description = "No entry"
+                        description = "Given student description on this date",
+                        total = "00:00"
                     };
                 }
             }}

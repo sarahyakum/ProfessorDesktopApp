@@ -978,6 +978,44 @@ class DatabaseService{
         }
     }
 
+    //Retrieves the total amount of time the student has logged to date
+    //Written by Sarah Yakum (sny200000)
+    public async Task<string> GetTotalTime(string netid){
+
+        int total = 0;
+        string hours = string.Empty;
+        string minutes = string.Empty;
+               
+        using(var conn = new MySqlConnection(connectionString)){
+           
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("student_total_time", conn)){
+                    cmd.CommandType=CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@student_netID", netid);
+                    
+                    var result = new MySqlParameter("@student_total", MySqlDbType.Int32);
+                    result.Direction=ParameterDirection.Output;
+                    cmd.Parameters.Add(result);
+
+                    await cmd.ExecuteNonQueryAsync();
+
+                    total = Convert.ToInt32(result.Value);
+                }
+            }
+            catch (Exception ex){
+                    Console.Write(ex.Message);
+
+            }
+        }
+
+        hours = (total / 60).ToString();
+        minutes = (total % 60).ToString();
+
+
+        return hours +":"+ minutes;
+
+    }
 
     /* *************************************************************************************
     *   Procedure Calls for Peer Reviews                                                   *

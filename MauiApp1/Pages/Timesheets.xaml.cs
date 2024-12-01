@@ -128,9 +128,10 @@ public partial class Timesheets : ContentPage
 
             // Add student name as row header
         WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            var total = student.timeslots?.FirstOrDefault().Value?.total;
             var nameLabel = new Label
             {
-                Text = student.name,
+                Text = student.name + " - "+ total,
                 FontAttributes = FontAttributes.Bold,
                 FontSize= 20,
                 VerticalOptions = LayoutOptions.Center
@@ -157,7 +158,7 @@ public partial class Timesheets : ContentPage
                     {
                         date = date,
                         hours = "00:00",
-                        description = "No entry"
+                        description = "Given student description on this date"
                     };
                 }
                 var timeslot = student.timeslots[date];
@@ -184,11 +185,12 @@ public partial class Timesheets : ContentPage
                     if (result != null)
                     {
                         if(student.timeslots[date].description == null){
-                            student.timeslots[date].description = "";
+                            student.timeslots[date].description = "Given student description on this date";
                         }
-                        string text = student.timeslots[date].description ?? "";
+                        string text = student.timeslots[date].description?? "Given student description on this date";
                         string change = await UpdateSlot(student.netid, date, text, result);
                         if (change != "success"){
+                            await DisplayAlert("Error", "Please try again later.", "OK");
                             
 
                         }

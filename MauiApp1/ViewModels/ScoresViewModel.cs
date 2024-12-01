@@ -24,9 +24,7 @@ public class ScoresViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Scores));
         }
     }
-    private Student reviewed = new Student(){
-        netid = stu_netid
-    };
+    private Student reviewed;
 
     public Student Reviewed {
         get => reviewed;
@@ -39,8 +37,16 @@ public class ScoresViewModel : INotifyPropertyChanged
     public string professor_netid;
     public string sec_code;
     public string review_type;
+    public string ReviewType {
+        get => review_type;
+        set{
+            review_type = value;
+            OnPropertyChanged(nameof(ReviewType));
+        }
+    }
     public ScoresViewModel(string prof_id, PeerReview review, Student student ){
         databaseService = new DatabaseService();
+        reviewed = student;
         stu_netid = student.netid;
         professor_netid = prof_id;
         sec_code = review.section;
@@ -53,6 +59,7 @@ public class ScoresViewModel : INotifyPropertyChanged
     }
 
     public async Task StartAsync(string prof_id, PeerReview review, Student student ){
+        reviewed=student;
         stu_netid = student.netid;
         professor_netid = prof_id;
         sec_code = review.section;
