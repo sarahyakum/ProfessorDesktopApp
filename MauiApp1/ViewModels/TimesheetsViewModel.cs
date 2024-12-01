@@ -21,13 +21,13 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     private DatabaseService databaseService;
     
     //Handles week changes
-    public event EventHandler WeekChanged;
+    public event EventHandler? WeekChanged;
     public ICommand MoveToNextWeekCommand { get; }
     public ICommand MoveToPreviousWeekCommand { get; }
     
     
     private DateOnly currentWeekStart;
-    private string currentWeekRange;
+    public string? currentWeekRange;
     private int weekOffset = 0;
     private List<DateOnly> window = new List<DateOnly>();
     private ObservableCollection<Student> students = new ObservableCollection<Student>();
@@ -71,7 +71,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     //Sets up the range header
     public string CurrentWeekRange
     {
-        get => currentWeekRange;
+        get => currentWeekRange?? "";
         set
         {
             if (currentWeekRange != value)
@@ -214,8 +214,8 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged( string propertyName )  {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         if (propertyName == nameof(CurrentWeekRange))
-    {
-        WeekChanged?.Invoke(this, EventArgs.Empty); // Custom event for the week change
-    }
+        {
+            WeekChanged?.Invoke(this, EventArgs.Empty); // Custom event for the week change
+        }
     }
 }

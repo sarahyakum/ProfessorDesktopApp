@@ -37,7 +37,8 @@ public partial class TeamReviews : ContentPage
 		if (memberPick == null){
 			return;
 		}
-		await Navigation.PushAsync(new ViewScoresPopup(professor_id, preview, memberPick));
+		Student stu = memberPick;
+		await Navigation.PushAsync(new ViewScoresPopup(professor_id, preview, stu));
 		//var popup = new ViewScoresPopup(professor_id, preview, memberPick);
 		//await this.ShowPopupAsync(popup);
 

@@ -183,8 +183,11 @@ public partial class Timesheets : ContentPage
                     
                     if (result != null)
                     {
-                        
-                        string change = await UpdateSlot(student.netid, date, student.timeslots[date].description, result);
+                        if(student.timeslots[date].description == null){
+                            student.timeslots[date].description = "";
+                        }
+                        string text = student.timeslots[date].description ?? "";
+                        string change = await UpdateSlot(student.netid, date, text, result);
                         if (change != "success"){
                             
 

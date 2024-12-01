@@ -21,8 +21,7 @@ public partial class ReviewTypeList : ContentPage
     public ReviewViewModel viewModel;
     string id;
     string section;
-    DateOnly start;
-    DateOnly end;
+   
 	
 	public ReviewTypeList(string netid, string code){
 		InitializeComponent();

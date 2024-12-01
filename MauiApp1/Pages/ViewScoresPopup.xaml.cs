@@ -22,21 +22,23 @@ public partial class ViewScoresPopup : ContentPage
     private ScoresViewModel viewModel;
     public ObservableCollection<Score> scores { get; set; } = new ObservableCollection<Score>();
     private DatabaseService databaseService;
-    public string netid; 
-    public PeerReview review;
-    public Student student;
+    public string?  netid; 
+    public PeerReview? review;
+    public Student? student;
     
     public ViewScoresPopup(string netid, PeerReview review, Student student)
     {
         
-
+        this.netid = netid;
+        this.review = review;
+        this.student = student;
         
         viewModel = new ScoresViewModel(netid, review, student);
         
         BindingContext = viewModel;
         InitializeComponent();
         databaseService = new DatabaseService();
-        viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        //viewModel.PropertyChanged += ViewModel_PropertyChanged;
         
         try{
             _ = InitializeAsync(netid, review, student);
