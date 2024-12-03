@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+    Page layout for the professor to choose a what review type they want to view scores for
+    
+    Written by Sarah Yakum sny200000
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+
+             x:Class="CS4485_Team75.Pages.ReviewTypeList"
+             Title="Reviews">
+
+    
+    <ScrollView>
+        <StackLayout Padding="20">
+            <Label Text="Reviews" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="Select a a review type:" FontSize="Medium" HorizontalOptions="Center" />
+            <ListView ItemsSource="{Binding PeerReviews}" SeparatorColor="Black" SelectionMode="Single" ItemSelected="OnReviewTypeClicked" Margin="10">
+            
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell> 
+                            <Frame BorderColor="Gray" Padding="10">
+                            <VerticalStackLayout>
+                                
+                                <Label FontSize="Medium">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding type}" FontAttributes="Bold"  />
+                                            <Span Text= ": " />
+                                            <Span Text="{Binding startDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                                            <Span Text=" - " />
+                                            <Span Text="{Binding endDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                            </VerticalStackLayout>
+                            
+                        </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+            
+            
+        </StackLayout>
+        
+    </ScrollView>
+      
+</ContentPage>
