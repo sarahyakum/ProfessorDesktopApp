@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+ <!-- 
+Page layout for the professors peer reviews allows for professors to select
+between viewing their classes teams scores or creating more peer reviews.
+Written by Sarah Yakum sny200000
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CS4485_Team75.Pages.PeerReviewHome"
+            Title="Peer Review">
+    
+    <ScrollView>
+         <VerticalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+
+            <Label Text="Peer Review Page" FontSize="Title" HorizontalOptions="Center"/>
+
+            <HorizontalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+        
+                <Button
+                    x:Name="ViewPeerReviews"
+                    Text="View Peer Reviews" 
+                    Clicked="OnViewButtonClicked"
+                />
+
+                <Button
+                    x:Name="PeerReviewSetUp"
+                    Text="Set Up Criteria and Peer Review" 
+                    Clicked="OnSetUpButtonClicked"
+                />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
