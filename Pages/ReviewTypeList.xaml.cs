@@ -3,7 +3,7 @@
         Navigates the professor through the different review types they have
         in their section
 
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on December 1, 2024
         NetID: sny200000
 */ 
 
@@ -32,6 +32,7 @@ public partial class ReviewTypeList : ContentPage
 		
 	}
 
+    // Sends professor to view the reviews by teams based on selection
     private async void OnReviewTypeClicked(object sender, SelectedItemChangedEventArgs e){
         var reviewPick = e.SelectedItem as PeerReview;
         if(reviewPick == null)

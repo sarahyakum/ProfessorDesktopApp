@@ -2,7 +2,7 @@
     ReviewModel Class
         Handles accessing all the teams their information for the peer reviews
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 1, 2024
         NETID: sny200000
 */
 
@@ -54,13 +54,15 @@ public class ReviewViewModel : INotifyPropertyChanged
         _ = InitializeAsync(code);
     }
 
+    //Begins process for getting data
     private async Task InitializeAsync(string code)
     {
         await LoadTeamsAsync(code);
         GetPRAsync(code);
     }
-    //calls database service that retrieves teams and members based on a section and adds to 
-    //team class for the professor
+
+    // Calls database service that retrieves teams and members based on a section and adds to 
+    //  team class for the professor
     private async Task LoadTeamsAsync(string code){
         var curr_teams = await databaseService.GetTeams(code);
         var new_teams = new List<Team>();
@@ -80,6 +82,7 @@ public class ReviewViewModel : INotifyPropertyChanged
         Teams = new_teams;
     }
 
+    // Retrieves peer review information based on the section code
     public async void GetPRAsync(string code){
         PeerReviews = await databaseService.GetPeerReviews(code);
     }

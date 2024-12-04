@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <!-- 
-Page layout for the user to log into the desktop app, this will be the first page seen upon turning on
-Written by Sarah Yakum sny200000
+    Page layout for the user to log into the desktop app, this will be the first page seen upon turning on
+    
+    Written by Sarah Yakum (sny200000) for CS 4485.0W1, Senior Design Project, Started on October 10, 2024
 -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"

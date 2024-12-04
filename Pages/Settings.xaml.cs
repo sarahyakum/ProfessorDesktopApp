@@ -5,7 +5,7 @@
     Allows the professor to manage sections, students, teams, or change their password
 
 
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 23, 2024
         NetID: sny200000
 
 

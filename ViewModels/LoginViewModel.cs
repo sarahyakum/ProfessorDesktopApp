@@ -3,8 +3,7 @@
         Handles the authentication between the user interface and the database for the professor login
         and changing password
 
-        
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 24, 2024
         NETID: sny200000
 
 */

@@ -9,7 +9,7 @@
             Incorrect Login: Tells the user their login information was incorrect and remains on this page
 
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 10, 2024
         NetID: sny200000
 
 

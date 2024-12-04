@@ -5,7 +5,7 @@
 		The back arrow returns the professor to their home page
 
 	
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 30, 2024
         NetID: sny200000
 */
 

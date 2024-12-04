@@ -3,7 +3,7 @@
         Handles creating the peer reviews and the criteria to then be populated in the database
         based on section given
     
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 7, 2024
         NETID: sny200000
 
     Worked on by Emma Hockett for CS 4485.0W1, Senior Design Project, Started on November 20, 2024

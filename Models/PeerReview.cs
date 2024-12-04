@@ -4,7 +4,7 @@
         The Peer Review created with this class will set up the dates and 
         given criteria of a section for the students to submit reviews
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 12, 2024
         NetID: sny200000
 */
 

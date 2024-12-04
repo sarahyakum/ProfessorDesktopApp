@@ -30,7 +30,7 @@
 
     The procedures handle most of the validation for the database and return a string of the status of the procedure. 
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 24, 2024
         NETID: sny200000
 
     Written by Emma Hockett for CS 4485.0W1, Senior Design Project, Started on November 12, 2024

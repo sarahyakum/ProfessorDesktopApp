@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <!-- 
-Page layout for the professor to view timesheets of all students for a specific section
-Written by Sarah Yakum sny200000
+    Page layout for the professor to view timesheets of all students for a specific section
+    Written by Sarah Yakum sny200000 for CS 4485.0W1, Senior Design Project, Started on October 14, 2024
 -->
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -10,12 +10,7 @@ Written by Sarah Yakum sny200000
              
              x:Class="CS4485_Team75.Pages.Timesheets"
              Title="Timesheets">
-
-   
-
-    
-        
-               
+ 
        <StackLayout>
             
                 <Label 

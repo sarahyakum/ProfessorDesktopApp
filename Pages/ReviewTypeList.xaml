@@ -2,7 +2,7 @@
 <!-- 
     Page layout for the professor to choose a what review type they want to view scores for
     
-    Written by Sarah Yakum sny200000
+    Written by Sarah Yakum sny200000 for CS 4485.0W1, Senior Design Project, Started on December 1, 2024
 -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"

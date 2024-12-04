@@ -2,7 +2,7 @@
     TimesheetsViewModel Class
         View model for getting each students current recorded time sheet
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 7, 2024
         NETID:sny200000
 */
 using System.Linq.Expressions;
@@ -91,7 +91,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     
 
     
-    //Handles acquire data for the timesheets page
+    //Handles acquiring data for the timesheets page
     public TimesheetsViewModel(string section)
     {
         databaseService = new DatabaseService();
@@ -109,19 +109,17 @@ public class TimesheetsViewModel : INotifyPropertyChanged
         
     }
 
-    //Begin the functionality
+    //Begins the retrieval process
     public async Task StartAsync(string section){
         if (currentWeekStart == DateOnly.MinValue)
         {
             CurrentWeekStart = GetStartOfWeek(DateOnly.FromDateTime(DateTime.Today));
         }
-
-        // Load students and initialize data
         
         await LoadStudentsAsync(section);
         
     }
-    //get Monday of the week
+    //Starts week from monday
     private DateOnly GetStartOfWeek(DateOnly date)
     {
         int daysToSubtract = (int)date.DayOfWeek - (int)DayOfWeek.Monday;
@@ -132,27 +130,25 @@ public class TimesheetsViewModel : INotifyPropertyChanged
     public async Task LoadStudentsAsync(string code){
         
         Students = await databaseService.GetStudentAndInfo(code);
-
         await LoadWeeklyTimeslotsAsync();
-
 
     }
 
-    //changes the range
+    //changes the range of the week
     private void UpdateCurrentWeekRange()
     {
         var currentWeekEnd = currentWeekStart.AddDays(6);
         CurrentWeekRange = $"{currentWeekStart:MMM dd} - {currentWeekEnd:MMM dd}";
     }
 
-    //Accesses the database to get the current weeks timesheets
+    //calls the database to get the current weeks timesheets
     public async Task LoadWeeklyTimeslotsAsync()
     {
         try{
         var weekStart = CurrentWeekStart;
         var weekEnd = weekStart.AddDays(6);
 
-        //Acquire timeslots for all students
+        //get timeslots for all students
         var tasks = students.Select(async student =>
         {
             try{
@@ -164,7 +160,6 @@ public class TimesheetsViewModel : INotifyPropertyChanged
                 student.timeslots = new Dictionary<DateOnly, Timeslot>(); // Initialize if null
             }
 
-            //update time slots
             foreach (var timeslot in timeslots)
             {
                 if(timeslot!=null){
@@ -173,8 +168,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
                 }
                 
             }
-
-            //Adds 0 slot for empty slots
+            
             for (var date = weekStart; date <= weekEnd; date = date.AddDays(1))
             {
                 if (!student.timeslots.ContainsKey(date))

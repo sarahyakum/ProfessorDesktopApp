@@ -1,9 +1,9 @@
 /*
 	Timesheets Page:
-		Displays the Time sheets FOR A SPECIFIC SECTION
+		Displays the table for each students time sheet in a section.
+        Also shows the total time logged to dat by the student's name
 
-
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ... ADD THIS 
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 14, 2024
         NetID: sny200000 
 */
 
@@ -18,14 +18,14 @@ namespace CS4485_Team75.Pages;
 public partial class Timesheets : ContentPage
 {
 	public string section;
-    public DateOnly Timestamp { get; set; }
    	private TimesheetsViewModel viewModel;
+    private DatabaseService databaseService;
+    public DateOnly Timestamp { get; set; }
     public ObservableCollection<Student> students { get; set; } = new ObservableCollection<Student>();
 
-    private DatabaseService databaseService;
 	public Timesheets(string className, string code)
 	{
-        //get binding context from view model
+        // Get binding context from view model
         section = code;
 		viewModel = new TimesheetsViewModel(code);
 		BindingContext = viewModel;
@@ -33,7 +33,7 @@ public partial class Timesheets : ContentPage
 		SectionName.Text = className;
         databaseService = new DatabaseService();
         
-        //Moving from week to week
+        // Moving from week to week
         viewModel.WeekChanged +=  (sender, args) => {
             
             try{
@@ -54,15 +54,16 @@ public partial class Timesheets : ContentPage
 		
 
 	}
+    //Handles refresh of page
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if(BindingContext is TimesheetsViewModel viewModel)
+        if(BindingContext is TimesheetsViewModel)
         {
             await InitializeAsync();
         }
     }
-    //Get all the students time slot data
+    // Gets all the students time slot data
     public async Task LoadDataAsync()
     {
         await viewModel.GetTimeFrameAsync(section);
@@ -71,6 +72,7 @@ public partial class Timesheets : ContentPage
             students.Add(student);
         }
     }
+
     //Starts the view models tasks
     private async Task InitializeAsync()
     {
@@ -103,7 +105,7 @@ public partial class Timesheets : ContentPage
         //sets up the column headers
         for (int columnIndex = 1; columnIndex <= weekDates.Count; columnIndex++)
         {
-        WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            WorkHoursGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             
             
             var dateLabel = new Label
@@ -127,7 +129,7 @@ public partial class Timesheets : ContentPage
             var student = students[rowIndex - 1];
 
             // Add student name as row header
-        WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            WorkHoursGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             var total = student.timeslots?.FirstOrDefault().Value?.total;
             var nameLabel = new Label
             {
@@ -174,7 +176,7 @@ public partial class Timesheets : ContentPage
                     HeightRequest = 95  // Set cell height
                 };
 
-                //THIS NEEDS TO BE CONNECTED TO THE DB
+                //Handles updating students time logged
                 button.Clicked += async (sender, e) =>
                 {
                     string result = await DisplayPromptAsync($"Edit Hours for: \"{student.timeslots[date].description}\"",  $"\nEnter hours for {student.netid} on {date}", 
@@ -212,29 +214,18 @@ public partial class Timesheets : ContentPage
                 var borderedCell = new Frame
                 {
                     Content = button,
-                    //Padding = 10,  
-                    //BorderColor = Colors.Black,
-                    //BackgroundColor = Colors.LightGray,
                     WidthRequest = 100,
                     HeightRequest = 100
                 };
 
                 WorkHoursGrid.Add(borderedCell, columnIndex, rowIndex); // Dynamic column, dynamic row
-            
-        }}
+            }
         }
+    }
        
        
        
-    /*
-	private async void OnStudentSelected(object sender, SelectedItemChangedEventArgs e){
-		// Inside any page
-		var student = e.SelectedItem as Student;
-		string netid = student.netid;
-
-
-	}*/
-
+    // Handles input from the professor to update student's timeslot
     public async Task<string> UpdateSlot(string netid, DateOnly date, string desc, string dur){
         string result = await databaseService.EditTimeslot(netid, date, desc, dur);
         if(result != "Success"){

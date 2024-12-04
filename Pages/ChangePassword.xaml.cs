@@ -6,7 +6,7 @@
 
         This page will automatically come up for the first login to the system when their password is their UTDID.
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ...
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on October 30, 2024
         NetID: sny200000
 */
 

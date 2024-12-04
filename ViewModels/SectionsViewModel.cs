@@ -2,7 +2,7 @@
    SectionsViewModel Class 
         Getting the data of each section for the professor
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 7, 2024
         NETID:sny200000
 */
 namespace CS4485_Team75.ViewModels;

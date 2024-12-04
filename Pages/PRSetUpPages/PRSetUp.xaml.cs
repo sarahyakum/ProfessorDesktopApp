@@ -7,7 +7,7 @@
 		Displays the current peer reviews for the section 
 		Allows the professor to add additional peer reviews 
 
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 1, 2024
         NetID: sny200000
 
 	Worked on by Emma Hockett for CS 4485.0W1, Senior Design Project, Started on November 20, 2024

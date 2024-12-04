@@ -2,7 +2,7 @@
 	Team Reviews Page:
 		List of Teams per section and all the students and peer reviews within the team
 
-	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+	Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 1, 2024
         NetID: sny200000
 
 */
@@ -25,22 +25,21 @@ public partial class TeamReviews : ContentPage
 		InitializeComponent();
         viewModel = new ReviewViewModel(code);
 		BindingContext = viewModel;
-		//SectionName.Text = className;
 		professor_id=netid;
 		preview = pr;
 		
 
 	}
 
+	// Navigates to individuals scores from team members in the team selected
 	private async void OnMemberClicked(object sender, SelectionChangedEventArgs e){
 		var memberPick = e.CurrentSelection[0] as Student;
 		if (memberPick == null){
 			return;
 		}
 		Student stu = memberPick;
-		await Navigation.PushAsync(new ViewScoresPopup(professor_id, preview, stu));
-		//var popup = new ViewScoresPopup(professor_id, preview, memberPick);
-		//await this.ShowPopupAsync(popup);
+		await Navigation.PushAsync(new ViewScores(professor_id, preview, stu));
+		
 
 
 	}

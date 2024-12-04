@@ -1,10 +1,10 @@
 /*
-    View Scores Popup:
-        From the Manage Sections Page when the professor chooses to edit a section 
-        Shows a pop up with the current information in text input fields where it can be altered
+    View Score Page:
+        Shows table for selected student's peer review scores from team members
+        Allows for professor to update the score if need be
 
-    Written entirely by Sarah Yakum for CS 4485.0W1 Senior Design Prject, Started on November 19, 2024
-        NetID: sny200000
+   Written by Sarah Yakum (sny200000) for CS 4485.0W1 Started on December 1, 2024 
+
 
 */
 
@@ -16,17 +16,18 @@ using System.Collections.ObjectModel;
 namespace CS4485_Team75.Pages;
 
 
-public partial class ViewScoresPopup : ContentPage 
+public partial class ViewScores : ContentPage 
 {
     
     private ScoresViewModel viewModel;
-    public ObservableCollection<Score> scores { get; set; } = new ObservableCollection<Score>();
     private DatabaseService databaseService;
     public string?  netid; 
     public PeerReview? review;
     public Student? student;
+    public ObservableCollection<Score> scores { get; set; } = new ObservableCollection<Score>();
+
     
-    public ViewScoresPopup(string netid, PeerReview review, Student student)
+    public ViewScores(string netid, PeerReview review, Student student)
     {
         
         this.netid = netid;
@@ -39,8 +40,10 @@ public partial class ViewScoresPopup : ContentPage
         BindingContext = viewModel;
         InitializeComponent();
         databaseService = new DatabaseService();
+        
         //viewModel.PropertyChanged += ViewModel_PropertyChanged;
         
+        // Begin obtaining the data to show
         try{
             _ = InitializeAsync(netid, review, student);
         }
@@ -49,6 +52,8 @@ public partial class ViewScoresPopup : ContentPage
         }
         //LoadScoresAndPopulateGrid();
     }
+
+    // Calls database to get student's peer review scores
      public async Task LoadDataAsync()
     {
         await viewModel.GetScoresAsync(viewModel.professor_netid, viewModel.sec_code, viewModel.Reviewed.netid, viewModel.review_type);
@@ -59,7 +64,7 @@ public partial class ViewScoresPopup : ContentPage
         }
     }
 
-
+    // Begins the process of obtaining data when called
     private async Task InitializeAsync(string netid, PeerReview review, Student student){
         try{
             scores.Clear();
@@ -71,12 +76,8 @@ public partial class ViewScoresPopup : ContentPage
             Console.WriteLine(ex.Message);
         }  
     }
-    /*private async void LoadScoresAndPopulateGrid()
-{
-    await viewModel.GetScoresAsync(viewModel.professor_netid, viewModel.sec_code, viewModel.Reviewed.netid, viewModel.review_type);
-    PopulateGrid();
-}*/
-
+    
+    //Handles changes to the data
     private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ScoresViewModel.Scores))
@@ -85,7 +86,7 @@ public partial class ViewScoresPopup : ContentPage
         }
     }
 
-
+    // Creates the table view for the student's Peer Review results
     private void PopulateGrid(){
         ScoreGrid.Clear();
         ScoreGrid.ColumnDefinitions.Clear();
@@ -174,8 +175,5 @@ public partial class ViewScoresPopup : ContentPage
 
         }
     }
-
-    
-
     
 }

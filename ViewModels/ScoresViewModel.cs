@@ -1,8 +1,8 @@
 /*
-    ReviewModel Class
-        Handles accessing all the teams their information for the peer reviews
+    Scores ViewModel Class
+        Handles accessing all the scores for that student from their team members
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on ....
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started on November 30, 2024
         NETID: sny200000
 */
 namespace CS4485_Team75.ViewModels;
@@ -52,12 +52,10 @@ public class ScoresViewModel : INotifyPropertyChanged
         sec_code = review.section;
         review_type = review.type;
         _ = GetScoresAsync(professor_netid, sec_code, stu_netid, review_type );
-        
-
-
 
     }
 
+    // Begin the process of retrieving the data
     public async Task StartAsync(string prof_id, PeerReview review, Student student ){
         reviewed=student;
         stu_netid = student.netid;
@@ -68,6 +66,8 @@ public class ScoresViewModel : INotifyPropertyChanged
         
     }
 
+
+    // Calls database to retrieve data
    public async Task GetScoresAsync(string prof_id, string code, string stu_id, string type)
     {
         try

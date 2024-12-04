@@ -8,7 +8,7 @@
                 - Professors create the peer reviews that the students do in their section
                 - Professors should be able to see the scores for the peer reviews, both given and written by the students in their section
 
-    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in ...
+    Written by Sarah Yakum for CS 4485.0W1, Senior Design Project, Started in October 30, 2024
         NetID: sny200000
 
 */
@@ -19,12 +19,9 @@ namespace CS4485_Team75.Models;
 public class Student{
     public string? name{get;set;}
     public required string netid{get;set;}
-
     public string? utdid {get;set;}
     public string? section{get;set;}
-
     public Dictionary<DateOnly,Timeslot>? timeslots{get;set;}
-
     public List<Score>? scores{get;set;}
 
 }
