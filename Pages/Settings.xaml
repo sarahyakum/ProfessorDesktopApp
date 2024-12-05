@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+    Page layout for the professor to add sections, add students, add team members, and change password
+    Written by Sarah Yakum sny200000 for CS 4485.0W1, Senior Design Project, Started on October 23, 2024
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CS4485_Team75.Pages.Settings"
+             Title="Settings">
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30" 
+            Spacing="10"
+            HorizontalOptions="Center">
+        <Label 
+            Text="Welcome to the Settings Page!"
+            SemanticProperties.HeadingLevel="Level1" 
+            HorizontalOptions="Center" />
+        
+
+        <Button
+            x:Name="AddSectionsButton"
+            Text="Manage Sections" 
+            Clicked="OnManageSectionsButtonClicked"
+        />
+
+        <Button
+            x:Name="AddStudentsButton"
+            Text="Manage Students" 
+            Clicked="OnManageStudentsButtonClicked"
+        />
+        <Button
+            x:Name="AddTeamMembersButton"
+            Text="Manage Teams" 
+            Clicked="OnManageTeamsButtonClicked"
+        />
+        <Button
+            x:Name="ChangePasswordButton"
+            Text="Change Password" 
+            Clicked="OnChangePasswordButtonClicked"
+            
+        />
+        </VerticalStackLayout>
+    </ScrollView>
+     
+</ContentPage>

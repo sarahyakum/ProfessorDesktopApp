@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- 
+    Page layout for the professor to view timesheets of all students for a specific section
+    Written by Sarah Yakum sny200000 for CS 4485.0W1, Senior Design Project, Started on October 14, 2024
+-->
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             x:Class="CS4485_Team75.Pages.Timesheets"
+             Title="Timesheets">
+ 
+       <StackLayout>
+            
+                <Label 
+                    Text="Student Timesheets" FontSize="Title" HorizontalOptions="Center" />
+                
+                <Label x:Name="SectionName" HorizontalOptions="Center" FontSize="Subtitle" Padding="5"></Label>
+                
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="10" Padding ="10">
+                    <Button Text="Previous Week" Command="{Binding MoveToPreviousWeekCommand}" Padding ="10" />
+                    <Label Text="{Binding CurrentWeekRange}" Padding ="10"/>
+                    <Button Text="Next Week" Command="{Binding MoveToNextWeekCommand}" Padding ="10"/>
+                </StackLayout>
+            
+           
+                 
+            <ScrollView>
+               <Grid x:Name="WorkHoursGrid" Padding="5" RowSpacing="10" ColumnSpacing="10"  >
+                    <!-- The grid will be populated dynamically in the code-behind -->
+                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /> <!-- Header row -->
+                        <RowDefinition Height="*" />   <!-- Data rows -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" /> <!-- Header column -->
+                        <ColumnDefinition Width="*" />   <!-- Data columns -->
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </ScrollView>
+        </StackLayout>
+
+
+        
+     
+</ContentPage>
+ 
