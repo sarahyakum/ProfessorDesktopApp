@@ -16,6 +16,14 @@ public class ScoresViewModel : INotifyPropertyChanged
     private DatabaseService databaseService;
     
     private List<Score> scores = new List<Score>();
+    private Dictionary< string, double> averages = new Dictionary< string, double>();
+    public Dictionary< string, double> Averages{
+        get => averages;
+        set{
+            averages = value;
+            OnPropertyChanged(nameof(Averages));
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     public List<Score> Scores{
         get => scores;
@@ -52,6 +60,7 @@ public class ScoresViewModel : INotifyPropertyChanged
         sec_code = review.section;
         review_type = review.type;
         _ = GetScoresAsync(professor_netid, sec_code, stu_netid, review_type );
+        _ = GetAveragesAsync(professor_netid, sec_code, stu_netid, review_type );
 
     }
 
@@ -63,7 +72,7 @@ public class ScoresViewModel : INotifyPropertyChanged
         sec_code = review.section;
         review_type = review.type;
         await GetScoresAsync(professor_netid, sec_code, stu_netid, review_type );
-        
+        await GetAveragesAsync(professor_netid, sec_code, stu_netid, review_type );
     }
 
 
@@ -74,6 +83,20 @@ public class ScoresViewModel : INotifyPropertyChanged
         {
             var reviews = await databaseService.GetReviews(prof_id, code, stu_id, type);
             Scores = reviews ?? new List<Score>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching scores: {ex.Message}");
+        }
+    }
+
+    //Get Student's average
+    public async Task GetAveragesAsync(string prof_id, string code, string stu_id, string type){
+        
+        try
+        {
+            var avgs = await databaseService.GetAverages(prof_id, code, stu_id, type);
+            Averages = avgs ?? new Dictionary<string, double>();
         }
         catch (Exception ex)
         {

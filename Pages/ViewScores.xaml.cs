@@ -25,6 +25,8 @@ public partial class ViewScores : ContentPage
     public PeerReview? review;
     public Student? student;
     public ObservableCollection<Score> scores { get; set; } = new ObservableCollection<Score>();
+    public Dictionary< string, double> averages = new Dictionary< string, double>();
+
 
     
     public ViewScores(string netid, PeerReview review, Student student)
@@ -57,10 +59,15 @@ public partial class ViewScores : ContentPage
      public async Task LoadDataAsync()
     {
         await viewModel.GetScoresAsync(viewModel.professor_netid, viewModel.sec_code, viewModel.Reviewed.netid, viewModel.review_type);
+        await viewModel.GetAveragesAsync(viewModel.professor_netid, viewModel.sec_code, viewModel.Reviewed.netid, viewModel.review_type);
     
         foreach (var score in viewModel.Scores)
         {
             scores.Add(score);
+        }
+        foreach(var avg in viewModel.Averages){
+            averages[avg.Key] = avg.Value;
+
         }
     }
 
@@ -165,15 +172,41 @@ public partial class ViewScores : ContentPage
                         });
                     }
                 };
+                
+                
 
                 ScoreGrid.Add(scoreEntry, yIndex, x); // Add Entry to the grid
                 yIndex++;
             }
+            
             x++;
+            
+            
             
 
 
         }
+        int z = 1;
+            foreach(var avg in averages){
+                var avgValue = new Label
+                {
+                    Text = avg.Value.ToString(),
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center
+                };
+                
+                ScoreGrid.Add(avgValue, z++, x);
+
+            }
+        var avgLabel = new Label
+            {
+                Text = "Averages",
+                FontAttributes = FontAttributes.Bold,
+                HorizontalTextAlignment = TextAlignment.Start,
+                VerticalTextAlignment = TextAlignment.Center
+            };
+        ScoreGrid.Add(avgLabel, 0, x);
     }
     
 }

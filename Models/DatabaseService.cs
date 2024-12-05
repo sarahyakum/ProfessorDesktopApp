@@ -834,7 +834,7 @@ class DatabaseService{
         }
     }
 
-
+    
     /* *************************************************************************************
     *   Procedure Calls for Time Tracking                                                  *
     ****************************************************************************************/
@@ -846,6 +846,7 @@ class DatabaseService{
         using(var conn = new MySqlConnection(connectionString)){
            
             try{
+                await conn.OpenAsync();
                 using (MySqlCommand cmd = new MySqlCommand("student_timeslot_by_date", conn)){
                     cmd.CommandType=System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@stu_netID", netId);
@@ -1487,8 +1488,38 @@ class DatabaseService{
         }
         return scores;
     }
+    
+    //Gets averages based on criteria for student
+   public async Task< Dictionary< string, double>>  GetAverages(string prof_netid, string section, string stu_netid, string review){
+        Dictionary< string, double> averages = new Dictionary< string, double>();
+        using(var conn = new MySqlConnection(connectionString)){
+           
+            try{
+                await conn.OpenAsync();
+                using (MySqlCommand cmd = new MySqlCommand("professor_view_averages", conn)){
+                    cmd.CommandType=System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@prof_netID", prof_netid);
+                    cmd.Parameters.AddWithValue("@stu_netID", stu_netid);
+                    cmd.Parameters.AddWithValue("@section_code", section);
+                    cmd.Parameters.AddWithValue("@review_type", review);
+                    using (MySqlDataReader reader = await cmd.ExecuteReaderAsync()){
+                        while (await reader.ReadAsync())
+                        {
+                            averages[reader.GetString("CriteriaName")] = reader.GetDouble("AvgScore");
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception ex){
+                Console.Write(ex.Message);
+            }
+        }
 
-   
+
+        return averages;
+    }
+
     /* *************************************************************************************
     *   Procedure Calls for Student Emails                                                 *
     ****************************************************************************************/

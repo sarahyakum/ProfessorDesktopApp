@@ -178,7 +178,7 @@ public class TimesheetsViewModel : INotifyPropertyChanged
                         date = date,
                         hours = "00:00",  // Default value
                         description = "Given student description on this date",
-                        total = "00:00"
+                        total = total
                     };
                 }
             }}

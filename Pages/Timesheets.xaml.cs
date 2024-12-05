@@ -201,8 +201,10 @@ public partial class Timesheets : ContentPage
                             student.timeslots[date] = new Timeslot{
                                 date = date,
                                 hours = result,
-                                description = student.timeslots[date].description 
+                                description = student.timeslots[date].description
+                                
                             };
+                            await InitializeAsync();
 
                         }
                         
